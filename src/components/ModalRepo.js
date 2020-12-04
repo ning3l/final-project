@@ -9,7 +9,7 @@ import {
   DialogTitle,
 } from "@material-ui/core";
 
-export default function Modal({ openRepo, setOpenRepo }) {
+export default function Modal({ openRepo, setOpenRepo, setMyRepo }) {
   const handleClose = () => {
     setOpenRepo(false);
   };
@@ -29,7 +29,7 @@ export default function Modal({ openRepo, setOpenRepo }) {
             you choose not to provide any data, no maintenance notfications will
             be available for this plant.
           </DialogContentText>
-          <FormAddPlant />
+          <FormAddPlant setMyRepo={setMyRepo} />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">

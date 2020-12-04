@@ -7,6 +7,7 @@ import SentimentVeryDissatisfiedIcon from "@material-ui/icons/SentimentVeryDissa
 import SentimentSatisfiedIcon from "@material-ui/icons/SentimentSatisfied";
 import SentimentSatisfiedOutlinedIcon from "@material-ui/icons/SentimentSatisfiedOutlined";
 import axios from "axios";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles({
   formInputs: {
@@ -14,7 +15,9 @@ const useStyles = makeStyles({
   },
 });
 
-export default function FormAddPlant() {
+export default function FormAddPlant({setMyRepo}) {
+  // console.log({setMyRepo})
+  const history = useHistory()
   const { plantId } = useParams();
   const classes = useStyles();
 
@@ -46,7 +49,10 @@ export default function FormAddPlant() {
     console.log(plantId);
     axios
       .post(`http://localhost:3000/api/plants/${plantId}`, plantInstanceInput)
-      .then((res) => console.log(res))
+      .then((res) => {
+        setMyRepo(prevRepo => [...prevRepo, res.data])
+        history.push("/repo")
+      })
       .catch((err) => console.log(err));
   };
 

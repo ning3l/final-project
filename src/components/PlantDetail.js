@@ -44,7 +44,8 @@ const StyledTableCell = withStyles((theme) => ({
   },
 }))(TableCell);
 
-export default function PlantDetail({ match }) {
+export default function PlantDetail({ match, setMyRepo }) {
+  // console.log({setMyRepo})
   const classes = useStyles();
   // SET SINGLE PLANT
   const [singlePlant, setSinglePlant] = useState(null);
@@ -205,7 +206,7 @@ export default function PlantDetail({ match }) {
           </Paper>
           <SentimentSatisfiedAltIcon fontSize="large" />
         </Grid>
-        <ModalRepo openRepo={openRepo} setOpenRepo={setOpenRepo} />
+        <ModalRepo openRepo={openRepo} setOpenRepo={setOpenRepo} setMyRepo={setMyRepo} />
         <ModalWishlist
           openWishlist={openWishlist}
           setOpenWishlist={setOpenWishlist}
