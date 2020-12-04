@@ -248,7 +248,7 @@ function App() {
         />
         <Route
           path="/:plantId"
-          render={(props) => <PlantDetail {...props} />}
+          render={(props) => <PlantDetail setMyRepo={setMyRepo} {...props} />}
         />
       </Switch>
     </ThemeProvider>
