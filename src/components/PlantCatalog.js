@@ -1,6 +1,6 @@
-import axios from "axios";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import NavBar from "./NavBar";
+import bkg from "../assets/detailPage.png";
 import {
   CardContent,
   Grid,
@@ -8,6 +8,7 @@ import {
   CardMedia,
   CircularProgress,
   Typography,
+  Box,
 } from "@material-ui/core";
 import Pagination from "@material-ui/lab/Pagination";
 import { makeStyles } from "@material-ui/core/styles";
@@ -27,28 +28,21 @@ const useStyles = makeStyles({
   },
 });
 
-export default function PlantCatalog({ history }) {
+export default function PlantCatalog({
+  allPlants,
+  setPlants,
+  history,
+  setCurrUser,
+  setCredentials,
+  handleLogout,
+}) {
   const classes = useStyles();
-  // MAIN STATES
-  const [allPlants, setAllPlants] = useState([]);
+
   // PAGINATION STATE
   const [page, setPage] = useState(1);
   // SEARCH STATE (only enable pagination if !isSearch, otherwise hide)
   const [plantSearch, setPlantSearch] = useState("");
   const [isSearch, setIsSearch] = useState(false);
-
-  useEffect(() => {
-    fetch("http://localhost:3000/api/plants")
-      .then((res) => res.json())
-      .then((data) => setAllPlants(data))
-      .catch((err) => console.log(err));
-  }, []);
-
-  // useEffect(() => {
-  //   axios.get("http://localhost:3000/plants")
-  //     .then((data) => setAllPlants(data))
-  //     .catch((err) => console.log(err));
-  // }, []);
 
   // HANDLE PAGINATION
   const handleChangePage = (_, page) => {
@@ -62,14 +56,28 @@ export default function PlantCatalog({ history }) {
   const createPlantCard = (el) => {
     return (
       <Grid item xs={12} sm={4} key={el._id}>
-        <Card onClick={() => history.push(`/${el._id}`)}>
-          <CardMedia
-            className={classes.cardMedia}
-            image={el.srcImg}
-            style={{ width: "130px", height: "130px" }}
-          ></CardMedia>
+        <Card onClick={() => history.push(`/${el._id}`)} square={true}>
+          <Box display="flex">
+            <CardMedia
+              className={classes.cardMedia}
+              image={el.srcImg}
+              style={{ width: "130px", height: "130px" }}
+            ></CardMedia>
+            <CardMedia
+              className={classes.cardMedia}
+              image={el.srcImg}
+              style={{ width: "130px", height: "130px" }}
+            ></CardMedia>
+            <CardMedia
+              className={classes.cardMedia}
+              image={el.srcImg}
+              style={{ width: "130px", height: "130px" }}
+            ></CardMedia>
+          </Box>
           <CardContent className={classes.cardContent}>
-            <Typography>{el.latin || "-"}</Typography>
+            <Typography style={{ fontWeight: 700 }}>
+              {el.latin || "-"}
+            </Typography>
           </CardContent>
         </Card>
       </Grid>
@@ -78,7 +86,11 @@ export default function PlantCatalog({ history }) {
 
   return (
     <>
-      <NavBar />
+      <NavBar
+        setCurrUser={setCurrUser}
+        setCredentials={setCredentials}
+        handleLogout={handleLogout}
+      />
       {allPlants ? (
         <Grid container spacing={2} className={classes.catalogContainer}>
           <SearchCatalog

@@ -1,4 +1,5 @@
 import React from "react";
+import axios from "axios";
 import {
   Button,
   Dialog,
@@ -8,8 +9,16 @@ import {
   DialogTitle,
 } from "@material-ui/core";
 
-export default function Modal({ openWishlist, setOpenWishlist }) {
+export default function Modal({ openWishlist, setOpenWishlist, singlePlant }) {
   const handleClose = () => {
+    axios
+      .post(`http://localhost:3000/api/users/wish`, {
+        plantId: singlePlant._id,
+        plantName: singlePlant.latin,
+      })
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+
     setOpenWishlist(false);
   };
 
@@ -28,10 +37,7 @@ export default function Modal({ openWishlist, setOpenWishlist }) {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">
-            Exit
-          </Button>
-          <Button onClick={handleClose} color="primary">
-            Go to my wishlist
+            x
           </Button>
         </DialogActions>
       </Dialog>

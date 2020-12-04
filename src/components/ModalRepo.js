@@ -33,11 +33,8 @@ export default function Modal({ openRepo, setOpenRepo }) {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">
-            Cancel
+            x
           </Button>
-          {/* <Button onClick={handleClose} color="primary">
-            Add Plant
-          </Button> */}
         </DialogActions>
       </Dialog>
     </div>

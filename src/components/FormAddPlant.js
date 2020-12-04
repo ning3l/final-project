@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useParams } from "react-router-dom";
 import { Grid, TextField, Typography, Button } from "@material-ui/core";
 import { ToggleButton, ToggleButtonGroup } from "@material-ui/lab";
 import { makeStyles } from "@material-ui/core/styles";
@@ -6,7 +7,6 @@ import SentimentVeryDissatisfiedIcon from "@material-ui/icons/SentimentVeryDissa
 import SentimentSatisfiedIcon from "@material-ui/icons/SentimentSatisfied";
 import SentimentSatisfiedOutlinedIcon from "@material-ui/icons/SentimentSatisfiedOutlined";
 import axios from "axios";
-import { useParams } from "react-router-dom";
 
 const useStyles = makeStyles({
   formInputs: {
@@ -39,6 +39,7 @@ export default function FormAddPlant() {
     }));
   };
 
+  // ADD PLANT TO PLANT INSTANCE DB
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(plantInstanceInput);
@@ -67,7 +68,7 @@ export default function FormAddPlant() {
           <TextField
             className={classes.formInputs}
             name="waterDate"
-            label="Last watered?"
+            label="Next watering?"
             variant="outlined"
             type="date"
             margin="dense"
@@ -92,7 +93,7 @@ export default function FormAddPlant() {
           <TextField
             className={classes.formInputs}
             name="fertilizeDate"
-            label="Last fertilized?"
+            label="Next fertilizing?"
             variant="outlined"
             type="date"
             margin="dense"
@@ -117,7 +118,7 @@ export default function FormAddPlant() {
           <TextField
             className={classes.formInputs}
             name="repotDate"
-            label="Last repotted?"
+            label="Next repotting?"
             variant="outlined"
             type="date"
             margin="dense"

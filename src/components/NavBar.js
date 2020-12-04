@@ -3,16 +3,22 @@ import { Link } from "react-router-dom";
 import { AppBar, Toolbar, Container } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import {
-  Grid,
   Typography,
   List,
   ListItem,
   ListItemText,
+  Menu,
+  MenuItem,
+  Button,
+  Hidden,
 } from "@material-ui/core";
+import AddIcon from "@material-ui/icons/Add";
+import { logout } from "../utils/auth";
 
 const useStyles = makeStyles({
   navBar: {
-    backgroundColor: "pink",
+    backgroundColor: "white",
+    border: "2px solid black",
   },
   navContainer: {
     display: "flex",
@@ -28,32 +34,78 @@ const useStyles = makeStyles({
 const navLinks = [
   { title: `events`, path: `/events` },
   { title: `find users`, path: `/find-users` },
-  { title: `plantindex`, path: `/plantindex` },
-  { title: `logout`, path: `/logout` },
-  { title: `me`, path: `/me` },
+  { title: `plantindex`, path: `/catalog` },
 ];
 
-export default function NavBar() {
+export default function NavBar({ setCurrUser, setCredentials, handleLogout }) {
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   const classes = useStyles();
   return (
     <>
       <AppBar position="static" className={classes.navBar}>
         <Toolbar>
           <Container className={classes.navContainer}>
-            <Typography>HOME</Typography>
-            <List
-              component="nav"
-              aria-labelledby="main navigation"
-              className={classes.navLinkContainer}
-            >
-              {navLinks.map(({ title, path }) => (
-                <Link to={path} key={title}>
-                  <ListItem button>
-                    <ListItemText primary={title} />
+            <Typography>
+              <Link to="/">LOGO</Link>
+            </Typography>
+            <Hidden xsDown>
+              <List
+                component="nav"
+                aria-labelledby="main navigation"
+                className={classes.navLinkContainer}
+              >
+                {navLinks.map(({ title, path }) => (
+                  <Link to={path} key={title}>
+                    <ListItem button>
+                      <ListItemText primary={title} />
+                    </ListItem>
+                  </Link>
+                ))}
+                <Link to="/login">
+                  <ListItem onClick={() => handleLogout()}>
+                    <ListItemText primary="bye" />
                   </ListItem>
                 </Link>
-              ))}
-            </List>
+              </List>
+            </Hidden>
+            <Hidden smUp>
+              <Button
+                aria-controls="simple-menu"
+                aria-haspopup="true"
+                onClick={handleClick}
+              >
+                <AddIcon />
+              </Button>
+              <Menu
+                id="simple-menu"
+                anchorEl={anchorEl}
+                keepMounted
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
+              >
+                <MenuItem onClick={handleClose}>
+                  <Link to="#">events</Link>
+                </MenuItem>
+                <MenuItem onClick={handleClose}>
+                  <Link to="#">find users</Link>
+                </MenuItem>
+                <MenuItem onClick={handleClose}>
+                  <Link to="/catalog">plant index</Link>
+                </MenuItem>
+                <MenuItem onClick={() => handleLogout()}>
+                  <Link to="/login">bye</Link>
+                </MenuItem>
+              </Menu>
+            </Hidden>
           </Container>
         </Toolbar>
       </AppBar>

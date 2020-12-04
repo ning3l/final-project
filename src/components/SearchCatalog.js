@@ -6,7 +6,6 @@ export default function SearchCatalog({ setPlantSearch, setIsSearch }) {
   const handleSearch = (e) => {
     console.log(e.target.value);
     if (!e.target.value) {
-      console.log("no val");
       setIsSearch(false);
     } else {
       setPlantSearch(e.target.value);
