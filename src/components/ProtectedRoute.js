@@ -9,7 +9,13 @@ export default function ProtectedRoute({
   currUser,
   setMyRepo,
   myRepo,
+  myWishlist,
+  setMyWishlist,
   allPlants,
+  myEvents,
+  setMyEvents,
+  needsCare,
+  setNeedsCare,
   ...rest
 }) {
   return (
@@ -24,7 +30,13 @@ export default function ProtectedRoute({
             currUser={currUser}
             setMyRepo={setMyRepo}
             myRepo={myRepo}
+            myWishlist={myWishlist}
+            setMyWishlist={setMyWishlist}
             allPlants={allPlants}
+            myEvents={myEvents}
+            setMyEvents={setMyEvents}
+            needsCare={needsCare}
+            setNeedsCare={setNeedsCare}
           />
         ) : (
           <Redirect

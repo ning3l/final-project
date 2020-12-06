@@ -1,5 +1,5 @@
 import React from "react";
-import axios from "axios";
+import FormAddEvent from "./FormAddEvent";
 import {
   Button,
   Dialog,
@@ -10,40 +10,35 @@ import {
 } from "@material-ui/core";
 
 export default function Modal({
-  openWishlist,
-  setOpenWishlist,
-  singlePlant,
-  currUser,
-  setCurrUser,
-  myWishlist,
-  setMyWishlist,
+  openAddEvent,
+  setOpenAddEvent,
+  setMyEvents,
+  setAllEvents,
+  myEvents,
 }) {
   const handleClose = () => {
-    axios
-      .post(`http://localhost:3000/api/users/wish`, {
-        plantId: singlePlant._id,
-        plantName: singlePlant.latin,
-      })
-      .then((res) => {
-        setMyWishlist((prevWishes) => [...prevWishes, res.data]);
-      })
-      .catch((err) => console.log(err));
-
-    setOpenWishlist(false);
+    setOpenAddEvent(false);
   };
 
   return (
     <div>
       <Dialog
-        open={openWishlist}
+        open={openAddEvent}
         onClose={handleClose}
         aria-labelledby="form-dialog-title"
       >
-        <DialogTitle id="form-dialog-title">Success</DialogTitle>
+        <DialogTitle id="form-dialog-title">Add your event</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            The plant was added to your wishlist.
+            Plant Bazaar? Collective Repotting? Please feel free to add any
+            event that might be of interest to our community.
           </DialogContentText>
+          <FormAddEvent
+            setMyEvents={setMyEvents}
+            handleClose={handleClose}
+            setAllEvents={setAllEvents}
+            myEvents={myEvents}
+          />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">

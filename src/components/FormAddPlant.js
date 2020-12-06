@@ -15,9 +15,9 @@ const useStyles = makeStyles({
   },
 });
 
-export default function FormAddPlant({setMyRepo}) {
+export default function FormAddPlant({ setMyRepo }) {
   // console.log({setMyRepo})
-  const history = useHistory()
+  const history = useHistory();
   const { plantId } = useParams();
   const classes = useStyles();
 
@@ -50,8 +50,8 @@ export default function FormAddPlant({setMyRepo}) {
     axios
       .post(`http://localhost:3000/api/plants/${plantId}`, plantInstanceInput)
       .then((res) => {
-        setMyRepo(prevRepo => [...prevRepo, res.data])
-        history.push("/repo")
+        setMyRepo((prevRepo) => [...prevRepo, res.data]);
+        history.push("/repo");
       })
       .catch((err) => console.log(err));
   };

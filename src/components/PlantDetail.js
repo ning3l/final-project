@@ -5,6 +5,7 @@ import ModalRepo from "./ModalRepo";
 import ModalWishlist from "./ModalWishlist";
 import bkg from "../assets/detailPage.png";
 import {
+  Hidden,
   CircularProgress,
   Grid,
   Paper,
@@ -44,7 +45,14 @@ const StyledTableCell = withStyles((theme) => ({
   },
 }))(TableCell);
 
-export default function PlantDetail({ match, setMyRepo }) {
+export default function PlantDetail({
+  match,
+  setMyRepo,
+  currUser,
+  setCurrUser,
+  myWishlist,
+  setMyWishlist,
+}) {
   // console.log({setMyRepo})
   const classes = useStyles();
   // SET SINGLE PLANT
@@ -86,8 +94,8 @@ export default function PlantDetail({ match, setMyRepo }) {
       tip,
     } = singlePlant;
     return (
-      <Grid>
-        <Grid>
+      <Grid container>
+        <Grid item xs={12}>
           <Typography variant="h1" color="primary">
             {latin}
           </Typography>
@@ -103,13 +111,15 @@ export default function PlantDetail({ match, setMyRepo }) {
           <Typography variant="body1">{description}</Typography>
         </Grid>
         <Grid container>
-          <Grid item xs={12} sm={6} md={4}>
-            <img
-              src={srcImg}
-              style={{ maxHeight: "400px" }}
-              alt="detail pic of the plant"
-            />
-          </Grid>
+          <Hidden smDown>
+            <Grid item xs={12} sm={6} md={4}>
+              <img
+                src={srcImg}
+                style={{ maxHeight: "400px", margin: "auto" }}
+                alt="detail pic of the plant"
+              />
+            </Grid>
+          </Hidden>
           <Grid item xs={12} sm={6} md={8}>
             <TableContainer>
               <Table
@@ -195,9 +205,8 @@ export default function PlantDetail({ match, setMyRepo }) {
         direction="column"
         justify="center"
         alignItems="center"
-        className={classes.image}
       >
-        <Grid item>
+        <Grid item xs={12} className={classes.image}>
           <SentimentSatisfiedAltIcon fontSize="large" />
           <Paper elevation={3} square={true} className={classes.paperContainer}>
             {!singlePlant && <CircularProgress />}
@@ -206,12 +215,20 @@ export default function PlantDetail({ match, setMyRepo }) {
           </Paper>
           <SentimentSatisfiedAltIcon fontSize="large" />
         </Grid>
-        <ModalRepo openRepo={openRepo} setOpenRepo={setOpenRepo} setMyRepo={setMyRepo} />
+        <ModalRepo
+          openRepo={openRepo}
+          setOpenRepo={setOpenRepo}
+          setMyRepo={setMyRepo}
+        />
         <ModalWishlist
           openWishlist={openWishlist}
           setOpenWishlist={setOpenWishlist}
           plantId={match.params.plantId}
           singlePlant={singlePlant}
+          currUser={currUser}
+          setCurrUser={setCurrUser}
+          myWishlist={myWishlist}
+          setMyWishlist={setMyWishlist}
         />
       </Grid>
     </>

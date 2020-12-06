@@ -30,7 +30,6 @@ const useStyles = makeStyles({
 
 export default function PlantCatalog({
   allPlants,
-  setPlants,
   history,
   setCurrUser,
   setCredentials,
