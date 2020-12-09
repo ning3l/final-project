@@ -1,12 +1,16 @@
 import React from "react";
+import { useHistory } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
-import Card from "@material-ui/core/Card";
-import CardActionArea from "@material-ui/core/CardActionArea";
-import CardActions from "@material-ui/core/CardActions";
-import CardContent from "@material-ui/core/CardContent";
-import CardMedia from "@material-ui/core/CardMedia";
-import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
+import {
+  Box,
+  Card,
+  CardActionArea,
+  CardActions,
+  CardContent,
+  CardMedia,
+  Button,
+  Typography,
+} from "@material-ui/core";
 import event1 from "../assets/eventImages/event-1.jpg";
 import event2 from "../assets/eventImages/event-2.jpg";
 import event3 from "../assets/eventImages/event-3.jpg";
@@ -14,6 +18,7 @@ import event4 from "../assets/eventImages/event-4.jpg";
 import event5 from "../assets/eventImages/event-5.jpg";
 import event6 from "../assets/eventImages/event-6.jpg";
 import event7 from "../assets/eventImages/event-7.jpg";
+import axios from "axios";
 
 const useStyles = makeStyles({
   root: {
@@ -25,18 +30,52 @@ const useStyles = makeStyles({
   },
 });
 
-export default function UserProfileCard({ el }) {
+export default function UserProfileCard({
+  el,
+  setMyEvents,
+  myEvents,
+  currUser,
+}) {
   const classes = useStyles();
-
+  const history = useHistory();
   const eventPics = [event1, event2, event3, event4, event5, event6, event7];
+
+  // LEAVE AN EVENT
+  const handleLeave = (el) => {
+    const eventId = el._id;
+    axios
+      .post("http://localhost:3000/api/events/leave", { eventId })
+      .then((res) => {
+        // res is the id of the deleted event
+        setMyEvents((prevEvents) =>
+          [...prevEvents].filter((el) => el._id !== res.data)
+        );
+        console.log("myEvents", myEvents);
+      })
+      .catch((err) => console.log(err.message));
+  };
+
+  // CANCEL AN EVENT
+  // FE: delete from myEvents & allEvents
+  // BE: delete event and pull from each attendees events array
+  const handleCancel = (el) => {
+    console.log("event to be cancelled:", el._id);
+  };
+
+  // CANCEL AN EVENT
+  // FE: delete from myEvents & allEvents
+  // BE: delete event and pull from each attendees events array
+  const handleEdit = (el) => {
+    console.log("event to be cancelled:", el._id);
+  };
 
   return (
     <Card className={classes.root}>
-      <CardActionArea>
+      <CardActionArea onClick={() => history.push("/events")}>
         <CardMedia
           className={classes.media}
           image={`${eventPics[el.img]}`}
-          title="Contemplative Reptile"
+          title="detail view of a plant"
         />
         <CardContent>
           <Typography gutterBottom variant="h5" component="h2">
@@ -48,9 +87,24 @@ export default function UserProfileCard({ el }) {
         </CardContent>
       </CardActionArea>
       <CardActions>
-        <Button size="small" color="primary">
-          Leave
-        </Button>
+        {currUser && currUser.username === el.host ? (
+          <Box>
+            <Button size="small" color="primary" onClick={() => handleEdit(el)}>
+              Edit
+            </Button>
+            <Button
+              size="small"
+              color="primary"
+              onClick={() => handleCancel(el)}
+            >
+              Cancel
+            </Button>
+          </Box>
+        ) : (
+          <Button size="small" color="primary" onClick={() => handleLeave(el)}>
+            Leave
+          </Button>
+        )}
       </CardActions>
     </Card>
   );

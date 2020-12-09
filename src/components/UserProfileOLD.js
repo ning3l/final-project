@@ -23,9 +23,9 @@ const axios = require("axios");
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    // flexGrow: 1,
-    // height: "100vh",
-    // backgroundColor: "pink",
+    flexGrow: 1,
+    height: "100vh",
+    backgroundColor: "pink",
   },
   paper: {
     padding: theme.spacing(2),
@@ -37,12 +37,6 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     justifyContent: "center",
     opacity: "90%",
-  },
-  paperContainer: {
-    width: "80%",
-    padding: "2em",
-    margin: "auto",
-    textAlign: "center",
   },
   image: {
     marginTop: "0.5px",
@@ -119,6 +113,7 @@ export default function UserProfile({
   const plantDetails = (name) => {
     return myRepo.filter((el) => el.plant.latin === name)[0].nickname;
   };
+
   return (
     <>
       <NavBar
@@ -130,10 +125,10 @@ export default function UserProfile({
         className={classes.image}
         container
         spacing={3}
+        display="flex"
         direction="column"
         alignItems="center"
         justify="center"
-        style={{ minHeight: "100vh" }}
       >
         <Grid item xs={12} style={{ width: "800px " }}>
           <Paper className={classes.paper}>

@@ -22,9 +22,6 @@ export default function FormAddEvent({
   const history = useHistory();
   const classes = useStyles();
 
-  // EVENT IMG OPTIONS
-  const eventImgs = [];
-
   // STATE FORM INPUT
   const [eventInput, setEventInput] = useState({
     title: "",

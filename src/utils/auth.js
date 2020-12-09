@@ -31,12 +31,13 @@ const decodeToken = () => {
 };
 
 const register = async (newUser) => {
-  const { username, password } = newUser;
-  console.log("username from register", username);
+  const { username, password, plantsitting, city } = newUser;
   axios
     .post("http://localhost:3000/api/users/register", {
       username,
       password,
+      plantsitting,
+      city,
     })
     .then((res) => console.log(res)) // gives you id & username
     .catch((err) => console.log(err.message));

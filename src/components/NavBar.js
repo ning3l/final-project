@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { AppBar, Toolbar, Container } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import logo from "../assets/logo.png";
 import {
   Typography,
   List,
@@ -33,7 +34,7 @@ const useStyles = makeStyles({
 
 const navLinks = [
   { title: `events`, path: `/events` },
-  { title: `find users`, path: `/find-users` },
+  { title: `find users`, path: `/users` },
   { title: `plantindex`, path: `/catalog` },
 ];
 
@@ -55,7 +56,9 @@ export default function NavBar({ setCurrUser, setCredentials, handleLogout }) {
         <Toolbar>
           <Container className={classes.navContainer}>
             <Typography>
-              <Link to="/">LOGO</Link>
+              <Link to="/">
+                <img src={logo} alt="logo" />
+              </Link>
             </Typography>
             <Hidden xsDown>
               <List
@@ -93,10 +96,10 @@ export default function NavBar({ setCurrUser, setCredentials, handleLogout }) {
                 onClose={handleClose}
               >
                 <MenuItem onClick={handleClose}>
-                  <Link to="#">events</Link>
+                  <Link to="/events">events</Link>
                 </MenuItem>
                 <MenuItem onClick={handleClose}>
-                  <Link to="#">find users</Link>
+                  <Link to="/users">find users</Link>
                 </MenuItem>
                 <MenuItem onClick={handleClose}>
                   <Link to="/catalog">plant index</Link>

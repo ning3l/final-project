@@ -8,21 +8,21 @@ import {
   FormControlLabel,
   Checkbox,
   Typography,
+  Paper,
+  Grid,
 } from "@material-ui/core/";
-
-import Grid from "@material-ui/core/Grid";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import bkg from "../assets/detailPage.png";
+import logo from "../assets/logo.png";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    // marginTop: theme.spacing(8),
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    padding: "30px",
+    padding: "60px",
   },
   avatar: {
     margin: theme.spacing(1),
@@ -41,6 +41,10 @@ const useStyles = makeStyles((theme) => ({
     backgroundRepeat: "no-repeat",
     backgroundSize: "cover",
     backgroundPosition: "center",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
   },
 }));
 
@@ -49,16 +53,13 @@ export default function SignIn({ handleSetNewUser, handleRegister }) {
 
   return (
     <Grid className={classes.image}>
-      <Container
-        component="main"
-        maxWidth="xs"
-        style={{ backgroundColor: "white", height: "100vh" }}
-      >
+      <Container component="main" maxWidth="sm">
         <CssBaseline />
-        <div className={classes.paper}>
-          <Avatar className={classes.avatar}>
+        <Paper className={classes.paper}>
+          {/* <Avatar className={classes.avatar}>
             <LockOutlinedIcon />
-          </Avatar>
+          </Avatar> */}
+          <img src={logo} alt="logo" />
           <Typography component="h1" variant="h5">
             Sign up
           </Typography>
@@ -92,10 +93,10 @@ export default function SignIn({ handleSetNewUser, handleRegister }) {
               margin="normal"
               required
               fullWidth
-              name="zip"
-              label="zip code"
-              type="zip"
-              id="zip"
+              name="city"
+              label="city"
+              type="city"
+              id="city"
               onChange={(e) => handleSetNewUser(e)}
             />
             <FormControlLabel
@@ -123,7 +124,7 @@ export default function SignIn({ handleSetNewUser, handleRegister }) {
               </Grid>
             </Grid>
           </form>
-        </div>
+        </Paper>
       </Container>
     </Grid>
   );

@@ -17,18 +17,19 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Container,
 } from "@material-ui/core";
 import { withStyles, makeStyles } from "@material-ui/core/styles";
 import SentimentSatisfiedAltIcon from "@material-ui/icons/SentimentSatisfiedAlt";
 
 const useStyles = makeStyles({
   paperContainer: {
-    width: "75%",
+    width: "80%",
     padding: "2em",
     margin: "auto",
+    textAlign: "center",
   },
   image: {
-    // height: "100vh",
     backgroundImage: `url(${bkg})`,
     backgroundRepeat: "no-repeat",
     backgroundSize: "cover",
@@ -52,6 +53,7 @@ export default function PlantDetail({
   setCurrUser,
   myWishlist,
   setMyWishlist,
+  handleLogout,
 }) {
   // console.log({setMyRepo})
   const classes = useStyles();
@@ -95,7 +97,7 @@ export default function PlantDetail({
     } = singlePlant;
     return (
       <Grid container>
-        <Grid item xs={12}>
+        <Grid item xs={12} style={{ marginBottom: "20px" }}>
           <Typography variant="h1" color="primary">
             {latin}
           </Typography>
@@ -110,16 +112,15 @@ export default function PlantDetail({
         <Grid item xs={12}>
           <Typography variant="body1">{description}</Typography>
         </Grid>
-        <Grid container>
-          <Hidden smDown>
-            <Grid item xs={12} sm={6} md={4}>
-              <img
-                src={srcImg}
-                style={{ maxHeight: "400px", margin: "auto" }}
-                alt="detail pic of the plant"
-              />
-            </Grid>
-          </Hidden>
+        <Grid container display="flex" alignItems="center">
+          <Grid item xs={12} sm={6} md={4}>
+            <img
+              src={srcImg}
+              // style={{ maxHeight: "400px", margin: "auto" }}
+              style={{ maxWidth: "300px", margin: "auto" }}
+              alt="detail pic of the plant"
+            />
+          </Grid>
           <Grid item xs={12} sm={6} md={8}>
             <TableContainer>
               <Table
@@ -175,7 +176,7 @@ export default function PlantDetail({
           justify="space-around"
           alignItems="flex-end"
         >
-          <Grid item>
+          <Grid item style={{ marginTop: "20px" }}>
             <Button variant="outlined" onClick={(e) => handleClickOpen(e)}>
               Add to repo
             </Button>
@@ -198,23 +199,30 @@ export default function PlantDetail({
 
   return (
     <>
-      <NavBar />
+      <NavBar handleLogout={handleLogout} />
+      {/* <Grid className={classes.image}> */}
       <Grid
+        className={classes.image}
         container
-        align="center"
+        spacing={0}
         direction="column"
-        justify="center"
         alignItems="center"
+        justify="center"
+        style={{ minHeight: "100vh" }}
+        // display="flex"
+        // align="center"
+        // direction="column"
+        // justify="center"
       >
-        <Grid item xs={12} className={classes.image}>
+        <Container display="flex" align="center">
           <SentimentSatisfiedAltIcon fontSize="large" />
-          <Paper elevation={3} square={true} className={classes.paperContainer}>
+          <Paper elevation={3} className={classes.paperContainer}>
             {!singlePlant && <CircularProgress />}
             {singlePlant && createPlantDetail(singlePlant)}
             {isError && <h1>this plant is not in our database</h1>}
           </Paper>
           <SentimentSatisfiedAltIcon fontSize="large" />
-        </Grid>
+        </Container>
         <ModalRepo
           openRepo={openRepo}
           setOpenRepo={setOpenRepo}

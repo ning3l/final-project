@@ -9,6 +9,7 @@ import Cookies from "js-cookie";
 
 const { default: PlantCatalog } = require("./components/PlantCatalog");
 const { default: Events } = require("./components/Events");
+const { default: Users } = require("./components/Users");
 const { default: PlantDetail } = require("./components/PlantDetail");
 const { default: PlantRepo } = require("./components/PlantRepo");
 const { default: UserProfile } = require("./components/UserProfile");
@@ -16,7 +17,7 @@ const { default: Login } = require("./components/Login");
 const { default: Signup } = require("./components/Signup");
 const { default: ProtectedRoute } = require("./components/ProtectedRoute");
 
-// EDIT MUI DEFAULT STYLES
+// EDITS FOR MUI DEFAULT STYLES
 const theme = createMuiTheme({
   typography: {
     h1: {
@@ -57,6 +58,7 @@ function App() {
   // ###################### GENERAL STATES ######################
   const [allPlants, setAllPlants] = useState([]);
   const [allEvents, setAllEvents] = useState([]);
+  const [allUsers, setAllUsers] = useState([]);
 
   // ###################### HANDLE REGISTER ######################
   const handleSetNewUser = (e) => {
@@ -97,13 +99,12 @@ function App() {
       alert(err);
     } else {
       getData();
-      history.push("/"); // go to profile page
+      history.push("/");
     }
   };
 
   const handleLogout = () => {
-    console.log("call from handleLogout");
-    // setAnchorEl(null);
+    console.log("user is logged out...");
     setCurrUser(null);
     setCredentials(null);
     setMyRepo([]);
@@ -113,14 +114,14 @@ function App() {
     logout();
   };
 
+  // maybe use this to just fetch currUser username + id
   const getData = async () => {
     try {
       const { data: userData } = await userContext();
       if (!userData) {
         console.log("/PROFILE sth went wrong, no data");
       } else {
-        // from /me, you could just extract username, bio & profile pic
-        console.log("res from /me", userData);
+        console.log("curr user from /me", userData);
         setCurrUser(userData);
       }
     } catch (err) {
@@ -139,10 +140,7 @@ function App() {
     axios
       .get("http://localhost:3000/api/plants/repository/me")
       .then((res) => {
-        // ALTERNATIVE: get data from the user repo array!
-        // console.log("content user repo", res.data.repository);
-        // const data = res.data.repository;
-        console.log(res.data);
+        console.log("curr user plant repo", res.data);
         setMyRepo(res.data);
       })
       .catch((err) => console.log(err.message));
@@ -156,6 +154,7 @@ function App() {
   }, []);
 
   // ###################### CARE CHECKER ######################
+  // checks if any plant in the user repo needs attention today
   useEffect(() => {
     const today = new Date(Date.now()).toLocaleDateString("en-US");
     const careChecker = () => {
@@ -171,8 +170,8 @@ function App() {
         }
       }
     };
-    console.log(needsCare);
     careChecker();
+    console.log("these plants need you today:", needsCare);
   }, [myRepo]);
 
   // ###################### CURR USER EVENTS ######################
@@ -195,20 +194,29 @@ function App() {
   }, []);
 
   // ###################### ALL EVENTS ######################
-
   useEffect(() => {
     axios
       .get("http://localhost:3000/api/events")
       .then((res) => {
-        console.log("EVENTS ARR", res.data);
+        console.log("ALL EVENTS", res.data);
         setAllEvents(res.data);
       })
       .catch((err) => console.log(err.message));
   }, []);
 
-  // GET ALL USERS
+  // ###################### ALL USERS ######################
+  useEffect(() => {
+    axios
+      .get("http://localhost:3000/api/users")
+      .then((res) => {
+        console.log("ALL USERS", res.data);
+        setAllUsers(res.data);
+      })
+      .catch((err) => console.log(err.message));
+  }, []);
 
-  // GET All MESSAGES
+  // ###################### ALL MESSAGES ######################
+  // implement messaging system - chat with socket?
 
   return (
     <ThemeProvider theme={theme}>
@@ -293,6 +301,23 @@ function App() {
               setAllEvents={setAllEvents}
               myEvents={myEvents}
               setMyEvents={setMyEvents}
+              handleLogout={handleLogout}
+              {...props}
+            />
+          )}
+        />
+        <Route
+          path="/users"
+          render={(props) => (
+            <Users
+              allEvents={allEvents}
+              setAllEvents={setAllEvents}
+              myEvents={myEvents}
+              setMyEvents={setMyEvents}
+              currUser={currUser}
+              allUsers={allUsers}
+              setAllUsers={setAllUsers}
+              handleLogout={handleLogout}
               {...props}
             />
           )}
@@ -332,6 +357,7 @@ function App() {
               setCurrUser={setCurrUser}
               myWishlist={myWishlist}
               setMyWishlist={setMyWishlist}
+              handleLogout={handleLogout}
               {...props}
             />
           )}

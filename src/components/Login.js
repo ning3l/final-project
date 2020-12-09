@@ -70,7 +70,7 @@ export default function Login({ handleSetCredentials, handleLogin }) {
               opacity: "0.8",
             }}
           >
-            <Paper className={classes.paperLeft} square={true}>
+            <Paper className={classes.paperLeft}>
               <Typography style={{ fontSize: "2.3em", fontWeight: "500" }}>
                 <u>
                   <span style={{ backgroundColor: "yellow" }}>

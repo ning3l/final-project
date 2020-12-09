@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import NavBar from "./NavBar";
+import ModalUpdatePlant from "./ModalUpdatePlant";
 import axios from "axios";
-import bkg from "../assets/repo.jpg";
+// import bkg from "../assets/repo.jpg";
+import bkg from "../assets/myRepo.jpg";
 import {
   Box,
   Grid,
@@ -22,6 +24,7 @@ const useStyles = makeStyles({
     display: "flex",
     width: "80%",
     marginBottom: "1em",
+    opacity: "90%",
   },
   details: {
     display: "flex",
@@ -31,7 +34,7 @@ const useStyles = makeStyles({
     flex: "1 0 auto",
   },
   plantPic: {
-    width: 151,
+    width: 200,
   },
   image: {
     minHeight: "100vh",
@@ -54,6 +57,15 @@ export default function PlantRepo({
 }) {
   const classes = useStyles();
 
+  // HANDLE MODAL FORM REPO
+  const [openEdit, setOpenEdit] = useState(false);
+  const [selectedPlant, setSelectedPlant] = useState(null);
+
+  const handleClickOpen = (plant) => {
+    setOpenEdit(true);
+    setSelectedPlant(plant);
+  };
+
   // HANDLE PLANT DELETE
   const handleDelete = (id, plant) => {
     console.log("from handleDelete", id);
@@ -75,7 +87,6 @@ export default function PlantRepo({
 
   const createRepoCard = (el) => {
     const id = el._id;
-    // console.log("EL FROM REPO", el);
     return (
       // <Card>
       <Card className={classes.root}>
@@ -107,14 +118,15 @@ export default function PlantRepo({
                 <SentimentSatisfiedIcon />
               )}
             </Typography>
-            <div style={{ width: "100%", backgroundColor: "salmon" }}>
+            <div>
               <Box display="flex" p={1}>
                 <Button onClick={() => history.push(`/${el.plant._id}`)}>
                   care overview
                 </Button>
                 <Grid item>
-                  <Button>edit</Button>
-                  <Button onClick={() => handleDelete(id, el)}>delete</Button>
+                  <Button onClick={() => handleClickOpen(el)}>edit</Button>
+                  {/* <Button onClick={() => handleUpdate(id, el)}>edit</Button> */}
+                  <Button onClick={() => handleDelete(id, el)}>R.I.P.</Button>
                 </Grid>
               </Box>
             </div>
@@ -148,6 +160,15 @@ export default function PlantRepo({
           </Link>
         )}
       </Grid>
+      <ModalUpdatePlant
+        openEdit={openEdit}
+        setOpenEdit={setOpenEdit}
+        selectedPlant={selectedPlant}
+        setSelectedPlant={setSelectedPlant}
+        setMyRepo={setMyRepo}
+        myRepo={myRepo}
+        setNeedsCare={setNeedsCare}
+      />
     </>
   );
 }
