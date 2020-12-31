@@ -39,14 +39,14 @@ const register = async (newUser) => {
       plantsitting,
       city,
     })
-    .then((res) => console.log(res)) // gives you id & username
+    .then((res) => console.log("NEW USER:", res)) // sends only username back
     .catch((err) => console.log(err.message));
 };
 
 const login = async (credentials) => {
   const { username, password } = credentials;
   try {
-    // change address after deployment
+    // change address after deployment: check how ben did it in auth frontend repo
     const data = await axios.post("http://localhost:3000/api/auth/login", {
       username,
       password,
@@ -60,7 +60,6 @@ const login = async (credentials) => {
     }
   } catch (err) {
     console.log(err.message);
-    // here, you can set up an err message?
     return "please enter valid credentials";
   }
 };
@@ -72,10 +71,9 @@ const logout = () => {
 
 const userContext = async () => {
   setAuthHeaders();
-  console.log("/AUTH/me gets called");
   try {
     const data = await axios.get("http://localhost:3000/api/auth/me");
-    console.log("data from /auth", data);
+    console.log("DATA FROM /AUTH/ME:", data);
     return data;
   } catch (error) {
     console.log(error.message);

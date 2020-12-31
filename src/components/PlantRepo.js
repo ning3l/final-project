@@ -23,6 +23,7 @@ const useStyles = makeStyles({
   root: {
     display: "flex",
     width: "80%",
+    marginTop: "1rem",
     marginBottom: "1em",
     opacity: "90%",
   },

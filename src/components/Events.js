@@ -9,7 +9,6 @@ import event6 from "../assets/eventImages/event-6.jpg";
 import event7 from "../assets/eventImages/event-7.jpg";
 import {
   CardContent,
-  CardActionArea,
   CardActions,
   Grid,
   Card,
@@ -19,7 +18,6 @@ import {
   Box,
   Button,
 } from "@material-ui/core";
-import Pagination from "@material-ui/lab/Pagination";
 import { makeStyles } from "@material-ui/core/styles";
 import SearchEvents from "./SearchEvents";
 import ModalAddEvent from "./ModalAddEvent";
@@ -39,7 +37,7 @@ const useStyles = makeStyles({
   },
   root: {
     maxWidth: 600,
-    height: 500,
+    height: 550,
   },
   media: {
     height: 240,
@@ -51,38 +49,29 @@ export default function Events({
   setAllEvents,
   myEvents,
   setMyEvents,
-  history,
+  currUser,
   setCurrUser,
   setCredentials,
   handleLogout,
 }) {
   const classes = useStyles();
 
-  // PAGINATION STATE
-  const [page, setPage] = useState(1);
   // SEARCH STATE (only enable pagination if !isSearch, otherwise hide)
   const [eventSearch, setEventSearch] = useState("");
   const [isEventSearch, setIsEventSearch] = useState(false);
   // MODAL FORM STATES
   const [openAddEvent, setOpenAddEvent] = useState(false);
 
-  // HANDLE PAGINATION
-  const handleChangePage = (_, page) => {
-    setPage(page);
-  };
-
-  const idxLastPlant = page * 15;
-  const idxFirstPlant = idxLastPlant - 15;
-
   // HANDLE MODAL ADD EVENT
   const handleClickOpen = (e) => {
     setOpenAddEvent(true);
   };
 
-  // ATTEND AN EVENT
+  // ATTEND AN EVENT (and check if user already attends first)
   const handleAttend = (el) => {
     const eventId = el._id;
-    // fix this so you can't attend if you're already attending
+    let attendAlready = myEvents.filter((event) => event._id === eventId);
+    if (attendAlready.length) return alert("you already attend this event!");
     axios
       .post("http://localhost:3000/api/events/attend", { eventId })
       .then((res) => {
@@ -92,47 +81,74 @@ export default function Events({
       .catch((err) => console.log(err.message));
   };
 
+  // CANCEL AN EVENT
+  const handleCancel = (event) => {
+    const eventId = event._id;
+    console.log(eventId);
+    // axios
+    //   .delete(`http://localhost:3000/api/events/cancel`, { data: { eventId } })
+    //   .then((res) => {
+    //     console.log("EL to be deleted", res.data);
+    //     let del = res.data;
+    //     setMyEvents((prev) => [...prev].filter((el) => el._id !== del._id));
+    //     setAllEvents((prev) => [...prev].filter((el) => el._id !== del._id));
+    //   })
+    //   .catch((err) => console.log(err.message));
+  };
+
+  // EDIT AN EVENT
+  const handleEdit = (event) => {
+    console.log("event to be edited:", event._id);
+  };
+
   // CREATE EVENT THUMBNAILS
   const eventPics = [event1, event2, event3, event4, event5, event6, event7];
 
   // CREATE EACH PLANT PREVIEW CARD
-  const createEventCard = (el) => {
+  const createEventCard = (card) => {
     return (
-      <Grid item xs={12} sm={4} key={el._id}>
-        <Card className={classes.root}>
+      <Grid item key={card._id} xs={12} sm={6} md={4}>
+        <Card className={classes.card}>
           <CardMedia
             className={classes.media}
-            image={`${eventPics[el.img]}`}
-            title="Contemplative Reptile"
+            image={`${eventPics[card.img]}`}
+            title="plant pic"
           />
-          <CardContent>
-            <Typography variant="h6" style={{ fontWeight: 700 }}>
-              {el.title}
+          <CardContent className={classes.cardContent}>
+            <Typography gutterBottom variant="h5" component="h2">
+              {card.title}
             </Typography>
-            <Typography
-              style={{ backgroundColor: "yellow", display: "inline" }}
-            >
-              <b>Host</b>: {el.host}
-            </Typography>
-            <Typography color="primary">
-              {/* <Typography variant="body2" color="primary" component="p"> */}
-              <b>Date</b>: {el.date}
-            </Typography>
-            {/* <Typography variant="body2" color="primary" component="p"> */}
-            <Typography color="primary">
-              <b>Address</b>: {el.address.street} {el.address.number},{" "}
-              {el.address.zip} {el.address.city}
-            </Typography>
-            <Typography>{el.description}</Typography>
+            <Typography>{card.description || "tba"}</Typography>
           </CardContent>
           <CardActions>
-            <Button
-              size="small"
-              color="primary"
-              onClick={() => handleAttend(el)}
-            >
-              Attend
-            </Button>
+            {currUser && currUser.username === card.host ? (
+              <Box>
+                <Typography>CURR USER: {currUser.username}</Typography>
+                <Typography>HOST: {card.host}</Typography>
+                <Button
+                  size="small"
+                  color="primary"
+                  onClick={() => handleEdit(card)}
+                >
+                  Edit
+                </Button>
+                <Button
+                  size="small"
+                  color="primary"
+                  onClick={() => handleCancel(card)}
+                >
+                  Cancel
+                </Button>
+              </Box>
+            ) : (
+              <Button
+                size="small"
+                color="primary"
+                onClick={() => handleAttend(card)}
+              >
+                Attend
+              </Button>
+            )}
           </CardActions>
         </Card>
       </Grid>
@@ -169,18 +185,7 @@ export default function Events({
                 )
             : allEvents
                 .sort((a, b) => new Date(a.date) - new Date(b.date))
-                // .slice(idxFirstPlant, idxLastPlant)
                 .map((el) => createEventCard(el))}
-          {/* <Grid container direction="row" justify="center" alignItems="center">
-            {!isSearch && (
-              <Pagination
-                shape="rounded"
-                count={Math.ceil(allEvents.length / 15)}
-                page={page}
-                onChange={handleChangePage}
-              />
-            )}
-          </Grid> */}
         </Grid>
       ) : (
         <CircularProgress />

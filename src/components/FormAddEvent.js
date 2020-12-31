@@ -43,17 +43,14 @@ export default function FormAddEvent({
     }));
   };
 
-  // ADD EVENT TO DB
+  // ADD NEW EVENT TO DB
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(eventInput);
     axios
       .post(`http://localhost:3000/api/events`, eventInput)
       .then((res) => {
-        console.log(res.data);
-        setAllEvents((prevEvents) => [...prevEvents, res.data]);
-        setMyEvents((prevEvents) => [...prevEvents, res.data]);
-        console.log("EVENTS", myEvents);
+        setAllEvents((prevEvents) => [...prevEvents, res.data]); // add to all events client
+        setMyEvents((prevEvents) => [...prevEvents, res.data]); // add to currUser events client
       })
       .catch((err) => console.log(err));
     handleClose(false);

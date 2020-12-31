@@ -16,6 +16,7 @@ export default function ProtectedRoute({
   setMyEvents,
   needsCare,
   setNeedsCare,
+  setAllEvents,
   ...rest
 }) {
   return (
@@ -33,6 +34,7 @@ export default function ProtectedRoute({
             myWishlist={myWishlist}
             setMyWishlist={setMyWishlist}
             allPlants={allPlants}
+            setAllEvents={setAllEvents}
             myEvents={myEvents}
             setMyEvents={setMyEvents}
             needsCare={needsCare}

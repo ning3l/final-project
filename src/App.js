@@ -114,7 +114,6 @@ function App() {
     logout();
   };
 
-  // maybe use this to just fetch currUser username + id
   const getData = async () => {
     try {
       const { data: userData } = await userContext();
@@ -123,6 +122,7 @@ function App() {
       } else {
         console.log("curr user from /me", userData);
         setCurrUser(userData);
+        setMyWishlist(userData.wishlist);
       }
     } catch (err) {
       console.log(err.message);
@@ -146,12 +146,26 @@ function App() {
       .catch((err) => console.log(err.message));
   }, [currUser]);
 
+  // useEffect(() => {
+  //   axios
+  //     .get("http://localhost:3000/api/users/wish")
+  //     .then((res) => {
+  //       console.log("WISHES", res.data);
+  //       //setMyWishlist(res.data)
+  //     })
+  //     .catch((err) => console.log(err.message));
+  // }, []);
+
+  // ###################### CURR USER EVENTS ######################
   useEffect(() => {
     axios
-      .get("http://localhost:3000/api/users/wish")
-      .then((res) => setMyWishlist(res.data))
+      .get("http://localhost:3000/api/events/me")
+      .then((res) => {
+        console.log("MY EVENTS", res.data.events);
+        setMyEvents(res.data.events);
+      })
       .catch((err) => console.log(err.message));
-  }, []);
+  }, [currUser]);
 
   // ###################### CARE CHECKER ######################
   // checks if any plant in the user repo needs attention today
@@ -173,17 +187,6 @@ function App() {
     careChecker();
     console.log("these plants need you today:", needsCare);
   }, [myRepo]);
-
-  // ###################### CURR USER EVENTS ######################
-  useEffect(() => {
-    axios
-      .get("http://localhost:3000/api/events/me")
-      .then((res) => {
-        console.log("user events get fetched upon pageload...");
-        setMyEvents(res.data.events);
-      })
-      .catch((err) => console.log(err.message));
-  }, [currUser]);
 
   // ###################### ALL CATALOG PLANTS ######################
   useEffect(() => {
@@ -249,6 +252,7 @@ function App() {
           currUser={currUser}
           setCurrUser={setCurrUser}
           handleLogout={handleLogout}
+          setAllEvents={setAllEvents}
           myEvents={myEvents}
           setMyEvents={setMyEvents}
           needsCare={needsCare}
@@ -297,6 +301,7 @@ function App() {
           path="/events"
           render={(props) => (
             <Events
+              currUser={currUser}
               allEvents={allEvents}
               setAllEvents={setAllEvents}
               myEvents={myEvents}

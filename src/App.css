@@ -1,10 +1,12 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap");
 
-.blink {
-  animation: blink-animation 1s steps(5, start) infinite;
+input[type="file"] {
+  display: none;
 }
-@keyframes blink-animation {
-  to {
-    visibility: hidden;
-  }
+
+.custom-file-upload {
+  border-bottom: 1px solid black;
+  display: inline-block;
+  padding: 6px 12px;
+  cursor: pointer;
 }

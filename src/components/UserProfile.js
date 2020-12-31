@@ -1,55 +1,81 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import NavBar from "./NavBar";
-import UserProfileCard from "./UserProfileCard";
 import "../App.css";
+import noData from "../assets/noData.png";
+import bkg from "../assets/detailPage.png";
+import axios from "axios";
+import NavBar from "./NavBar";
+import Button from "@material-ui/core/Button";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import Grid from "@material-ui/core/Grid";
+import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import {
-  Grid,
-  Paper,
-  Typography,
-  Button,
+  Container,
   Box,
-  TextField,
   ListItem,
-  ListItemText,
+  Paper,
   List,
+  ListItemText,
+  TextField,
+  Card,
+  CardMedia,
+  CardContent,
 } from "@material-ui/core";
-import noData from "../assets/noData.png";
-import bkg from "../assets/repo.jpg";
 import SentimentSatisfiedOutlinedIcon from "@material-ui/icons/SentimentSatisfiedOutlined";
 import SentimentVeryDissatisfiedIcon from "@material-ui/icons/SentimentVeryDissatisfied";
-const axios = require("axios");
+import UserEventSection from "./UserEventSection";
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    // flexGrow: 1,
-    // height: "100vh",
-    // backgroundColor: "pink",
-  },
-  paper: {
+  heroContent: {
+    backgroundImage: `url(${bkg})`,
+    backgroundRepeat: "no-repeat",
+    backgroundSize: "cover",
+    backgroundPosition: "center",
     padding: theme.spacing(2),
-    marginRight: theme.spacing(2),
-    marginLeft: theme.spacing(2),
+  },
+  heroButtons: {
+    paddingBottom: theme.spacing(1),
+  },
+  container: {
     textAlign: "center",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
-    opacity: "90%",
+    marginBottom: theme.spacing(2),
+    paddingTop: theme.spacing(2),
+    paddingBottom: theme.spacing(2),
   },
-  paperContainer: {
-    width: "80%",
-    padding: "2em",
-    margin: "auto",
+  picContainer: {
     textAlign: "center",
+    marginBottom: theme.spacing(2),
+    padding: theme.spacing(2),
+    opacity: "80%",
   },
-  image: {
-    marginTop: "0.5px",
-    backgroundImage: `url(${bkg})`,
-    backgroundRepeat: "no-repeat",
-    backgroundSize: "cover",
-    backgroundPosition: "center",
+  cardGrid: {
+    paddingTop: theme.spacing(4),
+  },
+  eventContainer: {
+    paddingTop: theme.spacing(2),
+    display: "flex",
+    justifyContent: "center",
+  },
+  careCardContainer: {
+    marginTop: theme.spacing(2),
+  },
+  card: {
+    height: "250px",
+    marginBottom: theme.spacing(2),
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+  },
+  cardMedia: {
+    height: "75%",
+  },
+  cardContent: {
+    flexGrow: 1,
   },
 }));
 
@@ -61,6 +87,7 @@ export default function UserProfile({
   myRepo,
   myWishlist,
   setMyWishlist,
+  setAllEvents,
   myEvents,
   setMyEvents,
   needsCare,
@@ -116,167 +143,197 @@ export default function UserProfile({
       .catch((err) => console.log(err.message));
   };
 
+  // FILL REPO PLANTS WITH ARCHETYPE DATA
   const plantDetails = (name) => {
-    return myRepo.filter((el) => el.plant.latin === name)[0].nickname;
+    console.log(
+      "PLANT DETAILS",
+      myRepo.filter((el) => el.plant.latin === name)
+    );
+    return myRepo.filter((el) => el.plant.latin === name)[0];
   };
+
   return (
-    <>
+    <React.Fragment>
+      <CssBaseline />
       <NavBar
         setCurrUser={setCurrUser}
         setCredentials={setCredentials}
         handleLogout={handleLogout}
       />
-      <Grid
-        className={classes.image}
-        container
-        spacing={3}
-        direction="column"
-        alignItems="center"
-        justify="center"
-        style={{ minHeight: "100vh" }}
-      >
-        <Grid item xs={12} style={{ width: "800px " }}>
-          <Paper className={classes.paper}>
-            <Typography variant="h2">
-              {currUser ? (
-                <span> hi there, {currUser.username}</span>
-              ) : (
-                <span>no one is logged in</span>
-              )}
-            </Typography>
-            <Box
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <SentimentSatisfiedOutlinedIcon fontSize="large" />
-              {currUser ? (
-                <div
-                  style={{
-                    width: "300px",
-                    height: "300px",
-                    overflow: "hidden",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  <img
-                    src={`http://localhost:3000/${currUser.profileImg}`}
-                    alt="profile-pic"
-                  />
-                </div>
-              ) : (
-                <div>Loading...</div>
-              )}
-              <SentimentSatisfiedOutlinedIcon fontSize="large" />
-            </Box>
-            <TextField
-              type="file"
-              name="profile_pic"
-              onChange={(e) => handleChange(e)}
-            />
-            <Button onClick={handleUpload}>upload</Button>
-          </Paper>
-        </Grid>
-
-        <Grid item xs={12} sm={3}>
-          <Paper className={classes.paper}>
-            <Box
-              display="flex"
-              direction="column"
-              justifyContent="space-between"
-              style={{ width: "200px" }}
-            >
-              <img src={noData} style={{ width: "30px" }} />
-              <Typography variant="h2">wishlist</Typography>
-              <img src={noData} style={{ width: "30px" }} />
-            </Box>
-            <Grid container display="flex" justify="center">
-              {myWishlist.length ? (
-                myWishlist.map((el) => (
-                  <ListItem>
-                    <ListItemText>{el}</ListItemText>
-                    <Button onClick={() => handleDelete(el)}>x</Button>
-                  </ListItem>
-                ))
-              ) : (
-                <Box>
-                  <Typography>start by adding some plants</Typography>
-                  <Link to="/catalog">
-                    <Button>browse our catalog for inspiration</Button>
+      <main>
+        {/* Hero unit */}
+        <div className={classes.heroContent}>
+          <Container maxWidth="sm">
+            {/* Profile Picture */}
+            <Paper className={classes.picContainer}>
+              <Typography variant="h2">
+                {currUser ? (
+                  <span> hi there, {currUser.username}</span>
+                ) : (
+                  <span>no one is logged in</span>
+                )}
+              </Typography>
+              <Box display="flex" justifyContent="center" alignItems="center">
+                <SentimentSatisfiedOutlinedIcon fontSize="large" />
+                {currUser ? (
+                  <div
+                    style={{
+                      width: "200px",
+                      height: "200px",
+                      marginTop: "10px",
+                      marginLeft: "20px",
+                      marginRight: "20px",
+                      overflow: "hidden",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <img
+                      src={`http://localhost:3000/${currUser.profileImg}`}
+                      alt="profile-pic"
+                    />
+                  </div>
+                ) : (
+                  <div>Loading...</div>
+                )}
+                <SentimentSatisfiedOutlinedIcon fontSize="large" />
+              </Box>
+              <label for="file-upload" class="custom-file-upload">
+                change pic
+              </label>
+              <TextField
+                id="file-upload"
+                type="file"
+                name="profile_pic"
+                onChange={(e) => handleChange(e)}
+              />
+              <Button onClick={handleUpload}>upload</Button>
+            </Paper>
+            {/* Buttons */}
+            <div className={classes.heroButtons}>
+              <Grid container spacing={2} justify="center">
+                <Grid item>
+                  <Link to="/repo" style={{ textDecoration: "none" }}>
+                    <Button variant="contained" color="primary">
+                      my plants
+                    </Button>
                   </Link>
+                </Grid>
+              </Grid>
+            </div>
+          </Container>
+        </div>
+        <Container className={classes.cardGrid} maxWidth="md">
+          {/* CARE CALENDAR */}
+          <Grid item xs={12}>
+            <Paper className={classes.container}>
+              <Typography variant="h2">care calendar</Typography>
+              <Typography>babies that need your attention today:</Typography>
+              {!myRepo.length ? (
+                <Box>
+                  <img src={noData} style={{ width: "100px" }} />
+                  <Typography>start by adding some plants</Typography>
                 </Box>
-              )}
-            </Grid>
-          </Paper>
-        </Grid>
-
-        <Grid item xs={12} style={{ width: "600px" }}>
-          <Paper className={classes.paper}>
-            <Typography variant="h2">care calendar</Typography>
-            <Typography>babies that need your attention today:</Typography>
-            {!myRepo.length ? (
+              ) : null}
+              {myRepo.length && !needsCare.length ? (
+                <Box>
+                  <img src={noData} style={{ width: "100px" }} />
+                  <Typography>no plant care today!</Typography>
+                </Box>
+              ) : null}
+              {needsCare.length ? (
+                <Container className={classes.careCardContainer}>
+                  {needsCare.length &&
+                    myRepo.length &&
+                    needsCare.map((el) => (
+                      <Card className={classes.card}>
+                        <CardMedia
+                          className={classes.cardMedia}
+                          image={plantDetails(el).plant.srcImg}
+                          title="Image title"
+                        />
+                        <CardContent className={classes.cardContent}>
+                          <Typography gutterBottom variant="h5" component="h2">
+                            {plantDetails(el).nickname || el}
+                          </Typography>
+                        </CardContent>
+                      </Card>
+                    ))}
+                </Container>
+              ) : null}
               <Box>
-                <img src={noData} style={{ width: "100px" }} />
-                <Typography>start by adding some plants</Typography>
+                <Link to="/repo">
+                  <Button>show me my plant repo</Button>
+                </Link>
               </Box>
-            ) : null}
-            {myRepo.length && !needsCare.length ? (
-              <Box>
-                <img src={noData} style={{ width: "100px" }} />
-                <Typography>no plant care today!</Typography>
-              </Box>
-            ) : null}
-            {needsCare.length ? (
-              <List>
-                {needsCare.length &&
-                  myRepo.length &&
-                  needsCare.map((el) => (
-                    <ListItemText style={{ color: "#0000EE" }}>
-                      <img src={noData} style={{ width: "20px" }} />{" "}
-                      {plantDetails(el) || el}{" "}
-                      <img src={noData} style={{ width: "20px" }} />
-                    </ListItemText>
-                  ))}
-              </List>
-            ) : null}
-            <Box>
-              <Link to="/repo">
-                <Button>show me my plant repo</Button>
-              </Link>
-            </Box>
-          </Paper>
-        </Grid>
+            </Paper>
+          </Grid>
 
-        <Grid item xs={12} style={{ maxWidth: "80%" }}>
-          <Paper className={classes.paper}>
+          {/* WISHLIST */}
+          <Grid item xs={12}>
+            <Paper className={classes.container}>
+              <Box
+                display="flex"
+                direction="column"
+                justifyContent="space-between"
+              >
+                <img src={noData} style={{ width: "30px" }} />
+                <Typography variant="h2">wishlist</Typography>
+                <img src={noData} style={{ width: "30px" }} />
+              </Box>
+              <Grid container xs={12} sm={4}>
+                {myWishlist.length ? (
+                  myWishlist.map((el) => (
+                    <ListItem>
+                      <ListItemText>{el}</ListItemText>
+                      <Button onClick={() => handleDelete(el)}>x</Button>
+                    </ListItem>
+                  ))
+                ) : (
+                  <Box>
+                    <Typography>start by adding some plants</Typography>
+                    <Link to="/catalog">
+                      <Button>inspiration</Button>
+                    </Link>
+                  </Box>
+                )}
+              </Grid>
+            </Paper>
+          </Grid>
+
+          {/* EVENTS */}
+          <Box textAlign="center">
             <Typography variant="h2">your events</Typography>
             <Typography>time to mingle with other plant parents</Typography>
-            <Grid container display="flex" justify="center">
-              {myEvents ? (
-                myEvents.map((el) => (
-                  <UserProfileCard
-                    el={el}
+            {myEvents.length ? (
+              <Grid container spacing={4} className={classes.eventContainer}>
+                {myEvents.map((card) => (
+                  <UserEventSection
+                    card={card}
+                    currUser={currUser}
+                    setAllEvents={setAllEvents}
                     setMyEvents={setMyEvents}
                     myEvents={myEvents}
-                    currUser={currUser}
                   />
-                ))
-              ) : (
-                <Box display="flex" flexDirection="column" alignItems="center">
-                  <SentimentVeryDissatisfiedIcon fontSize="large" />
-                  <Link to="/events">
-                    <Button>show me all events</Button>
-                  </Link>
-                </Box>
-              )}
-            </Grid>
-          </Paper>
-        </Grid>
-      </Grid>
-    </>
+                ))}
+              </Grid>
+            ) : (
+              <Box
+                className={classes.eventContainer}
+                display="flex"
+                flexDirection="column"
+                alignItems="center"
+              >
+                <SentimentVeryDissatisfiedIcon fontSize="large" />
+                <Link to="/events">
+                  <Button>show me all events</Button>
+                </Link>
+              </Box>
+            )}
+          </Box>
+        </Container>
+      </main>
+    </React.Fragment>
   );
 }
