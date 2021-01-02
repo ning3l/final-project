@@ -93,6 +93,11 @@ export default function FormAddPlant({ setMyRepo }) {
             type="number"
             margin="dense"
             onChange={handleChange}
+            InputProps={{
+              inputProps: {
+                min: 0,
+              },
+            }}
           />
         </Grid>
         <Grid item xs={6}>
@@ -118,6 +123,11 @@ export default function FormAddPlant({ setMyRepo }) {
             type="number"
             margin="dense"
             onChange={handleChange}
+            InputProps={{
+              inputProps: {
+                min: 0,
+              },
+            }}
           />
         </Grid>
         <Grid item xs={6}>
@@ -143,6 +153,11 @@ export default function FormAddPlant({ setMyRepo }) {
             type="number"
             margin="dense"
             onChange={handleChange}
+            InputProps={{
+              inputProps: {
+                min: 0,
+              },
+            }}
           />
         </Grid>
         <Grid container direction="column" justify="center" alignItems="center">

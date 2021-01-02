@@ -38,6 +38,7 @@ export default function Modal({
           {selectedPlant && (
             <FormUpdatePlant
               selectedPlant={selectedPlant}
+              setSelectedPlant={setSelectedPlant}
               setMyRepo={setMyRepo}
               myRepo={myRepo}
               setNeedsCare={setNeedsCare}

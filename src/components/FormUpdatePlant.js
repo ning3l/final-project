@@ -7,6 +7,7 @@ import SentimentVeryDissatisfiedIcon from "@material-ui/icons/SentimentVeryDissa
 import SentimentSatisfiedIcon from "@material-ui/icons/SentimentSatisfied";
 import SentimentSatisfiedOutlinedIcon from "@material-ui/icons/SentimentSatisfiedOutlined";
 import axios from "axios";
+import moment from "moment";
 import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles({
@@ -17,14 +18,12 @@ const useStyles = makeStyles({
 
 export default function FormUpdatePlant({
   selectedPlant,
+  setSelectedPlant,
   setMyRepo,
   myRepo,
   setNeedsCare,
   setOpenEdit,
 }) {
-  // console.log({setMyRepo})
-  const history = useHistory();
-  const { plantId } = useParams();
   const classes = useStyles();
 
   // STATE FORM UPDATE INPUT
@@ -42,22 +41,32 @@ export default function FormUpdatePlant({
   // HANDLE FORM INPUT
   const handleChange = (e) => {
     const { name, value } = e.target;
+    // changing the state here prevents the "controlled input" warning
+    setSelectedPlant((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+
+    // do you need both then? or can you just send updatet selected plant obj?
     setPlantUpdateInput((prev) => ({
       ...prev,
       [name]: value,
     }));
   };
 
+  console.log("SELECTED PLANT", selectedPlant);
+  console.log(
+    moment(selectedPlant.water.date, "MM/DD/YYYY").format("YYYY/MM/DD")
+  );
+
   // HANDLE PLANT UPDATE
-  // care array !!
-  // setMyRepo((prevRepo) => [...prevRepo, res.data]);
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("update", selectedPlant.plant.latin);
     axios
       .put(`http://localhost:3000/api/plants/update`, {
-        plantUpdateInput: plantUpdateInput,
-        id: selectedPlant._id,
+        //plantUpdateInput: plantUpdateInput,
+        selectedPlant: selectedPlant,
+        // id: selectedPlant._id,
       })
       .then((res) => {
         console.log(res.data);
@@ -74,16 +83,6 @@ export default function FormUpdatePlant({
     console.log("MY REPO FROM FORM UPDATE PLANT", myRepo);
   };
 
-  // HANDLE PLANT UPDATE
-  // const handleUpdate = (id, plant) => {
-  //   console.log("id from update", id);
-  //   axios
-  //     .put(`http://localhost:3000/api/plants/update`, { id })
-  //     .then((res) => console.log("EL to be updatet", res.data))
-  //     .catch((err) => console.log(err.message));
-  //   // manually update repo AND care tracker arr
-  // };
-
   return (
     <form onSubmit={handleSubmit}>
       <Grid container direction="row" justify="center" alignItems="center">
@@ -95,7 +94,7 @@ export default function FormUpdatePlant({
             variant="outlined"
             type="text"
             margin="dense"
-            // value={selectedPlant.nickname || selectedPlant.latin}
+            value={selectedPlant.nickname}
             onChange={handleChange}
           />
         </Grid>
@@ -107,7 +106,9 @@ export default function FormUpdatePlant({
             variant="outlined"
             type="date"
             margin="dense"
-            // value={selectedPlant.waterDate}
+            value={moment(selectedPlant.water.date, "MM/DD/YYYY").format(
+              "YYYY-MM-DD"
+            )}
             InputLabelProps={{
               shrink: true,
             }}
@@ -122,8 +123,13 @@ export default function FormUpdatePlant({
             label="Preferred interval"
             type="number"
             margin="dense"
-            // value={selectedPlant.waterInterval}
+            value={selectedPlant.waterInterval}
             onChange={handleChange}
+            InputProps={{
+              inputProps: {
+                min: 0,
+              },
+            }}
           />
         </Grid>
         <Grid item xs={6}>
@@ -134,7 +140,9 @@ export default function FormUpdatePlant({
             variant="outlined"
             type="date"
             margin="dense"
-            // value={selectedPlant.fertilizeDate}
+            value={moment(selectedPlant.fertilize.date, "MM/DD/YYYY").format(
+              "YYYY-MM-DD"
+            )}
             InputLabelProps={{
               shrink: true,
             }}
@@ -149,8 +157,13 @@ export default function FormUpdatePlant({
             label="Preferred interval"
             type="number"
             margin="dense"
-            // value={selectedPlant.fertilizeInterval}
+            value={selectedPlant.fertilizeInterval}
             onChange={handleChange}
+            InputProps={{
+              inputProps: {
+                min: 0,
+              },
+            }}
           />
         </Grid>
         <Grid item xs={6}>
@@ -161,7 +174,9 @@ export default function FormUpdatePlant({
             variant="outlined"
             type="date"
             margin="dense"
-            // value={selectedPlant.repotDate}
+            value={moment(selectedPlant.repot.date, "MM/DD/YYYY").format(
+              "YYYY-MM-DD"
+            )}
             InputLabelProps={{
               shrink: true,
             }}
@@ -176,8 +191,13 @@ export default function FormUpdatePlant({
             label="Preferred interval"
             type="number"
             margin="dense"
-            // value={selectedPlant.repotInterval}
+            value={selectedPlant.repotInterval}
             onChange={handleChange}
+            InputProps={{
+              inputProps: {
+                min: 0,
+              },
+            }}
           />
         </Grid>
         <Grid container direction="column" justify="center" alignItems="center">

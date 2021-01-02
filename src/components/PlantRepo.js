@@ -27,13 +27,6 @@ const useStyles = makeStyles({
     marginBottom: "1em",
     opacity: "90%",
   },
-  details: {
-    display: "flex",
-    flexDirection: "column",
-  },
-  content: {
-    flex: "1 0 auto",
-  },
   plantPic: {
     width: 200,
   },
@@ -60,7 +53,7 @@ export default function PlantRepo({
 
   // HANDLE MODAL FORM REPO
   const [openEdit, setOpenEdit] = useState(false);
-  const [selectedPlant, setSelectedPlant] = useState(null);
+  const [selectedPlant, setSelectedPlant] = useState(null); // state is updated in formUpdate
 
   const handleClickOpen = (plant) => {
     setOpenEdit(true);
@@ -69,7 +62,6 @@ export default function PlantRepo({
 
   // HANDLE PLANT DELETE
   const handleDelete = (id, plant) => {
-    console.log("from handleDelete", id);
     axios
       .delete(`http://localhost:3000/api/plants/del`, { data: { id } })
       .then((res) => {
@@ -89,17 +81,14 @@ export default function PlantRepo({
   const createRepoCard = (el) => {
     const id = el._id;
     return (
-      // <Card>
-      <Card className={classes.root}>
+      <Card className={classes.root} key={el._id}>
         <CardMedia
           className={classes.plantPic}
           image={el.plant.srcImg}
           title="Plant Preview"
         />
         <div>
-          {/* <div className={classes.details}> */}
           <CardContent>
-            {/* <CardContent className={classes.content}> */}
             <Typography component="h5" variant="h5">
               {el.nickname || el.plant.latin}
             </Typography>
@@ -126,7 +115,6 @@ export default function PlantRepo({
                 </Button>
                 <Grid item>
                   <Button onClick={() => handleClickOpen(el)}>edit</Button>
-                  {/* <Button onClick={() => handleUpdate(id, el)}>edit</Button> */}
                   <Button onClick={() => handleDelete(id, el)}>R.I.P.</Button>
                 </Grid>
               </Box>
