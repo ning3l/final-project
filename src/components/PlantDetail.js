@@ -5,7 +5,6 @@ import ModalRepo from "./ModalRepo";
 import ModalWishlist from "./ModalWishlist";
 import bkg from "../assets/detailPage.png";
 import {
-  Hidden,
   CircularProgress,
   Grid,
   Paper,
@@ -79,6 +78,10 @@ export default function PlantDetail({
     if (e.target.innerText.includes("REPO")) {
       setOpenRepo(true);
     } else if (e.target.innerText.includes("WISHLIST")) {
+      if (myWishlist.length === 3)
+        return alert(
+          "Your wishlist already contains 3 plants, pls delete one first!"
+        );
       setOpenWishlist(true);
     }
   };

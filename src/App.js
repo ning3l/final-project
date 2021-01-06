@@ -8,7 +8,8 @@ import { login, logout, register, userContext } from "./utils/auth";
 import Cookies from "js-cookie";
 
 const { default: PlantCatalog } = require("./components/PlantCatalog");
-const { default: Events } = require("./components/Events");
+const { default: Events } = require("./components/Events/Events");
+const { default: EventDetail } = require("./components/Events/EventDetail");
 const { default: Users } = require("./components/Users");
 const { default: PlantDetail } = require("./components/PlantDetail");
 const { default: PlantRepo } = require("./components/PlantRepo");
@@ -133,7 +134,7 @@ function App() {
     if (cookie) {
       getData();
     }
-  }, []);
+  }, [cookie]);
 
   // ###################### CURR USER REPO + WISHLIST ######################
   useEffect(() => {
@@ -186,7 +187,7 @@ function App() {
     };
     careChecker();
     console.log("these plants need you today:", needsCare);
-  }, [myRepo]);
+  }, [myRepo, needsCare]);
 
   // ###################### ALL CATALOG PLANTS ######################
   useEffect(() => {
@@ -301,6 +302,20 @@ function App() {
           path="/events"
           render={(props) => (
             <Events
+              currUser={currUser}
+              allEvents={allEvents}
+              setAllEvents={setAllEvents}
+              myEvents={myEvents}
+              setMyEvents={setMyEvents}
+              handleLogout={handleLogout}
+              {...props}
+            />
+          )}
+        />
+        <Route
+          path="/event/:eventId"
+          render={(props) => (
+            <EventDetail
               currUser={currUser}
               allEvents={allEvents}
               setAllEvents={setAllEvents}

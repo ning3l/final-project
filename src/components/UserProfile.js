@@ -15,7 +15,6 @@ import {
   Box,
   ListItem,
   Paper,
-  List,
   ListItemText,
   TextField,
   Card,
@@ -64,12 +63,14 @@ const useStyles = makeStyles((theme) => ({
   careCardContainer: {
     marginTop: theme.spacing(2),
   },
-  card: {
-    height: "250px",
-    marginBottom: theme.spacing(2),
+  wishlistContainer: {
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
+  },
+  card: {
+    height: "250px",
+    marginBottom: theme.spacing(2),
   },
   cardMedia: {
     height: "75%",
@@ -190,7 +191,7 @@ export default function UserProfile({
                     }}
                   >
                     <img
-                      src={`http://localhost:3000/${currUser.profileImg}`}
+                      src={`http://localhost:3000/images/user/${currUser.profileImg}`}
                       alt="profile-pic"
                     />
                   </div>
@@ -199,7 +200,7 @@ export default function UserProfile({
                 )}
                 <SentimentSatisfiedOutlinedIcon fontSize="large" />
               </Box>
-              <label for="file-upload" class="custom-file-upload">
+              <label htmlFor="file-upload" className="custom-file-upload">
                 change pic
               </label>
               <TextField
@@ -210,7 +211,7 @@ export default function UserProfile({
               />
               <Button onClick={handleUpload}>upload</Button>
             </Paper>
-            {/* Buttons */}
+            {/* Button to Plant Repo */}
             <div className={classes.heroButtons}>
               <Grid container spacing={2} justify="center">
                 <Grid item>
@@ -232,13 +233,21 @@ export default function UserProfile({
               <Typography>babies that need your attention today:</Typography>
               {!myRepo.length ? (
                 <Box>
-                  <img src={noData} style={{ width: "100px" }} />
+                  <img
+                    src={noData}
+                    style={{ width: "100px" }}
+                    alt="plant pot"
+                  />
                   <Typography>start by adding some plants</Typography>
                 </Box>
               ) : null}
               {myRepo.length && !needsCare.length ? (
                 <Box>
-                  <img src={noData} style={{ width: "100px" }} />
+                  <img
+                    src={noData}
+                    style={{ width: "100px" }}
+                    alt="plant pot"
+                  />
                   <Typography>no plant care today!</Typography>
                 </Box>
               ) : null}
@@ -246,8 +255,8 @@ export default function UserProfile({
                 <Container className={classes.careCardContainer}>
                   {needsCare.length &&
                     myRepo.length &&
-                    needsCare.map((el) => (
-                      <Card className={classes.card}>
+                    needsCare.map((el, idx) => (
+                      <Card className={classes.card} key={idx}>
                         <CardMedia
                           className={classes.cardMedia}
                           image={plantDetails(el).plant.srcImg}
@@ -278,11 +287,19 @@ export default function UserProfile({
                 direction="column"
                 justifyContent="space-between"
               >
-                <img src={noData} style={{ width: "30px" }} />
+                <img
+                  src={noData}
+                  style={{ width: "30px", marginRight: "10px" }}
+                  alt="plant pot"
+                />
                 <Typography variant="h2">wishlist</Typography>
-                <img src={noData} style={{ width: "30px" }} />
+                <img
+                  src={noData}
+                  style={{ width: "30px", marginLeft: "10px" }}
+                  alt="plant pot"
+                />
               </Box>
-              <Grid container xs={12} sm={4}>
+              <Grid item xs={12} sm={4} className={classes.wishlistContainer}>
                 {myWishlist.length ? (
                   myWishlist.map((el) => (
                     <ListItem>

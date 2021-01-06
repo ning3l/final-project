@@ -26,6 +26,7 @@ export default function FormAddEvent({
   const [eventInput, setEventInput] = useState({
     title: "",
     date: "",
+    time: "15:30",
     description: "",
     street: "",
     number: "",
@@ -68,6 +69,8 @@ export default function FormAddEvent({
             type="text"
             margin="dense"
             onChange={handleChange}
+            required={true}
+            inputProps={{ maxLength: 24 }}
           />
         </Grid>
         <Grid item xs={12}>
@@ -81,6 +84,8 @@ export default function FormAddEvent({
             margin="dense"
             variant="outlined"
             onChange={handleChange}
+            required={true}
+            inputProps={{ maxLength: 400 }}
           />
         </Grid>
         <Grid item xs={12}>
@@ -95,8 +100,29 @@ export default function FormAddEvent({
               shrink: true,
             }}
             onChange={handleChange}
+            InputProps={{
+              inputProps: { min: new Date().toISOString().slice(0, 10) },
+            }}
           />
         </Grid>
+        <TextField
+          className={classes.formInputs}
+          name="time"
+          label="Time"
+          variant="outlined"
+          type="time"
+          margin="dense"
+          defaultValue="15:30"
+          variant="outlined"
+          InputLabelProps={{
+            shrink: true,
+          }}
+          inputProps={{
+            step: 300, // 5 min
+          }}
+          onChange={handleChange}
+          required={true}
+        />
         <Grid item xs={6}>
           <TextField
             className={classes.formInputs}
@@ -106,6 +132,7 @@ export default function FormAddEvent({
             type="text"
             margin="dense"
             onChange={handleChange}
+            required={true}
           />
         </Grid>
         <Grid item xs={6}>
@@ -117,6 +144,7 @@ export default function FormAddEvent({
             type="text"
             margin="dense"
             onChange={handleChange}
+            required={true}
           />
         </Grid>
         <Grid item xs={6}>
@@ -128,6 +156,7 @@ export default function FormAddEvent({
             type="text"
             margin="dense"
             onChange={handleChange}
+            required={true}
           />
         </Grid>
         <Grid item xs={6}>
@@ -139,6 +168,7 @@ export default function FormAddEvent({
             type="text"
             margin="dense"
             onChange={handleChange}
+            required={true}
           />
         </Grid>
         <Button

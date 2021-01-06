@@ -60,10 +60,9 @@ export default function Users({
 
   const createUserCard = (el) => {
     const id = el._id;
-    // console.log("EL FROM USERS", el);
     return (
       // <Card>
-      <Card className={classes.root}>
+      <Card className={classes.root} key={el._id}>
         <CardMedia
           className={classes.plantPic}
           image={`http://localhost:3000/${el.profileImg}`}
@@ -94,18 +93,6 @@ export default function Users({
             <Typography>
               currently owns {el.repository.length} plant(s)!
             </Typography>
-
-            {/* <div style={{ width: "100%", backgroundColor: "salmon" }}>
-              <Box display="flex" p={1}>
-                <Button onClick={() => history.push(`/${el.plant._id}`)}>
-                  care overview
-                </Button>
-                <Grid item>
-                  <Button>edit</Button>
-                  <Button>delete</Button>
-                </Grid>
-              </Box>
-            </div> */}
           </CardContent>
         </div>
       </Card>

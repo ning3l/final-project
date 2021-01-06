@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import NavBar from "./NavBar";
 import ModalUpdatePlant from "./ModalUpdatePlant";
 import axios from "axios";
-// import bkg from "../assets/repo.jpg";
 import bkg from "../assets/myRepo.jpg";
 import {
   Box,

@@ -1,17 +1,32 @@
 import React from "react";
+import { useHistory } from "react-router-dom";
 import Card from "@material-ui/core/Card";
-import CardActions from "@material-ui/core/CardActions";
+import { CardActions, CardActionArea } from "@material-ui/core";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import { Typography, Box, Button, Grid } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
+import event1 from "../assets/eventImages/event-1.jpg";
+import event2 from "../assets/eventImages/event-2.jpg";
+import event3 from "../assets/eventImages/event-3.jpg";
+import event4 from "../assets/eventImages/event-4.jpg";
+import event5 from "../assets/eventImages/event-5.jpg";
+import event6 from "../assets/eventImages/event-6.jpg";
+import event7 from "../assets/eventImages/event-7.jpg";
 
 const useStyles = makeStyles((theme) => ({
   card: {
     height: "100%",
     display: "flex",
     flexDirection: "column",
+    justifyContent: "space-between",
+    transition: "all 0.4s ease",
+    "&:hover": {
+      transform: "translateY(-7px)",
+      boxShadow: "2px 3px 15px 2px rgba(0,0,0,0.1)",
+      zIndex: 100,
+    },
   },
   cardMedia: {
     paddingTop: "56.25%", // 16:9
@@ -29,6 +44,8 @@ export default function UserEventSection({
   myEvents,
 }) {
   const classes = useStyles();
+  const history = useHistory();
+  const eventPics = [event1, event2, event3, event4, event5, event6, event7];
 
   // LEAVE AN EVENT
   const handleLeave = (el) => {
@@ -70,17 +87,20 @@ export default function UserEventSection({
   return (
     <Grid item key={card} xs={12} sm={6} md={4}>
       <Card className={classes.card}>
-        <CardMedia
-          className={classes.cardMedia}
-          image="https://source.unsplash.com/random"
-          title="Image title"
-        />
-        <CardContent className={classes.cardContent}>
-          <Typography gutterBottom variant="h5" component="h2">
-            {card.title}
-          </Typography>
-          <Typography>{card.content || "tba"}</Typography>
-        </CardContent>
+        <CardActionArea
+          onClick={() => history.push(`/events/event/${card._id}`)}
+        >
+          <CardMedia
+            className={classes.cardMedia}
+            image={`${eventPics[card.img]}`}
+            title="plant image"
+          />
+          <CardContent className={classes.cardContent}>
+            <Typography gutterBottom variant="h5" component="h2">
+              {card.title}
+            </Typography>
+          </CardContent>
+        </CardActionArea>
         <CardActions>
           {currUser && currUser.username === card.host ? (
             <Box>

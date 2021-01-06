@@ -56,9 +56,6 @@ export default function SignIn({ handleSetNewUser, handleRegister }) {
       <Container component="main" maxWidth="sm">
         <CssBaseline />
         <Paper className={classes.paper}>
-          {/* <Avatar className={classes.avatar}>
-            <LockOutlinedIcon />
-          </Avatar> */}
           <img src={logo} alt="logo" />
           <Typography component="h1" variant="h5">
             Sign up
@@ -107,7 +104,6 @@ export default function SignIn({ handleSetNewUser, handleRegister }) {
               onChange={(e) => handleSetNewUser(e)}
             />
             <Button
-              // type="submit"
               fullWidth
               variant="contained"
               color="primary"

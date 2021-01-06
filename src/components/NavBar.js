@@ -19,7 +19,7 @@ import { logout } from "../utils/auth";
 const useStyles = makeStyles({
   navBar: {
     backgroundColor: "white",
-    border: "2px solid black",
+    border: "1px solid black",
   },
   navContainer: {
     display: "flex",

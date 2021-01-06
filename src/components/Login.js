@@ -71,7 +71,7 @@ export default function Login({ handleSetCredentials, handleLogin }) {
             }}
           >
             <Paper className={classes.paperLeft}>
-              <Typography style={{ fontSize: "2.3em", fontWeight: "500" }}>
+              <Typography style={{ fontSize: "2em", fontWeight: "500" }}>
                 <u>
                   <span style={{ backgroundColor: "yellow" }}>
                     plant parenthood

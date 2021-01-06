@@ -24,6 +24,12 @@ const useStyles = makeStyles({
   root: {
     width: 345,
     margin: "20px",
+    transition: "all 0.4s ease",
+    "&:hover": {
+      transform: "translateY(-7px)",
+      boxShadow: "2px 3px 15px 2px rgba(0,0,0,0.1)",
+      zIndex: 100,
+    },
   },
   media: {
     height: 140,
