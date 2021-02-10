@@ -12,11 +12,17 @@ export default function ProtectedRoute({
   myWishlist,
   setMyWishlist,
   allPlants,
+  setAllPlants,
   myEvents,
   setMyEvents,
   needsCare,
   setNeedsCare,
+  allEvents,
   setAllEvents,
+  allUsers,
+  setAllUsers,
+  myMessages,
+  setMyMessages,
   ...rest
 }) {
   return (
@@ -34,11 +40,17 @@ export default function ProtectedRoute({
             myWishlist={myWishlist}
             setMyWishlist={setMyWishlist}
             allPlants={allPlants}
+            setAllPlants={setAllPlants}
+            allEvents={allEvents}
             setAllEvents={setAllEvents}
             myEvents={myEvents}
             setMyEvents={setMyEvents}
             needsCare={needsCare}
             setNeedsCare={setNeedsCare}
+            allUsers={allUsers}
+            setAllUsers={setAllUsers}
+            myMessages={myMessages}
+            setMyMessages={setMyMessages}
           />
         ) : (
           <Redirect

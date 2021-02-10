@@ -12,18 +12,19 @@ const useStyles = makeStyles({
   },
 });
 
-export default function FormAddEvent({
+export default function FormUpdateEvent({
   setMyEvents,
   myEvents,
+  selectedEvent,
+  setSelectedEvent,
+  setOpenEditEvent,
   handleClose,
   setAllEvents,
 }) {
-  // console.log({setMyRepo})
-  const history = useHistory();
   const classes = useStyles();
 
-  // STATE FORM INPUT
-  const [eventInput, setEventInput] = useState({
+  // STATE FORM UPDATE INPUT
+  const [eventEditInput, setEventEditInput] = useState({
     title: "",
     date: "",
     time: "15:30",
@@ -38,23 +39,43 @@ export default function FormAddEvent({
   // HANDLE FORM INPUT
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setEventInput((prev) => ({
+    // changing the state here prevents the "controlled input" warning
+    setSelectedEvent((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+
+    // do you need both then? or can you just send updatet selected plant obj?
+    setEventEditInput((prev) => ({
       ...prev,
       [name]: value,
     }));
   };
 
-  // ADD NEW EVENT TO DB
+  // ADD UPDATES EVENT TO DB
+  // to fix: this does not go and update all user's events on client side!
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log(selectedEvent);
     axios
-      .post(`http://localhost:3000/api/events`, eventInput)
+      .put(`http://localhost:3000/api/events/edit`, {
+        selectedEvent: selectedEvent,
+      })
       .then((res) => {
-        setAllEvents((prevEvents) => [...prevEvents, res.data]); // add to all events client
-        setMyEvents((prevEvents) => [...prevEvents, res.data]); // add to currUser events client
+        // filter old event info from all events AND curr user's event arr
+        setAllEvents((prevEvents) =>
+          [...prevEvents].filter((el) => el._id !== selectedEvent._id)
+        );
+        setMyEvents((prevEvents) =>
+          [...prevEvents].filter((el) => el._id !== selectedEvent._id)
+        );
+        // put new updated event back in all events && into curr user's event arr
+        setAllEvents((prevEvents) => [...prevEvents, res.data]);
+        setMyEvents((prevEvents) => [...prevEvents, res.data]);
+        // close modal
+        setOpenEditEvent(false);
       })
       .catch((err) => console.log(err));
-    handleClose(false);
   };
 
   return (
@@ -68,6 +89,7 @@ export default function FormAddEvent({
             variant="outlined"
             type="text"
             margin="dense"
+            value={selectedEvent.title}
             onChange={handleChange}
             required={true}
             inputProps={{ maxLength: 24 }}
@@ -84,6 +106,7 @@ export default function FormAddEvent({
             margin="dense"
             variant="outlined"
             onChange={handleChange}
+            value={selectedEvent.description}
             required={true}
             inputProps={{ maxLength: 400 }}
           />
@@ -99,11 +122,11 @@ export default function FormAddEvent({
             InputLabelProps={{
               shrink: true,
             }}
+            value={selectedEvent.date}
             onChange={handleChange}
             InputProps={{
               inputProps: { min: new Date().toISOString().slice(0, 10) },
             }}
-            required={true}
           />
         </Grid>
         <TextField
@@ -113,11 +136,11 @@ export default function FormAddEvent({
           variant="outlined"
           type="time"
           margin="dense"
-          defaultValue="15:30"
           variant="outlined"
           InputLabelProps={{
             shrink: true,
           }}
+          value={selectedEvent.time}
           inputProps={{
             step: 300, // 5 min
           }}
@@ -132,6 +155,7 @@ export default function FormAddEvent({
             variant="outlined"
             type="text"
             margin="dense"
+            value={selectedEvent.address.street}
             onChange={handleChange}
             required={true}
           />
@@ -144,9 +168,7 @@ export default function FormAddEvent({
             variant="outlined"
             type="text"
             margin="dense"
-            inputProps={{
-              pattern: "^[0-9]*$",
-            }}
+            value={selectedEvent.address.number}
             onChange={handleChange}
             required={true}
           />
@@ -159,9 +181,7 @@ export default function FormAddEvent({
             variant="outlined"
             type="text"
             margin="dense"
-            inputProps={{
-              pattern: "^[0-9]*$",
-            }}
+            value={selectedEvent.address.zip}
             onChange={handleChange}
             required={true}
           />
@@ -174,6 +194,7 @@ export default function FormAddEvent({
             variant="outlined"
             type="text"
             margin="dense"
+            value={selectedEvent.address.city}
             onChange={handleChange}
             required={true}
           />

@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import NavBar from "./NavBar";
+import NavBar from "../NavBar";
 import ModalUpdatePlant from "./ModalUpdatePlant";
 import axios from "axios";
-import bkg from "../assets/myRepo.jpg";
+import bkg from "../../assets/myRepo.jpg";
 import {
   Box,
   Grid,

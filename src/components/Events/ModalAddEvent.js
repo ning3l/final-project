@@ -1,5 +1,5 @@
 import React from "react";
-import FormAddEvent from "./Events/FormAddEvent";
+import FormAddEvent from "./FormAddEvent";
 import {
   Button,
   Dialog,

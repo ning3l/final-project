@@ -7,13 +7,13 @@ import CardMedia from "@material-ui/core/CardMedia";
 import { Typography, Box, Button, Grid } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
-import event1 from "../assets/eventImages/event-1.jpg";
-import event2 from "../assets/eventImages/event-2.jpg";
-import event3 from "../assets/eventImages/event-3.jpg";
-import event4 from "../assets/eventImages/event-4.jpg";
-import event5 from "../assets/eventImages/event-5.jpg";
-import event6 from "../assets/eventImages/event-6.jpg";
-import event7 from "../assets/eventImages/event-7.jpg";
+import event1 from "../../assets/eventImages/event-1.jpg";
+import event2 from "../../assets/eventImages/event-2.jpg";
+import event3 from "../../assets/eventImages/event-3.jpg";
+import event4 from "../../assets/eventImages/event-4.jpg";
+import event5 from "../../assets/eventImages/event-5.jpg";
+import event6 from "../../assets/eventImages/event-6.jpg";
+import event7 from "../../assets/eventImages/event-7.jpg";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -96,6 +96,9 @@ export default function UserEventSection({
             title="plant image"
           />
           <CardContent className={classes.cardContent}>
+            <Typography gutterBottom variant="h6" component="h2">
+              {card.date}
+            </Typography>
             <Typography gutterBottom variant="h5" component="h2">
               {card.title}
             </Typography>

@@ -34,7 +34,7 @@ const useStyles = makeStyles({
 
 const navLinks = [
   { title: `events`, path: `/events` },
-  { title: `find users`, path: `/users` },
+  { title: `users`, path: `/users` },
   { title: `plantindex`, path: `/catalog` },
 ];
 
@@ -99,7 +99,7 @@ export default function NavBar({ setCurrUser, setCredentials, handleLogout }) {
                   <Link to="/events">events</Link>
                 </MenuItem>
                 <MenuItem onClick={handleClose}>
-                  <Link to="/users">find users</Link>
+                  <Link to="/users">users</Link>
                 </MenuItem>
                 <MenuItem onClick={handleClose}>
                   <Link to="/catalog">plant index</Link>
