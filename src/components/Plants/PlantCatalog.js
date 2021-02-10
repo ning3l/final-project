@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import NavBar from "./NavBar";
-import bkg from "../assets/detailPage.png";
+import NavBar from "../NavBar";
 import {
   CardContent,
   Grid,
@@ -55,7 +54,7 @@ export default function PlantCatalog({
   const createPlantCard = (el) => {
     return (
       <Grid item xs={12} sm={4} key={el._id}>
-        <Card onClick={() => history.push(`/${el._id}`)} square={true}>
+        <Card onClick={() => history.push(`/plant/${el._id}`)}>
           <Box display="flex">
             <CardMedia
               className={classes.cardMedia}
@@ -74,9 +73,12 @@ export default function PlantCatalog({
             ></CardMedia>
           </Box>
           <CardContent className={classes.cardContent}>
-            <Typography style={{ fontWeight: 700 }}>
+            <Typography gutterBottom variant="h6" component="h2">
               {el.latin || "-"}
             </Typography>
+            {/* <Typography style={{ fontWeight: 700 }}>
+              {el.latin || "-"}
+            </Typography> */}
           </CardContent>
         </Card>
       </Grid>

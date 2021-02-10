@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
 import { Grid, TextField, Typography, Button } from "@material-ui/core";
 import { ToggleButton, ToggleButtonGroup } from "@material-ui/lab";
 import { makeStyles } from "@material-ui/core/styles";
@@ -8,7 +7,6 @@ import SentimentSatisfiedIcon from "@material-ui/icons/SentimentSatisfied";
 import SentimentSatisfiedOutlinedIcon from "@material-ui/icons/SentimentSatisfiedOutlined";
 import axios from "axios";
 import moment from "moment";
-import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles({
   formInputs: {
@@ -53,11 +51,6 @@ export default function FormUpdatePlant({
       [name]: value,
     }));
   };
-
-  console.log("SELECTED PLANT", selectedPlant);
-  console.log(
-    moment(selectedPlant.water.date, "MM/DD/YYYY").format("YYYY/MM/DD")
-  );
 
   // HANDLE PLANT UPDATE
   const handleSubmit = (e) => {

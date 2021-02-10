@@ -1,27 +1,33 @@
 import React, { useState, useEffect } from "react";
-import { Route, Switch, useHistory } from "react-router-dom";
+import { Route, Switch, useHistory, Redirect } from "react-router-dom";
 import axios from "axios";
 import { createMuiTheme } from "@material-ui/core/styles";
 import { ThemeProvider } from "@material-ui/styles";
 import "./App.css";
 import { login, logout, register, userContext } from "./utils/auth";
 import Cookies from "js-cookie";
+import { ConversationsProvider } from "./contexts/ConversationsProvider";
+import { SocketProvider } from "./contexts/SocketProvider";
 
-const { default: PlantCatalog } = require("./components/PlantCatalog");
+const { default: PlantCatalog } = require("./components/Plants/PlantCatalog");
 const { default: Events } = require("./components/Events/Events");
 const { default: EventDetail } = require("./components/Events/EventDetail");
-const { default: Users } = require("./components/Users");
-const { default: PlantDetail } = require("./components/PlantDetail");
-const { default: PlantRepo } = require("./components/PlantRepo");
-const { default: UserProfile } = require("./components/UserProfile");
+const { default: Users } = require("./components/User/Users");
+const { default: PlantDetail } = require("./components/Plants/PlantDetail");
+const { default: PlantRepo } = require("./components/Plants/PlantRepo");
+const { default: UserProfile } = require("./components/User/UserProfile");
+const { default: VisitedProfile } = require("./components/User/VisitedProfile");
+const { default: Messenger } = require("./components/User/Messenger");
 const { default: Login } = require("./components/Login");
 const { default: Signup } = require("./components/Signup");
 const { default: ProtectedRoute } = require("./components/ProtectedRoute");
+const { default: NotFound } = require("./components/NotFound");
 
 // EDITS FOR MUI DEFAULT STYLES
 const theme = createMuiTheme({
   typography: {
     h1: {
+      // fontSize: "2.3em",
       fontSize: "2.3em",
       fontWeight: "700",
     },
@@ -56,6 +62,7 @@ function App() {
   const [myWishlist, setMyWishlist] = useState([]);
   const [myEvents, setMyEvents] = useState([]);
   const [needsCare, setNeedsCare] = useState([]);
+  const [myMessages, setMyMessages] = useState([]);
   // ###################### GENERAL STATES ######################
   const [allPlants, setAllPlants] = useState([]);
   const [allEvents, setAllEvents] = useState([]);
@@ -219,27 +226,67 @@ function App() {
       .catch((err) => console.log(err.message));
   }, []);
 
-  // ###################### ALL MESSAGES ######################
-  // implement messaging system - chat with socket?
+  // ###################### ALL MESSAGES & SOCKET ######################
 
+  useEffect(() => {
+    axios
+      .get("http://localhost:3000/api/messages")
+      .then((res) => {
+        let history = turnMessagesIntoConversations(res.data);
+        setMyMessages(history);
+      })
+      .catch((err) => console.log(err));
+  }, [currUser]);
+
+  // cluster messages so that each new contact gets indiv contact is present once
+  function turnMessagesIntoConversations(arr) {
+    const messageHistory = arr.reduce((acc, val) => {
+      if (val.recipient !== currUser._id) {
+        console.log(val.recipient);
+        if (!acc[val.recipient]) acc[val.recipient] = [];
+        acc[val.recipient].push(val);
+      } else if (val.sender !== currUser._id) {
+        if (!acc[val.sender]) acc[val.sender] = [];
+        acc[val.sender].push(val);
+      }
+      return acc;
+    }, []);
+
+    // build new contact obj for each contact
+    const contacts = [];
+    for (let key in messageHistory) {
+      contacts.push({
+        contact: key,
+        messages: [...messageHistory[key]],
+      });
+    }
+
+    return contacts;
+
+    // store newly clustered messages in state
+    // setConversations((prev) => [...prev, ...contacts]);
+  }
+
+  // const getMessages = () => {
+  //   socket.on("message", (data) => {
+  //     axios
+  //       .get("http://localhost:3000/api/messages")
+  //       .then((data) => {
+  //         console.log("MESSAGES", data.data);
+  //         setMessages(data.data);
+  //       })
+  //       .catch((err) => console.log(err));
+  //   });
+  // };
+
+  // useEffect(() => {
+  //   getMessages();
+  // }, []);
+
+  // ###################### ROUTING ######################
   return (
     <ThemeProvider theme={theme}>
       <Switch>
-        {/* <Route
-          exact
-          path="/"
-          render={(props) => (
-            <UserProfile
-              myRepo={myRepo}
-              credentials={credentials}
-              setCredentials={setCredentials}
-              currUser={currUser}
-              setCurrUser={setCurrUser}
-              handleLogout={handleLogout}
-              {...props}
-            />
-          )}
-        /> */}
         <ProtectedRoute
           exact
           path="/"
@@ -260,7 +307,6 @@ function App() {
           setNeedsCare={setNeedsCare}
         />
         <Route
-          exact
           path="/login"
           render={(props) => (
             <Login
@@ -270,9 +316,7 @@ function App() {
             />
           )}
         />
-
         <Route
-          exact
           path="/signup"
           render={(props) => (
             <Signup
@@ -287,101 +331,97 @@ function App() {
             />
           )}
         />
-        <Route
-          path="/catalog"
-          render={(props) => (
-            <PlantCatalog
-              allPlants={allPlants}
-              setAllPlants={setAllPlants}
-              handleLogout={handleLogout}
-              {...props}
-            />
-          )}
-        />
-        <Route
-          path="/events"
-          render={(props) => (
-            <Events
-              currUser={currUser}
-              allEvents={allEvents}
-              setAllEvents={setAllEvents}
-              myEvents={myEvents}
-              setMyEvents={setMyEvents}
-              handleLogout={handleLogout}
-              {...props}
-            />
-          )}
-        />
-        <Route
-          path="/event/:eventId"
-          render={(props) => (
-            <EventDetail
-              currUser={currUser}
-              allEvents={allEvents}
-              setAllEvents={setAllEvents}
-              myEvents={myEvents}
-              setMyEvents={setMyEvents}
-              handleLogout={handleLogout}
-              {...props}
-            />
-          )}
-        />
-        <Route
-          path="/users"
-          render={(props) => (
-            <Users
-              allEvents={allEvents}
-              setAllEvents={setAllEvents}
-              myEvents={myEvents}
-              setMyEvents={setMyEvents}
-              currUser={currUser}
-              allUsers={allUsers}
-              setAllUsers={setAllUsers}
-              handleLogout={handleLogout}
-              {...props}
-            />
-          )}
-        />
-        {/* <Route
-          path="/repo"
-          render={(props) => (
-            <PlantRepo
-              myRepo={myRepo}
-              setMyRepo={setMyRepo}
-              credentials={credentials}
-              setCredentials={setCredentials}
-              currUser={currUser}
-              setCurrUser={setCurrUser}
-              handleLogout={handleLogout}
-              {...props}
-            />
-          )}
-        /> */}
         <ProtectedRoute
-          path="/repo"
-          component={PlantRepo}
-          myRepo={myRepo}
-          setMyRepo={setMyRepo}
-          setCredentials={setCredentials}
-          setCurrUser={setCurrUser}
+          path="/catalog"
+          component={PlantCatalog}
+          allPlants={allPlants}
+          setAllPlants={setAllPlants}
           handleLogout={handleLogout}
-          needsCare={needsCare}
-          setNeedsCare={setNeedsCare}
         />
-        <Route
-          path="/:plantId"
-          render={(props) => (
-            <PlantDetail
-              setMyRepo={setMyRepo}
+        <ProtectedRoute
+          path="/events"
+          component={Events}
+          currUser={currUser}
+          allEvents={allEvents}
+          setAllEvents={setAllEvents}
+          myEvents={myEvents}
+          setMyEvents={setMyEvents}
+          handleLogout={handleLogout}
+        />
+        <ProtectedRoute
+          path="/event/:eventId"
+          component={EventDetail}
+          currUser={currUser}
+          allEvents={allEvents}
+          setAllEvents={setAllEvents}
+          myEvents={myEvents}
+          setMyEvents={setMyEvents}
+          handleLogout={handleLogout}
+        />
+        <ProtectedRoute
+          path="/users"
+          component={Users}
+          allEvents={allEvents}
+          setAllEvents={setAllEvents}
+          myEvents={myEvents}
+          setMyEvents={setMyEvents}
+          currUser={currUser}
+          allUsers={allUsers}
+          setAllUsers={setAllUsers}
+          handleLogout={handleLogout}
+        />
+        {/* Is there a better way to account for a page refresh that conditionally render the contexts? */}
+        {currUser ? (
+          <SocketProvider currUser={currUser}>
+            <ConversationsProvider
               currUser={currUser}
-              setCurrUser={setCurrUser}
-              myWishlist={myWishlist}
-              setMyWishlist={setMyWishlist}
-              handleLogout={handleLogout}
-              {...props}
-            />
-          )}
-        />
+              myMessages={myMessages}
+              setMyMessages={setMyMessages}
+            >
+              <ProtectedRoute
+                path="/user/:userId"
+                component={VisitedProfile}
+                allUsers={allUsers}
+              />
+              <ProtectedRoute
+                path="/messenger/:userId?"
+                component={Messenger}
+                allUsers={allUsers}
+                currUser={currUser}
+                setCurrUser={setCurrUser}
+                setCredentials={setCredentials}
+                handleLogout={handleLogout}
+                myMessages={myMessages}
+                setMyMessages={setMyMessages}
+              />
+
+              <ProtectedRoute
+                path="/repo"
+                component={PlantRepo}
+                myRepo={myRepo}
+                setMyRepo={setMyRepo}
+                setCredentials={setCredentials}
+                setCurrUser={setCurrUser}
+                handleLogout={handleLogout}
+                needsCare={needsCare}
+                setNeedsCare={setNeedsCare}
+              />
+              <ProtectedRoute
+                path="/plant/:plantId"
+                component={PlantDetail}
+                setMyRepo={setMyRepo}
+                currUser={currUser}
+                setCurrUser={setCurrUser}
+                myWishlist={myWishlist}
+                setMyWishlist={setMyWishlist}
+                handleLogout={handleLogout}
+              />
+            </ConversationsProvider>
+          </SocketProvider>
+        ) : (
+          <div>Loading...</div>
+        )}
+        <Route component={NotFound} />
       </Switch>
     </ThemeProvider>
   );

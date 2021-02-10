@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import NavBar from "./NavBar";
+import NavBar from "../NavBar";
 import ModalRepo from "./ModalRepo";
 import ModalWishlist from "./ModalWishlist";
-import bkg from "../assets/detailPage.png";
+import bkg from "../../assets/detailPage.png";
 import {
   CircularProgress,
   Grid,

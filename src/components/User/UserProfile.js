@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import "../App.css";
-import noData from "../assets/noData.png";
-import bkg from "../assets/detailPage.png";
+import "../../App.css";
+import noData from "../../assets/noData.png";
+import bkg from "../../assets/detailPage.png";
 import axios from "axios";
-import NavBar from "./NavBar";
+import NavBar from "../NavBar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Grid from "@material-ui/core/Grid";
@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
   },
   heroButtons: {
-    paddingBottom: theme.spacing(1),
+    margin: theme.spacing(1),
   },
   container: {
     textAlign: "center",
@@ -218,6 +218,13 @@ export default function UserProfile({
                   <Link to="/repo" style={{ textDecoration: "none" }}>
                     <Button variant="contained" color="primary">
                       my plants
+                    </Button>
+                  </Link>
+                </Grid>
+                <Grid item>
+                  <Link to="/messenger" style={{ textDecoration: "none" }}>
+                    <Button variant="contained" color="primary">
+                      messages
                     </Button>
                   </Link>
                 </Grid>

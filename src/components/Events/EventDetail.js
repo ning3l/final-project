@@ -146,7 +146,6 @@ export default function EventDetail({ match, handleLogout }) {
               <Typography>
                 {address.street} {address.number}
               </Typography>
-              <Typography>{address.number}</Typography>
               <Typography>
                 {address.zip} {address.city}
               </Typography>
@@ -193,8 +192,8 @@ export default function EventDetail({ match, handleLogout }) {
               singleEvent.attendees.map((user) => (
                 <Grid item className={classes.avatars}>
                   <Avatar
-                    alt="profile pic"
-                    src={`http://localhost:3000/${user.profileImg}`}
+                    alt="✿"
+                    src={`http://localhost:3000/images/user/${user.profileImg}`}
                   />
                   <Typography>{user.username}</Typography>
                 </Grid>

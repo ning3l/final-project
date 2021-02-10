@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import NavBar from "./NavBar";
+import NavBar from "../NavBar";
 import axios from "axios";
-import bkg from "../assets/repo.jpg";
+import bkg from "../../assets/repo.jpg";
 import {
   Box,
   Grid,
@@ -11,6 +11,7 @@ import {
   CardMedia,
   Typography,
   Button,
+  CardActionArea,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -53,6 +54,7 @@ export default function Users({
   handleLogout,
   allUsers,
   setAllUsers,
+  history,
 }) {
   const classes = useStyles();
 
@@ -61,16 +63,17 @@ export default function Users({
   const createUserCard = (el) => {
     const id = el._id;
     return (
-      // <Card>
-      <Card className={classes.root} key={el._id}>
+      <Card
+        className={classes.root}
+        key={el._id}
+        onClick={() => history.push(`/user/${el._id}`)}
+      >
         <CardMedia
           className={classes.plantPic}
-          image={`http://localhost:3000/${el.profileImg}`}
+          image={`http://localhost:3000/images/user/${el.profileImg}`}
           title="Plant Preview"
         />
-        {/* <div> */}
         <div className={classes.details}>
-          {/* <CardContent> */}
           <CardContent className={classes.content}>
             <div className={classes.plantsitting}>
               <Typography
@@ -79,7 +82,6 @@ export default function Users({
                 style={{ backgroundColor: "", display: "inline" }}
               >
                 {el.username}
-                {/* <Button onClick={(e) => handleClickOpen(e)}>open details modal</Button> */}
               </Typography>
               {el.plantsitting === "yes" ? (
                 <Typography
