@@ -34,6 +34,8 @@ export default function Messenger({
     sendMessage,
     selectedConversation,
     myMessages,
+    selectedConvo,
+    setSelectedConvo,
     setSelectedConversationID,
   } = useConversations();
 
@@ -43,14 +45,14 @@ export default function Messenger({
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    sendMessage(selectedConversation.contact, text);
+    sendMessage(selectedConvo.contact, text);
     setText("");
   };
 
   // select a convo from list of contacts to see message history / select recipient
   const handleSelectConvo = (convo) => {
-    console.log("selecting...", convo.contact);
-    setSelectedConversationID(convo.contact);
+    let select = myMessages.find((el) => el.contact === convo.contact);
+    setSelectedConvo(select);
     history.push(`/messenger/${convo.contact}`);
   };
 
@@ -70,7 +72,7 @@ export default function Messenger({
             style={{ backgroundColor: "pink" }}
             className={classes.container}
           >
-            {myMessages &&
+            {myMessages.length &&
               myMessages.map((convo, idx) => (
                 <div key={idx} onClick={(e) => handleSelectConvo(convo)}>
                   {convo.contact}
@@ -101,10 +103,11 @@ export default function Messenger({
               ) : (
                 <div>Loading</div>
               )} */}
-              {selectedConversation &&
-                selectedConversation.messages.map((message, idx) => (
-                  <div key={idx}>{message.text}</div>
-                ))}
+              {!selectedConvo
+                ? "select a convo"
+                : selectedConvo.messages.map((message, idx) => (
+                    <div key={idx}>{message.text}</div>
+                  ))}
             </Box>
             {/* <Box style={{ backgroundColor: "white", height: "20%" }}>
                   <TextField

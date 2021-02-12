@@ -262,26 +262,7 @@ function App() {
     }
 
     return contacts;
-
-    // store newly clustered messages in state
-    // setConversations((prev) => [...prev, ...contacts]);
   }
-
-  // const getMessages = () => {
-  //   socket.on("message", (data) => {
-  //     axios
-  //       .get("http://localhost:3000/api/messages")
-  //       .then((data) => {
-  //         console.log("MESSAGES", data.data);
-  //         setMessages(data.data);
-  //       })
-  //       .catch((err) => console.log(err));
-  //   });
-  // };
-
-  // useEffect(() => {
-  //   getMessages();
-  // }, []);
 
   // ###################### ROUTING ######################
   return (
