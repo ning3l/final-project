@@ -13,9 +13,12 @@ export function ConversationsProvider({
   setMyMessages,
   children,
 }) {
-  // myMessages holds chat history sorted by recipieny
+  // myMessages holds chat history sorted by recipient
   const [selectedConversationID, setSelectedConversationID] = useState("");
   const socket = useSocket();
+
+  // TEST
+  const [selectedConvo, setSelectedConvo] = useState(null);
 
   const addMessageToConversation = ({ recipient, text, sender }) => {
     // find conversation in all conversations
@@ -25,11 +28,10 @@ export function ConversationsProvider({
     // either add new msg to old convo
     if (oldConvo) {
       // CHANGE THIS so msg obj is created server-side and you get createdAt prop
-      oldConvo.messages.push({
-        recipient,
-        text,
-        sender,
-      });
+      setMyMessages((prev) => [
+        ...prev,
+        oldConvo.messages.push({ recipient, text, sender }),
+      ]);
     } else {
       // or create new convo for msg and push to messages arr
       let newConvo = {
@@ -55,7 +57,6 @@ export function ConversationsProvider({
 
   function sendMessage(recipient, text) {
     // send a recipient id and the msg text to server
-    console.log("recipient for lena", recipient);
     socket.emit("send-message", { recipient, text });
     addMessageToConversation({ recipient, text, sender: currUser._id });
   }
@@ -63,10 +64,8 @@ export function ConversationsProvider({
   const value = {
     myMessages,
     setMyMessages,
-    //selectedConversation: myMessages[selectedConversationIndex],
-    selectedConversation: myMessages.find(
-      (el) => el.contact === selectedConversationID
-    ),
+    selectedConvo,
+    setSelectedConvo,
     setSelectedConversationID,
     sendMessage,
   };
