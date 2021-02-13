@@ -24,6 +24,7 @@ export default function Messenger({
   location,
   match,
   history,
+  currUser,
   setCurrUser,
   setCredentials,
   handleLogout,
@@ -54,6 +55,35 @@ export default function Messenger({
     let select = myMessages.find((el) => el.contact === convo.contact);
     setSelectedConvo(select);
     history.push(`/messenger/${convo.contact}`);
+  };
+
+  // create different colors for each user
+  const createChatHistory = (el) => {
+    if (el.sender !== currUser._id) {
+      return (
+        <div>
+          <div style={{ textAlign: "left", marginLeft: "30px" }}>
+            <p style={{ color: "#66AD93" }}>
+              <b>
+                {el.recipient} at
+                {el.createdAt}
+              </b>
+            </p>
+            <p>{el.text}</p>
+          </div>
+        </div>
+      );
+    }
+    return (
+      <div>
+        <div style={{ textAlign: "right", marginRight: "30px" }}>
+          <p style={{ color: "pink" }}>
+            <b>You at {el.createdAt}</b>
+          </p>
+          <p>{el.text}</p>
+        </div>
+      </div>
+    );
   };
 
   return (
@@ -105,8 +135,8 @@ export default function Messenger({
               )} */}
               {!selectedConvo
                 ? "select a convo"
-                : selectedConvo.messages.map((message, idx) => (
-                    <div key={idx}>{message.text}</div>
+                : selectedConvo.messages.map((el, idx) => (
+                    <div key={idx}>{createChatHistory(el)}</div>
                   ))}
             </Box>
             {/* <Box style={{ backgroundColor: "white", height: "20%" }}>
