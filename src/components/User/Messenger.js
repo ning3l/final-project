@@ -1,8 +1,17 @@
 import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { Grid, TextField, Box, Button, Container } from "@material-ui/core";
+import {
+  Grid,
+  TextField,
+  Box,
+  Button,
+  Container,
+  Avatar,
+  Typography,
+} from "@material-ui/core";
 import NavBar from "../NavBar";
 import { useConversations } from "../../contexts/ConversationsProvider";
+import moment from "moment";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -63,24 +72,26 @@ export default function Messenger({
       return (
         <div>
           <div style={{ textAlign: "left", marginLeft: "30px" }}>
-            <p style={{ color: "#66AD93" }}>
-              <b>
-                {el.recipient} at
-                {el.createdAt}
-              </b>
-            </p>
-            <p>{el.text}</p>
+            <Typography style={{ color: "#66AD93" }}>
+              <b>{moment(el.createdAt).format("MMM Do YY, h:mm a")}</b>
+            </Typography>
+            <Typography>{el.text}</Typography>
           </div>
         </div>
       );
     }
     return (
       <div>
-        <div style={{ textAlign: "right", marginRight: "30px" }}>
-          <p style={{ color: "pink" }}>
-            <b>You at {el.createdAt}</b>
-          </p>
-          <p>{el.text}</p>
+        <div
+          style={{
+            textAlign: "right",
+            marginRight: "30px",
+          }}
+        >
+          <Typography style={{ color: "pink" }}>
+            <b> {moment(el.createdAt).format("MMM Do YY, h:mm a")}</b>
+          </Typography>
+          <Typography>{el.text}</Typography>
         </div>
       </div>
     );
@@ -94,59 +105,68 @@ export default function Messenger({
         handleLogout={handleLogout}
       />
       <div className={classes.root}>
-        <Grid container style={{ backgroundColor: "salmon" }}>
+        <Grid container>
           <Grid
             item
             xs={12}
             sm={3}
-            style={{ backgroundColor: "pink" }}
             className={classes.container}
+            style={{ borderRight: "1px solid grey" }}
           >
             {myMessages.length &&
               myMessages.map((convo, idx) => (
-                <div key={idx} onClick={(e) => handleSelectConvo(convo)}>
-                  {convo.contact}
+                <div
+                  key={idx}
+                  onClick={(e) => handleSelectConvo(convo)}
+                  style={{
+                    height: "80px",
+                    borderBottom: "1px solid grey",
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                >
+                  <Avatar
+                    alt="Cindy Baker"
+                    src="/static/images/avatar/3.jpg"
+                    style={{ margin: "20px" }}
+                  />
+                  <Typography>{convo.contact}</Typography>
                 </div>
               ))}
           </Grid>
-          <Grid
-            item
-            xs={12}
-            sm={9}
-            style={{ backgroundColor: "violet" }}
-            className={classes.container}
-          >
-            <Box style={{ backgroundColor: "green", height: "10%" }}>
-              {/* {otherUser && otherUser.username} */}
+          <Grid item xs={12} sm={9} className={classes.container}>
+            <Box
+              style={{
+                backgroundColor: "lightgrey",
+                height: "10%",
+                borderBottom: "1px solid grey",
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              {selectedConvo && (
+                <>
+                  <Avatar
+                    alt="Cindy Baker"
+                    src="/static/images/avatar/3.jpg"
+                    style={{ margin: "20px" }}
+                  />
+                  <Typography>{selectedConvo.contact}</Typography>
+                </>
+              )}
             </Box>
             <Box
               style={{
-                backgroundColor: "lightblue",
-                height: "70%",
+                height: "75%",
                 overflow: "scroll",
               }}
             >
-              {/* {currUser ? (
-                [...myMessages, ...messages].map((el, index) => (
-                  <div key={index}>{el.text}</div>
-                ))
-              ) : (
-                <div>Loading</div>
-              )} */}
               {!selectedConvo
                 ? "select a convo"
                 : selectedConvo.messages.map((el, idx) => (
                     <div key={idx}>{createChatHistory(el)}</div>
                   ))}
             </Box>
-            {/* <Box style={{ backgroundColor: "white", height: "20%" }}>
-                  <TextField
-                    placeholder="Type a message..."
-                    multiline
-                    rows={2}
-                    rowsMax={4}
-                  />
-                </Box> */}
             <form onSubmit={handleSubmit}>
               <Container>
                 <Grid item>
@@ -173,21 +193,6 @@ export default function Messenger({
                   </Button>
                 </Grid>
               </Container>
-              {/* <TextField
-                    id="standard-name"
-                    label="Name"
-                    value="hello"
-                    variant="outlined"
-                    margin="dense"
-                    style={{ width: "100%" }}
-                    InputProps={{
-                      endAdornment: (
-                        <Button variant="outlined" margin="dense">
-                          hi
-                        </Button>
-                      ),
-                    }}
-                  /> */}
             </form>
           </Grid>
         </Grid>
