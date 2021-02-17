@@ -363,6 +363,9 @@ function App() {
                 path="/user/:userId"
                 component={VisitedProfile}
                 allUsers={allUsers}
+                setCurrUser={setCurrUser}
+                setCredentials={setCredentials}
+                handleLogout={handleLogout}
               />
               <ProtectedRoute
                 path="/messenger/:userId?"
