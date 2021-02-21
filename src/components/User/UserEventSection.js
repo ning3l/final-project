@@ -87,9 +87,7 @@ export default function UserEventSection({
   return (
     <Grid item key={card} xs={12} sm={6} md={4}>
       <Card className={classes.card}>
-        <CardActionArea
-          onClick={() => history.push(`/events/event/${card._id}`)}
-        >
+        <CardActionArea onClick={() => history.push(`/event/${card._id}`)}>
           <CardMedia
             className={classes.cardMedia}
             image={`${eventPics[card.img]}`}

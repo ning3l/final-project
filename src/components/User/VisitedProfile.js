@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useConversations } from "../../contexts/ConversationsProvider";
 import NavBar from "../NavBar";
 import {
@@ -10,6 +10,7 @@ import {
   Card,
   CardMedia,
   CardContent,
+  CardActionArea,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import event1 from "../../assets/eventImages/event-1.jpg";
@@ -20,14 +21,17 @@ import event5 from "../../assets/eventImages/event-5.jpg";
 import event6 from "../../assets/eventImages/event-6.jpg";
 import event7 from "../../assets/eventImages/event-7.jpg";
 import smile from "../../assets/smile.png";
+import axios from "axios";
+import SentimentVeryDissatisfiedIcon from "@material-ui/icons/SentimentVeryDissatisfied";
 
 const useStyles = makeStyles((theme) => ({
   heroContent: {
     backgroundColor: theme.palette.background.paper,
-    padding: theme.spacing(8, 0, 6),
+    padding: theme.spacing(4, 0, 4),
   },
-  heroButtons: {
-    marginTop: theme.spacing(4),
+  heroButton: {
+    margin: theme.spacing(1),
+    display: "block",
   },
   card: {
     height: "100%",
@@ -56,7 +60,6 @@ const useStyles = makeStyles((theme) => ({
 export default function VisitedProfile({
   match,
   history,
-  allUsers,
   setCurrUser,
   setCredentials,
   handleLogout,
@@ -70,9 +73,20 @@ export default function VisitedProfile({
     setSelectedConversationID,
   } = useConversations();
 
-  const user = allUsers.find((user) => user._id === match.params.userId);
-  console.log("THIS USER", user);
+  // GET INFOS FOR THIS USER
+  const [userDetails, setUserDetails] = useState(null);
 
+  useEffect(() => {
+    axios
+      .get(`http://localhost:3000/api/users/${match.params.userId}`)
+      .then((res) => {
+        console.log("DATA", res.data);
+        setUserDetails(res.data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
+  // MESSENGER
   const handleOpenMessenger = (user) => {
     let oldConvo = myMessages.find((el) => el.contact === user._id);
     if (!oldConvo) {
@@ -89,24 +103,48 @@ export default function VisitedProfile({
     });
   };
 
-  const createCards = (card) => {
-    console.log(card);
+  const createPlantCards = (plant) => {
     return (
-      <Grid item key={card} xs={12} sm={6} md={4}>
+      <Grid item xs={12} sm={6} md={4}>
         <Card className={classes.card}>
-          <CardMedia
-            className={classes.cardMedia}
-            image="https://source.unsplash.com/random"
-            title="Image title"
-          />
-          <CardContent className={classes.cardContent}>
-            <Typography gutterBottom variant="h5" component="h2">
-              Here goes either event date OR plant name
-            </Typography>
-            <Typography>
-              Here goes either event title OR plant subname
-            </Typography>
-          </CardContent>
+          <CardActionArea onClick={() => history.push(`/plant/${plant._id}`)}>
+            <CardMedia
+              className={classes.cardMedia}
+              image={plant.srcImg}
+              title="Image title"
+            />
+            <CardContent className={classes.cardContent}>
+              <Typography gutterBottom variant="h5" component="h2">
+                {plant.common || "-"}
+              </Typography>
+              <Typography>{plant.latin || "-"}</Typography>
+            </CardContent>
+          </CardActionArea>
+        </Card>
+      </Grid>
+    );
+  };
+
+  const createEventCards = (event) => {
+    console.log("EEVENt", event);
+    return (
+      <Grid item xs={12} sm={6} md={4}>
+        <Card className={classes.card}>
+          <CardActionArea onClick={() => history.push(`/event/${event._id}`)}>
+            <CardMedia
+              className={classes.cardMedia}
+              image={`${eventPics[event.img]}`}
+              title="Image title"
+            />
+            <CardContent className={classes.cardContent}>
+              <Typography gutterBottom variant="h6" component="h2">
+                {event.date}
+              </Typography>
+              <Typography gutterBottom variant="h5" component="h2">
+                {event.title}
+              </Typography>
+            </CardContent>
+          </CardActionArea>
         </Card>
       </Grid>
     );
@@ -119,15 +157,31 @@ export default function VisitedProfile({
         setCredentials={setCredentials}
         handleLogout={handleLogout}
       />
-      {user && (
-        <Container className={classes.cardGrid} maxWidth="md">
-          {/* <Grid container style={{ backgroundColor: "pink" }}>
-            <Typography variant="h2">this is {user.username}</Typography>
-            <Typography>up for plantsitting?</Typography>
-            <Typography>{user.plantsitting}</Typography>
-            <div style={{ display: "flex" }}>
+      {userDetails && (
+        <main>
+          {/* user info */}
+          <img
+            src={smile}
+            alt="yellow smiley"
+            style={{
+              width: "100px",
+              position: "absolute",
+              marginLeft: "25%",
+              marginTop: "5%",
+            }}
+          />
+          <div className={classes.heroContent}>
+            <Container maxWidth="sm" align="center">
+              <Typography
+                component="h1"
+                variant="h2"
+                color="textPrimary"
+                gutterBottom
+              >
+                this is {userDetails.username}
+              </Typography>
               <img
-                src={`http://localhost:3000/images/user/${user.profileImg}`}
+                src={`http://localhost:3000/images/user/${userDetails.profileImg}`}
                 alt="user profile pic"
                 style={{
                   width: "200px",
@@ -141,93 +195,81 @@ export default function VisitedProfile({
                   justifyContent: "center",
                 }}
               />
-              <img src={smile} alt="yellow smiley" style={{ width: "100px" }} />
-            </div>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => handleOpenMessenger(user)}
+              <Typography>up for plantsitting?</Typography>
+              <Typography
+                style={{ backgroundColor: "yellow", display: "inline" }}
+              >
+                {userDetails.plantsitting}
+              </Typography>
+              <Button
+                className={classes.heroButton}
+                variant="contained"
+                color="primary"
+                onClick={() => handleOpenMessenger(userDetails)}
+              >
+                send a message
+              </Button>
+            </Container>
+          </div>
+          {/* plant and event section */}
+          <Container className={classes.cardGrid} maxWidth="md">
+            <Grid
+              container
+              spacing={4}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
             >
-              Send a message
-            </Button>
-          </Grid> */}
-          <main>
-            <div className={classes.heroContent}>
-              <Container maxWidth="sm">
-                <Typography
-                  component="h1"
-                  variant="h2"
-                  align="center"
-                  color="textPrimary"
-                  gutterBottom
-                >
-                  Album layout
+              <Box textAlign="center" mb={2}>
+                <Typography variant="h2" gutterBottom>
+                  plants {userDetails.username} currently owns
                 </Typography>
-                <Typography
-                  variant="h5"
-                  align="center"
-                  color="textSecondary"
-                  paragraph
-                >
-                  Something short and leading about the collection below—its
-                  contents, the creator, etc. Make it short and sweet, but not
-                  too short so folks don&apos;t simply skip over it entirely.
-                </Typography>
-                <div className={classes.heroButtons}>
-                  <Grid container spacing={2} justify="center">
-                    <Grid item>
-                      <Button variant="contained" color="primary">
-                        Main call to action
-                      </Button>
-                    </Grid>
-                    <Grid item>
-                      <Button variant="outlined" color="primary">
-                        Secondary action
-                      </Button>
-                    </Grid>
-                  </Grid>
-                </div>
-              </Container>
-            </div>
-
-            <Grid container spacing={4}>
-              <Box textAlign="center">
-                <Typography variant="h2">
-                  plants {user.username} currently owns
-                </Typography>
-                {user.repository.length ? (
+                {userDetails.repository.length ? (
                   <Grid
                     container
                     spacing={4}
                     className={classes.eventContainer}
                   >
-                    {user.repository.map((card) => createCards(card))}
+                    {userDetails.repository.map((card) =>
+                      createPlantCards(card.plant)
+                    )}
                   </Grid>
                 ) : (
-                  <div>{user.username} has not yet added any plants</div>
+                  <Box>
+                    <Typography>
+                      {userDetails.username} has not yet added any plants
+                    </Typography>
+                    <SentimentVeryDissatisfiedIcon fontSize="large" />
+                  </Box>
                 )}
               </Box>
-              <Box textAlign="center">
-                <Typography variant="h2">
-                  events {user.username} attends
+              <Box textAlign="center" mb={2}>
+                <Typography variant="h2" gutterBottom>
+                  events {userDetails.username} attends
                 </Typography>
-                {user.events.length ? (
+                {userDetails.events.length ? (
                   <Grid
                     container
                     spacing={4}
                     className={classes.eventContainer}
                   >
-                    {user.events.map((card) => createCards(card))}
+                    {userDetails.events.map((card) => createEventCards(card))}
                   </Grid>
                 ) : (
-                  <div>
-                    {user.username} is currently not attending any events
-                  </div>
+                  <Box>
+                    <Typography>
+                      {userDetails.username} is currently not attending any
+                      events
+                    </Typography>
+                    <SentimentVeryDissatisfiedIcon fontSize="large" />
+                  </Box>
                 )}
               </Box>
             </Grid>
-          </main>
-        </Container>
+          </Container>
+        </main>
       )}
     </>
   );
