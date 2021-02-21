@@ -25,13 +25,17 @@ export function ConversationsProvider({
     let oldConvo = myMessages.find(
       (el) => el.contact === recipient || el.contact === sender
     );
+    console.log("an old convo was found:", oldConvo);
     // either add new msg to old convo
     if (oldConvo) {
       // CHANGE THIS so msg obj is created server-side and you get createdAt prop
       setMyMessages((prev) => [
         ...prev,
-        oldConvo.messages.push({ recipient, text, sender }),
+        prev
+          .find((el) => el.contact === oldConvo.contact)
+          .messages.push({ recipient, text, sender }),
       ]);
+      console.log("all my messages after update", myMessages);
     } else {
       // or create new convo for msg and push to messages arr
       let newConvo = {
