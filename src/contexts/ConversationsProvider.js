@@ -29,12 +29,15 @@ export function ConversationsProvider({
     // either add new msg to old convo
     if (oldConvo) {
       // CHANGE THIS so msg obj is created server-side and you get createdAt prop
-      setMyMessages((prev) => [
-        ...prev,
-        prev
-          .find((el) => el.contact === oldConvo.contact)
-          .messages.push({ recipient, text, sender }),
-      ]);
+      setMyMessages(
+        (prev) =>
+          [
+            ...prev,
+            prev
+              .find((el) => el.contact === oldConvo.contact)
+              .messages.push({ recipient, text, sender }),
+          ].filter((el) => typeof el !== "number") // this is awful and you should probably use useReducer instead !
+      );
       console.log("all my messages after update", myMessages);
     } else {
       // or create new convo for msg and push to messages arr

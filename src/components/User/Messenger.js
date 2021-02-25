@@ -11,6 +11,7 @@ import {
 } from "@material-ui/core";
 import NavBar from "../NavBar";
 import { useConversations } from "../../contexts/ConversationsProvider";
+import noData from "../../assets/noData.png";
 import moment from "moment";
 
 const useStyles = makeStyles((theme) => ({
@@ -30,13 +31,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Messenger({
-  location,
-  match,
   history,
   currUser,
   setCurrUser,
   setCredentials,
   handleLogout,
+  allUsers,
 }) {
   const classes = useStyles();
   const [text, setText] = useState(""); // create a new message
@@ -97,6 +97,14 @@ export default function Messenger({
     );
   };
 
+  // create user info for selected convo
+  const createUserInfo = (id, item) => {
+    let selectedUser = allUsers.find((user) => user._id === id);
+
+    if (item === "text") return selectedUser.username;
+    if (item === "pic") return selectedUser.profileImg;
+  };
+
   return (
     <>
       <NavBar
@@ -123,21 +131,27 @@ export default function Messenger({
                     borderBottom: "1px solid grey",
                     display: "flex",
                     alignItems: "center",
+                    overflow: "scroll",
                   }}
                 >
                   <Avatar
-                    alt="Cindy Baker"
-                    src="/static/images/avatar/3.jpg"
+                    alt="profile pic"
+                    src={`http://localhost:3000/images/user/${createUserInfo(
+                      convo.contact,
+                      "pic"
+                    )}`}
                     style={{ margin: "20px" }}
                   />
-                  <Typography>{convo.contact}</Typography>
+                  <Typography>
+                    {createUserInfo(convo.contact, "text")}
+                  </Typography>
                 </div>
               ))}
           </Grid>
           <Grid item xs={12} sm={9} className={classes.container}>
             <Box
               style={{
-                backgroundColor: "lightgrey",
+                backgroundColor: "pink",
                 height: "10%",
                 borderBottom: "1px solid grey",
                 display: "flex",
@@ -147,53 +161,79 @@ export default function Messenger({
               {selectedConvo && (
                 <>
                   <Avatar
-                    alt="Cindy Baker"
-                    src="/static/images/avatar/3.jpg"
+                    alt="profile pic"
+                    src={`http://localhost:3000/images/user/${createUserInfo(
+                      selectedConvo.contact,
+                      "pic"
+                    )}`}
                     style={{ margin: "20px" }}
                   />
-                  <Typography>{selectedConvo.contact}</Typography>
+                  <Typography>
+                    {createUserInfo(selectedConvo.contact, "text")}
+                  </Typography>
                 </>
               )}
             </Box>
-            <Box
-              style={{
-                height: "75%",
-                overflow: "scroll",
-              }}
-            >
-              {!selectedConvo
-                ? "select a convo"
-                : selectedConvo.messages.map((el, idx) => (
+            {!selectedConvo ? (
+              <Box
+                style={{
+                  height: "75%",
+                  textAlign: "center",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <img src={noData} style={{ width: "100px" }} alt="plant pot" />
+                <Typography
+                  style={{ backgroundColor: "yellow", display: "inline" }}
+                >
+                  Pls select a conversation
+                </Typography>
+              </Box>
+            ) : (
+              <>
+                <Box
+                  style={{
+                    height: "75%",
+                    overflow: "scroll",
+                  }}
+                >
+                  {selectedConvo.messages.map((el, idx) => (
                     <div key={idx}>{createChatHistory(el)}</div>
                   ))}
-            </Box>
-            <form onSubmit={handleSubmit}>
-              <Container>
-                <Grid item>
-                  <TextField
-                    className={classes.formInputs}
-                    name="text"
-                    label="your message"
-                    variant="outlined"
-                    type="text"
-                    margin="dense"
-                    onChange={handleChange}
-                    required={true}
-                    style={{ width: "100%" }}
-                  />
-                </Grid>
-                <Grid item>
-                  <Button
-                    variant="outlined"
-                    type="submit"
-                    margin="dense"
-                    className={classes.formInputs}
-                  >
-                    Submit
-                  </Button>
-                </Grid>
-              </Container>
-            </form>
+                </Box>
+                <form onSubmit={handleSubmit}>
+                  <Container>
+                    <Grid item>
+                      <TextField
+                        className={classes.formInputs}
+                        name="text"
+                        label="your message"
+                        variant="outlined"
+                        type="text"
+                        margin="dense"
+                        onChange={handleChange}
+                        required={true}
+                        value={text}
+                        style={{ width: "100%" }}
+                      />
+                    </Grid>
+                    <Grid item>
+                      <Button
+                        variant="outlined"
+                        type="submit"
+                        margin="dense"
+                        className={classes.formInputs}
+                      >
+                        Submit
+                      </Button>
+                    </Grid>
+                  </Container>
+                </form>
+              </>
+            )}
           </Grid>
         </Grid>
       </div>

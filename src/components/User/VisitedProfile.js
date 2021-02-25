@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
   },
   cardGrid: {
     paddingTop: theme.spacing(4),
-    paddingBottom: theme.spacing(8),
+    paddingBottom: theme.spacing(4),
   },
   cardMedia: {
     paddingTop: "56.25%", // 16:9
@@ -126,7 +126,6 @@ export default function VisitedProfile({
   };
 
   const createEventCards = (event) => {
-    console.log("EEVENt", event);
     return (
       <Grid item xs={12} sm={6} md={4}>
         <Card className={classes.card}>
@@ -199,7 +198,7 @@ export default function VisitedProfile({
               <Typography
                 style={{ backgroundColor: "yellow", display: "inline" }}
               >
-                {userDetails.plantsitting}
+                {userDetails.plantsitting || "nope"}
               </Typography>
               <Button
                 className={classes.heroButton}
@@ -211,62 +210,54 @@ export default function VisitedProfile({
               </Button>
             </Container>
           </div>
-          {/* plant and event section */}
+          {/* PLANT CARDS */}
           <Container className={classes.cardGrid} maxWidth="md">
             <Grid
               container
               spacing={4}
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-              }}
+              style={{ display: "flex", justifyContent: "center" }}
             >
-              <Box textAlign="center" mb={2}>
-                <Typography variant="h2" gutterBottom>
-                  plants {userDetails.username} currently owns
-                </Typography>
-                {userDetails.repository.length ? (
-                  <Grid
-                    container
-                    spacing={4}
-                    className={classes.eventContainer}
-                  >
-                    {userDetails.repository.map((card) =>
-                      createPlantCards(card.plant)
-                    )}
-                  </Grid>
-                ) : (
-                  <Box>
-                    <Typography>
-                      {userDetails.username} has not yet added any plants
-                    </Typography>
-                    <SentimentVeryDissatisfiedIcon fontSize="large" />
-                  </Box>
-                )}
-              </Box>
-              <Box textAlign="center" mb={2}>
-                <Typography variant="h2" gutterBottom>
-                  events {userDetails.username} attends
-                </Typography>
-                {userDetails.events.length ? (
-                  <Grid
-                    container
-                    spacing={4}
-                    className={classes.eventContainer}
-                  >
-                    {userDetails.events.map((card) => createEventCards(card))}
-                  </Grid>
-                ) : (
-                  <Box>
-                    <Typography>
-                      {userDetails.username} is currently not attending any
-                      events
-                    </Typography>
-                    <SentimentVeryDissatisfiedIcon fontSize="large" />
-                  </Box>
-                )}
-              </Box>
+              <Typography variant="h2" gutterBottom>
+                plants {userDetails.username} currently owns
+              </Typography>
+              {userDetails.repository.length ? (
+                <Grid container spacing={4} className={classes.eventContainer}>
+                  {userDetails.repository.map((card) =>
+                    createPlantCards(card.plant)
+                  )}
+                </Grid>
+              ) : (
+                <Box>
+                  <Typography>
+                    {userDetails.username} has not yet added any plants
+                  </Typography>
+                  <SentimentVeryDissatisfiedIcon fontSize="large" />
+                </Box>
+              )}
+            </Grid>
+          </Container>
+          {/* EVENT CARDS */}
+          <Container className={classes.cardGrid} maxWidth="md">
+            <Grid
+              container
+              spacing={4}
+              style={{ display: "flex", justifyContent: "center" }}
+            >
+              <Typography variant="h2" gutterBottom>
+                events {userDetails.username} attends
+              </Typography>
+              {userDetails.events.length ? (
+                <Grid container spacing={4} className={classes.eventContainer}>
+                  {userDetails.events.map((card) => createEventCards(card))}
+                </Grid>
+              ) : (
+                <Box>
+                  <Typography>
+                    {userDetails.username} is currently not attending any
+                  </Typography>
+                  <SentimentVeryDissatisfiedIcon fontSize="large" />
+                </Box>
+              )}
             </Grid>
           </Container>
         </main>
