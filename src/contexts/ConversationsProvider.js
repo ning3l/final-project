@@ -17,6 +17,9 @@ export function ConversationsProvider({
   const [selectedConversationID, setSelectedConversationID] = useState("");
   const socket = useSocket();
 
+  // The 'addMessageToConversation' function makes the dependencies of useEffect Hook (at line 63)
+  // change on every render. To fix this, wrap the definition of 'addMessageToConversation' in its own useCallback()
+
   // TEST
   const [selectedConvo, setSelectedConvo] = useState(null);
 

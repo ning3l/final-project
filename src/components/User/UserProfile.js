@@ -20,6 +20,7 @@ import {
   Card,
   CardMedia,
   CardContent,
+  Hidden,
 } from "@material-ui/core";
 import SentimentSatisfiedOutlinedIcon from "@material-ui/icons/SentimentSatisfiedOutlined";
 import SentimentVeryDissatisfiedIcon from "@material-ui/icons/SentimentVeryDissatisfied";
@@ -175,7 +176,9 @@ export default function UserProfile({
                 )}
               </Typography>
               <Box display="flex" justifyContent="center" alignItems="center">
-                <SentimentSatisfiedOutlinedIcon fontSize="large" />
+                <Hidden smDown>
+                  <SentimentSatisfiedOutlinedIcon fontSize="large" />
+                </Hidden>
                 {currUser ? (
                   <div
                     style={{
@@ -198,7 +201,9 @@ export default function UserProfile({
                 ) : (
                   <div>Loading...</div>
                 )}
-                <SentimentSatisfiedOutlinedIcon fontSize="large" />
+                <Hidden smDown>
+                  <SentimentSatisfiedOutlinedIcon fontSize="large" />
+                </Hidden>
               </Box>
               <label htmlFor="file-upload" className="custom-file-upload">
                 change pic
@@ -266,7 +271,9 @@ export default function UserProfile({
                       <Card className={classes.card} key={idx}>
                         <CardMedia
                           className={classes.cardMedia}
-                          image={plantDetails(el).plant.srcImg}
+                          image={` http://localhost:3000/images/plants/${
+                            plantDetails(el).plant.srcImg
+                          }`}
                           title="Image title"
                         />
                         <CardContent className={classes.cardContent}>

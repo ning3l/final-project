@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import NavBar from "../NavBar";
-import axios from "axios";
 import bkg from "../../assets/repo.jpg";
 import {
   Box,
@@ -10,8 +9,6 @@ import {
   CardContent,
   CardMedia,
   Typography,
-  Button,
-  CardActionArea,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -61,7 +58,6 @@ export default function Users({
   console.log("Users from users", allUsers);
 
   const createUserCard = (el) => {
-    const id = el._id;
     return (
       <Card
         className={classes.root}
@@ -91,7 +87,7 @@ export default function Users({
                 </Typography>
               ) : null}
             </div>
-            <Typography>{el.city || "N/A"}</Typography>
+            <Typography>Location: {el.city || "N/A"}</Typography>
             <Typography>
               currently owns {el.repository.length} plant(s)!
             </Typography>

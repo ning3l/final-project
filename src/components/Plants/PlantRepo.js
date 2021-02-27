@@ -83,7 +83,7 @@ export default function PlantRepo({
       <Card className={classes.root} key={el._id}>
         <CardMedia
           className={classes.plantPic}
-          image={el.plant.srcImg}
+          image={`http://localhost:3000/images/plants/${el.plant.srcImg}`}
           title="Plant Preview"
         />
         <div>
@@ -109,7 +109,7 @@ export default function PlantRepo({
             </Typography>
             <div>
               <Box display="flex" p={1}>
-                <Button onClick={() => history.push(`/${el.plant._id}`)}>
+                <Button onClick={() => history.push(`/plant/${el.plant._id}`)}>
                   care overview
                 </Button>
                 <Grid item>

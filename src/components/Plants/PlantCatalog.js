@@ -24,6 +24,7 @@ const useStyles = makeStyles({
   },
   cardContent: {
     textAlign: "center",
+    marginTop: "10px",
   },
 });
 
@@ -58,27 +59,22 @@ export default function PlantCatalog({
           <Box display="flex">
             <CardMedia
               className={classes.cardMedia}
-              image={el.srcImg}
+              image={`http://localhost:3000/images/plants/${el.srcImg}`}
               style={{ width: "130px", height: "130px" }}
             ></CardMedia>
             <CardMedia
               className={classes.cardMedia}
-              image={el.srcImg}
+              image={`http://localhost:3000/images/plants/${el.srcImg}`}
               style={{ width: "130px", height: "130px" }}
             ></CardMedia>
             <CardMedia
               className={classes.cardMedia}
-              image={el.srcImg}
+              image={`http://localhost:3000/images/plants/${el.srcImg}`}
               style={{ width: "130px", height: "130px" }}
             ></CardMedia>
           </Box>
           <CardContent className={classes.cardContent}>
-            <Typography gutterBottom variant="h6" component="h2">
-              {el.latin || "-"}
-            </Typography>
-            {/* <Typography style={{ fontWeight: 700 }}>
-              {el.latin || "-"}
-            </Typography> */}
+            <Typography>{el.latin || "-"}</Typography>
           </CardContent>
         </Card>
       </Grid>
