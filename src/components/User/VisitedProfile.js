@@ -11,6 +11,7 @@ import {
   CardMedia,
   CardContent,
   CardActionArea,
+  Hidden,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import event1 from "../../assets/eventImages/event-1.jpg";
@@ -35,6 +36,7 @@ const useStyles = makeStyles((theme) => ({
   },
   card: {
     height: "100%",
+    textAlign: "center",
     display: "flex",
     flexDirection: "column",
     justifyContent: "space-between",
@@ -84,7 +86,7 @@ export default function VisitedProfile({
         setUserDetails(res.data);
       })
       .catch((err) => console.log(err));
-  }, []);
+  }, [match.params.userId]);
 
   // MESSENGER
   const handleOpenMessenger = (user) => {
@@ -110,7 +112,7 @@ export default function VisitedProfile({
           <CardActionArea onClick={() => history.push(`/plant/${plant._id}`)}>
             <CardMedia
               className={classes.cardMedia}
-              image={plant.srcImg}
+              image={`http://localhost:3000/images/plants/${plant.srcImg}`}
               title="Image title"
             />
             <CardContent className={classes.cardContent}>
@@ -158,17 +160,19 @@ export default function VisitedProfile({
       />
       {userDetails && (
         <main>
-          {/* user info */}
-          <img
-            src={smile}
-            alt="yellow smiley"
-            style={{
-              width: "100px",
-              position: "absolute",
-              marginLeft: "25%",
-              marginTop: "5%",
-            }}
-          />
+          {/* USER INFO */}
+          <Hidden smDown>
+            <img
+              src={smile}
+              alt="yellow smiley"
+              style={{
+                width: "100px",
+                position: "absolute",
+                marginLeft: "25%",
+                marginTop: "5%",
+              }}
+            />
+          </Hidden>
           <div className={classes.heroContent}>
             <Container maxWidth="sm" align="center">
               <Typography
@@ -179,9 +183,7 @@ export default function VisitedProfile({
               >
                 this is {userDetails.username}
               </Typography>
-              <img
-                src={`http://localhost:3000/images/user/${userDetails.profileImg}`}
-                alt="user profile pic"
+              <div
                 style={{
                   width: "200px",
                   height: "200px",
@@ -193,7 +195,12 @@ export default function VisitedProfile({
                   alignItems: "center",
                   justifyContent: "center",
                 }}
-              />
+              >
+                <img
+                  src={`http://localhost:3000/images/user/${userDetails.profileImg}`}
+                  alt="user profile pic"
+                />
+              </div>
               <Typography>up for plantsitting?</Typography>
               <Typography
                 style={{ backgroundColor: "yellow", display: "inline" }}
@@ -215,19 +222,23 @@ export default function VisitedProfile({
             <Grid
               container
               spacing={4}
-              style={{ display: "flex", justifyContent: "center" }}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                flexDirection: "column",
+              }}
             >
               <Typography variant="h2" gutterBottom>
-                plants {userDetails.username} currently owns
+                plants {userDetails.username} owns
               </Typography>
               {userDetails.repository.length ? (
-                <Grid container spacing={4} className={classes.eventContainer}>
+                <Grid container spacing={4}>
                   {userDetails.repository.map((card) =>
                     createPlantCards(card.plant)
                   )}
                 </Grid>
               ) : (
-                <Box>
+                <Box display="flex" alignItems="center" flexDirection="column">
                   <Typography>
                     {userDetails.username} has not yet added any plants
                   </Typography>
@@ -241,19 +252,23 @@ export default function VisitedProfile({
             <Grid
               container
               spacing={4}
-              style={{ display: "flex", justifyContent: "center" }}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                flexDirection: "column",
+              }}
             >
               <Typography variant="h2" gutterBottom>
                 events {userDetails.username} attends
               </Typography>
               {userDetails.events.length ? (
-                <Grid container spacing={4} className={classes.eventContainer}>
+                <Grid container spacing={4}>
                   {userDetails.events.map((card) => createEventCards(card))}
                 </Grid>
               ) : (
-                <Box>
+                <Box display="flex" alignItems="center" flexDirection="column">
                   <Typography>
-                    {userDetails.username} is currently not attending any
+                    {userDetails.username} is currently not attending any events
                   </Typography>
                   <SentimentVeryDissatisfiedIcon fontSize="large" />
                 </Box>

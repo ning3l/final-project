@@ -56,7 +56,7 @@ export default function SignIn({ handleSetNewUser, handleRegister }) {
       <Container component="main" maxWidth="sm">
         <CssBaseline />
         <Paper className={classes.paper}>
-          <img src={logo} alt="logo" />
+          <img src={logo} alt="logo" style={{ width: "150px" }} />
           <Typography component="h1" variant="h5">
             Sign up
           </Typography>

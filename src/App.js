@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Route, Switch, useHistory, Redirect } from "react-router-dom";
+import { Route, Switch, useHistory } from "react-router-dom";
 import axios from "axios";
 import { createMuiTheme } from "@material-ui/core/styles";
 import { ThemeProvider } from "@material-ui/styles";

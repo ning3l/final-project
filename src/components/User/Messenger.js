@@ -18,15 +18,12 @@ const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
   },
-  paper: {
-    padding: theme.spacing(2),
-    textAlign: "center",
-    color: theme.palette.text.secondary,
-    height: "75%",
-  },
   container: {
     height: "100vh",
     textAlign: "center",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
   },
 }));
 
@@ -71,11 +68,27 @@ export default function Messenger({
     if (el.sender !== currUser._id) {
       return (
         <div>
-          <div style={{ textAlign: "left", marginLeft: "30px" }}>
-            <Typography style={{ color: "#66AD93" }}>
-              <b>{moment(el.createdAt).format("MMM Do YY, h:mm a")}</b>
-            </Typography>
-            <Typography>{el.text}</Typography>
+          <div
+            style={{
+              textAlign: "left",
+              marginLeft: "30px",
+              marginRight: "30%",
+            }}
+          >
+            <div
+              style={{
+                backgroundColor: "white",
+                display: "inline-block",
+                padding: "15px 20px",
+                margin: "5px",
+                borderRadius: "5px",
+              }}
+            >
+              <Typography color="primary">
+                <b>{moment(el.createdAt).format("MMM Do YY, h:mm a")}</b>
+              </Typography>
+              <Typography>{el.text}</Typography>
+            </div>
           </div>
         </div>
       );
@@ -86,12 +99,23 @@ export default function Messenger({
           style={{
             textAlign: "right",
             marginRight: "30px",
+            marginLeft: "30%",
           }}
         >
-          <Typography style={{ color: "pink" }}>
-            <b> {moment(el.createdAt).format("MMM Do YY, h:mm a")}</b>
-          </Typography>
-          <Typography>{el.text}</Typography>
+          <div
+            style={{
+              backgroundColor: "white",
+              display: "inline-block",
+              padding: "15px 20px",
+              margin: "5px",
+              borderRadius: "5px",
+            }}
+          >
+            <Typography style={{ color: "pink" }}>
+              <b> {moment(el.createdAt).format("MMM Do YY, h:mm a")}</b>
+            </Typography>
+            <Typography>{el.text}</Typography>
+          </div>
         </div>
       </div>
     );
@@ -118,8 +142,7 @@ export default function Messenger({
             item
             xs={12}
             sm={3}
-            className={classes.container}
-            style={{ borderRight: "1px solid grey" }}
+            style={{ borderRight: "1px solid lightgrey", overflow: "scroll" }}
           >
             {myMessages.length &&
               myMessages.map((convo, idx) => (
@@ -128,10 +151,9 @@ export default function Messenger({
                   onClick={(e) => handleSelectConvo(convo)}
                   style={{
                     height: "80px",
-                    borderBottom: "1px solid grey",
                     display: "flex",
                     alignItems: "center",
-                    overflow: "scroll",
+                    borderBottom: "1px solid lightgrey",
                   }}
                 >
                   <Avatar
@@ -142,9 +164,45 @@ export default function Messenger({
                     )}`}
                     style={{ margin: "20px" }}
                   />
-                  <Typography>
-                    {createUserInfo(convo.contact, "text")}
-                  </Typography>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      width: "100%",
+                      marginRight: "5%",
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <Typography>
+                        {createUserInfo(convo.contact, "text")}
+                      </Typography>
+                      <Typography>
+                        {convo.messages.length
+                          ? moment(
+                              convo.messages[convo.messages.length - 1]
+                                .createdAt
+                            ).format("MMM Do YY")
+                          : ""}
+                      </Typography>
+                    </div>
+                    <div
+                      style={{
+                        height: "25px",
+                        overflow: "hidden",
+                      }}
+                    >
+                      <Typography style={{ color: "grey" }}>
+                        {convo.messages.length
+                          ? convo.messages[convo.messages.length - 1].text
+                          : ""}
+                      </Typography>
+                    </div>
+                  </div>
                 </div>
               ))}
           </Grid>
@@ -152,8 +210,8 @@ export default function Messenger({
             <Box
               style={{
                 backgroundColor: "pink",
-                height: "10%",
-                borderBottom: "1px solid grey",
+                height: "80px",
+                borderBottom: "1px solid lightgrey",
                 display: "flex",
                 alignItems: "center",
               }}
@@ -196,7 +254,7 @@ export default function Messenger({
               <>
                 <Box
                   style={{
-                    height: "75%",
+                    height: "72%",
                     overflow: "scroll",
                   }}
                 >
@@ -205,10 +263,16 @@ export default function Messenger({
                   ))}
                 </Box>
                 <form onSubmit={handleSubmit}>
-                  <Container>
+                  <Container
+                    style={{
+                      backgroundColor: "salmon",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                    }}
+                  >
                     <Grid item>
                       <TextField
-                        className={classes.formInputs}
                         name="text"
                         label="your message"
                         variant="outlined"
@@ -217,15 +281,14 @@ export default function Messenger({
                         onChange={handleChange}
                         required={true}
                         value={text}
-                        style={{ width: "100%" }}
                       />
                     </Grid>
                     <Grid item>
                       <Button
-                        variant="outlined"
+                        variant="contained"
                         type="submit"
                         margin="dense"
-                        className={classes.formInputs}
+                        color="primary"
                       >
                         Submit
                       </Button>

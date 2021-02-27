@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useParams } from "react-router-dom";
-import { Grid, TextField, Typography, Button } from "@material-ui/core";
-import { ToggleButton, ToggleButtonGroup } from "@material-ui/lab";
+import { Grid, TextField, Button } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
-import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles({
   formInputs: {
@@ -139,11 +137,12 @@ export default function FormUpdateEvent({
           variant="outlined"
           InputLabelProps={{
             shrink: true,
+            step: 300, // 5min
           }}
           value={selectedEvent.time}
-          inputProps={{
-            step: 300, // 5 min
-          }}
+          // inputProps={{
+          //   step: 300, // 5 min
+          // }}
           onChange={handleChange}
           required={true}
         />

@@ -14,7 +14,6 @@ import {
   Hidden,
 } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
-import { logout } from "../utils/auth";
 
 const useStyles = makeStyles({
   navBar: {
@@ -35,7 +34,7 @@ const useStyles = makeStyles({
 const navLinks = [
   { title: `events`, path: `/events` },
   { title: `users`, path: `/users` },
-  { title: `plantindex`, path: `/catalog` },
+  { title: `plants`, path: `/catalog` },
 ];
 
 export default function NavBar({ setCurrUser, setCredentials, handleLogout }) {
@@ -57,7 +56,7 @@ export default function NavBar({ setCurrUser, setCredentials, handleLogout }) {
           <Container className={classes.navContainer}>
             <Typography>
               <Link to="/">
-                <img src={logo} alt="logo" />
+                <img src={logo} alt="logo" style={{ width: "150px" }} />
               </Link>
             </Typography>
             <Hidden xsDown>
@@ -102,7 +101,7 @@ export default function NavBar({ setCurrUser, setCredentials, handleLogout }) {
                   <Link to="/users">users</Link>
                 </MenuItem>
                 <MenuItem onClick={handleClose}>
-                  <Link to="/catalog">plant index</Link>
+                  <Link to="/catalog">plants</Link>
                 </MenuItem>
                 <MenuItem onClick={() => handleLogout()}>
                   <Link to="/login">bye</Link>

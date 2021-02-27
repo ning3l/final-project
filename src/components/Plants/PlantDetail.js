@@ -116,11 +116,16 @@ export default function PlantDetail({
           <Typography variant="body1">{description}</Typography>
         </Grid>
         <Grid container display="flex" alignItems="center">
-          <Grid item xs={12} sm={6} md={4}>
+          <Grid
+            item
+            xs={12}
+            sm={6}
+            md={4}
+            style={{ width: 300, margin: "auto" }}
+          >
             <img
-              src={srcImg}
-              // style={{ maxHeight: "400px", margin: "auto" }}
-              style={{ maxWidth: "300px", margin: "auto" }}
+              src={`http://localhost:3000/images/plants/${srcImg}`}
+              style={{ maxWidth: "90%" }}
               alt="detail pic of the plant"
             />
           </Grid>
@@ -189,7 +194,7 @@ export default function PlantDetail({
                 handleClickOpen(e);
               }}
             >
-              ♡ Wishlist ♡
+              ♡ WISHLIST ♡
             </Button>
           </Grid>
           <Typography>

@@ -18,6 +18,7 @@ import {
   Typography,
   Box,
   Button,
+  Container,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import SearchEvents from "./SearchEvents";
@@ -71,8 +72,6 @@ export default function Events({
 }) {
   const classes = useStyles();
 
-  console.log("CURR USER FROM EVENTS", currUser);
-
   // SEARCH STATE (only enable pagination if !isSearch, otherwise hide)
   const [eventSearch, setEventSearch] = useState("");
   const [isEventSearch, setIsEventSearch] = useState(false);
@@ -94,7 +93,7 @@ export default function Events({
     setOpenAddEvent(true);
   };
 
-  // EDIT AN EVENT
+  // EDIT AN EVENT - to be implemented
   // const handleEdit = (event) => {
   //   console.log("event to be edited:", event._id);
   // };
@@ -166,10 +165,6 @@ export default function Events({
               <Typography gutterBottom variant="h5" component="h2">
                 {card.title}
               </Typography>
-              <Typography className={classes.cardDescription}>
-                {card.description.slice(0, 40)}
-                {"..."}
-              </Typography>
             </CardContent>
           </CardActionArea>
           <CardActions>
@@ -221,20 +216,42 @@ export default function Events({
         handleLogout={handleLogout}
       />
       {allEvents ? (
-        <Grid container spacing={2} className={classes.catalogContainer}>
-          <Grid item xs={12}>
-            <Button onClick={(e) => handleClickOpen(e)}>add your own</Button>
-          </Grid>
-          <SearchEvents
-            setEventSearch={setEventSearch}
-            setIsEventSearch={setIsEventSearch}
-          />
+        <Grid container spacing={4} className={classes.catalogContainer}>
+          <Container
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <Grid item>
+              <SearchEvents
+                setEventSearch={setEventSearch}
+                setIsEventSearch={setIsEventSearch}
+              />
+            </Grid>
+            <Grid item>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={(e) => handleClickOpen(e)}
+              >
+                add your own
+              </Button>
+            </Grid>
+          </Container>
           {isEventSearch
             ? allEvents
                 .sort((a, b) => a.date - b.date)
                 .map(
                   (el) =>
-                    el.description.includes(eventSearch) && createEventCard(el)
+                    el.description
+                      .toLowerCase()
+                      .includes(eventSearch.toLowerCase()) ||
+                    (el.title
+                      .toLowerCase()
+                      .includes(eventSearch.toLowerCase()) &&
+                      createEventCard(el))
                 )
             : allEvents
                 .sort((a, b) => new Date(a.date) - new Date(b.date))

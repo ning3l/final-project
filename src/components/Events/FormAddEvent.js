@@ -1,7 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { Grid, TextField, Typography, Button } from "@material-ui/core";
-import { ToggleButton, ToggleButtonGroup } from "@material-ui/lab";
+import React, { useState } from "react";
+import { Grid, TextField, Button } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
@@ -18,8 +16,6 @@ export default function FormAddEvent({
   handleClose,
   setAllEvents,
 }) {
-  // console.log({setMyRepo})
-  const history = useHistory();
   const classes = useStyles();
 
   // STATE FORM INPUT
@@ -117,10 +113,11 @@ export default function FormAddEvent({
           variant="outlined"
           InputLabelProps={{
             shrink: true,
+            step: 300, // 5min
           }}
-          inputProps={{
-            step: 300, // 5 min
-          }}
+          // inputProps={{
+          //   step: 300, // 5 min
+          // }}
           onChange={handleChange}
           required={true}
         />
