@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import {
-  Avatar,
   Button,
   CssBaseline,
   TextField,
@@ -11,7 +10,6 @@ import {
   Paper,
   Grid,
 } from "@material-ui/core/";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import bkg from "../assets/detailPage.png";
@@ -23,10 +21,6 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     alignItems: "center",
     padding: "60px",
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.primary.main,
   },
   form: {
     width: "100%", // Fix IE 11 issue.
@@ -60,7 +54,7 @@ export default function SignIn({ handleSetNewUser, handleRegister }) {
           <Typography component="h1" variant="h5">
             Sign up
           </Typography>
-          <form className={classes.form} noValidate>
+          <form className={classes.form}>
             <TextField
               variant="outlined"
               margin="normal"
@@ -69,7 +63,6 @@ export default function SignIn({ handleSetNewUser, handleRegister }) {
               id="username"
               label="username"
               name="username"
-              autoComplete="username"
               autoFocus
               onChange={(e) => handleSetNewUser(e)}
             />
@@ -82,13 +75,13 @@ export default function SignIn({ handleSetNewUser, handleRegister }) {
               label="password"
               type="password"
               id="password"
-              autoComplete="current-password"
+              inputProps={{ minLength: 5 }}
               onChange={(e) => handleSetNewUser(e)}
             />
             <TextField
               variant="outlined"
               margin="normal"
-              required
+              required={true}
               fullWidth
               name="city"
               label="city"

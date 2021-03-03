@@ -41,12 +41,13 @@ const useStyles = makeStyles({
 export default function PlantRepo({
   myRepo,
   setMyRepo,
+  currUser,
   setCurrUser,
   setCredentials,
   handleLogout,
   history,
-  needsCare,
   setNeedsCare,
+  setAllUsers,
 }) {
   const classes = useStyles();
 
@@ -64,18 +65,25 @@ export default function PlantRepo({
     axios
       .delete(`http://localhost:3000/api/plants/del`, { data: { id } })
       .then((res) => {
-        console.log("EL to be deleted", res.data);
         let del = res.data;
         // manually delete both from repo and care tracker arr
         setMyRepo((prevRepo) => [...prevRepo].filter((el) => el._id !== del));
         setNeedsCare((prev) =>
           [...prev].filter((el) => el !== plant.plant.latin)
         );
+        // also delete from all users
+        setAllUsers((prev) => {
+          let userToUpdate = [...prev].find((el) => el._id === currUser._id);
+          let idx = userToUpdate.repository.indexOf(id);
+          userToUpdate.repository.splice(idx, 1);
+          return [
+            ...prev.filter((el) => el._id !== currUser._id),
+            userToUpdate,
+          ];
+        });
       })
       .catch((err) => console.log(err.message));
   };
-
-  console.log("user repo content from repo", myRepo);
 
   const createRepoCard = (el) => {
     const id = el._id;

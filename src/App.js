@@ -27,7 +27,6 @@ const { default: NotFound } = require("./components/NotFound");
 const theme = createMuiTheme({
   typography: {
     h1: {
-      // fontSize: "2.3em",
       fontSize: "2.3em",
       fontWeight: "700",
     },
@@ -77,12 +76,15 @@ function App() {
   };
 
   const handleRegister = async () => {
-    if (!newUser || !newUser.username || !newUser.password) {
+    if (!newUser || !newUser.username || !newUser.password || !newUser.city) {
       alert("pls fill out form");
       return;
     }
-    console.log("/SIGNUP: submitting user", newUser);
-    await register(newUser);
+    if (newUser.password.length < 5) return alert("pls choose a password > 5");
+    // console.log("/SIGNUP: submitting user", newUser);
+    let user = await register(newUser);
+    setAllUsers((prev) => [...prev, user]);
+    console.log("THIS IS THE DATA I NEED", allUsers);
     setNewUser(null);
     history.push("/login");
   };
@@ -112,7 +114,6 @@ function App() {
   };
 
   const handleLogout = () => {
-    console.log("user is logged out...");
     setCurrUser(null);
     setCredentials(null);
     setMyRepo([]);
@@ -128,7 +129,7 @@ function App() {
       if (!userData) {
         console.log("/PROFILE sth went wrong, no data");
       } else {
-        console.log("curr user from /me", userData);
+        // console.log("curr user from /me", userData);
         setCurrUser(userData);
         setMyWishlist(userData.wishlist);
       }
@@ -145,31 +146,21 @@ function App() {
 
   // ###################### CURR USER REPO + WISHLIST ######################
   useEffect(() => {
+    if (!currUser) return;
     axios
       .get("http://localhost:3000/api/plants/repository/me")
       .then((res) => {
-        console.log("curr user plant repo", res.data);
         setMyRepo(res.data);
       })
       .catch((err) => console.log(err.message));
   }, [currUser]);
 
-  // useEffect(() => {
-  //   axios
-  //     .get("http://localhost:3000/api/users/wish")
-  //     .then((res) => {
-  //       console.log("WISHES", res.data);
-  //       //setMyWishlist(res.data)
-  //     })
-  //     .catch((err) => console.log(err.message));
-  // }, []);
-
   // ###################### CURR USER EVENTS ######################
   useEffect(() => {
+    if (!currUser) return;
     axios
       .get("http://localhost:3000/api/events/me")
       .then((res) => {
-        console.log("MY EVENTS", res.data.events);
         setMyEvents(res.data.events);
       })
       .catch((err) => console.log(err.message));
@@ -193,7 +184,6 @@ function App() {
       }
     };
     careChecker();
-    console.log("these plants need you today:", needsCare);
   }, [myRepo, needsCare]);
 
   // ###################### ALL CATALOG PLANTS ######################
@@ -209,7 +199,6 @@ function App() {
     axios
       .get("http://localhost:3000/api/events")
       .then((res) => {
-        console.log("ALL EVENTS", res.data);
         setAllEvents(res.data);
       })
       .catch((err) => console.log(err.message));
@@ -220,15 +209,40 @@ function App() {
     axios
       .get("http://localhost:3000/api/users")
       .then((res) => {
-        console.log("ALL USERS", res.data);
         setAllUsers(res.data);
       })
       .catch((err) => console.log(err.message));
   }, []);
 
-  // ###################### ALL MESSAGES & SOCKET ######################
-
+  // ###################### ALL MESSAGES ######################
   useEffect(() => {
+    if (!currUser) return;
+
+    // cluster messages so that each new contact gets indiv contact is present once
+    function turnMessagesIntoConversations(arr) {
+      const messageHistory = arr.reduce((acc, val) => {
+        if (val.recipient !== currUser._id) {
+          if (!acc[val.recipient]) acc[val.recipient] = [];
+          acc[val.recipient].push(val);
+        } else if (val.sender !== currUser._id) {
+          if (!acc[val.sender]) acc[val.sender] = [];
+          acc[val.sender].push(val);
+        }
+        return acc;
+      }, []);
+
+      // build new contact obj for each contact
+      const contacts = [];
+      for (let key in messageHistory) {
+        contacts.push({
+          contact: key,
+          messages: [...messageHistory[key]],
+        });
+      }
+
+      return contacts;
+    }
+
     axios
       .get("http://localhost:3000/api/messages")
       .then((res) => {
@@ -237,32 +251,6 @@ function App() {
       })
       .catch((err) => console.log(err));
   }, [currUser]);
-
-  // cluster messages so that each new contact gets indiv contact is present once
-  function turnMessagesIntoConversations(arr) {
-    const messageHistory = arr.reduce((acc, val) => {
-      if (val.recipient !== currUser._id) {
-        console.log(val.recipient);
-        if (!acc[val.recipient]) acc[val.recipient] = [];
-        acc[val.recipient].push(val);
-      } else if (val.sender !== currUser._id) {
-        if (!acc[val.sender]) acc[val.sender] = [];
-        acc[val.sender].push(val);
-      }
-      return acc;
-    }, []);
-
-    // build new contact obj for each contact
-    const contacts = [];
-    for (let key in messageHistory) {
-      contacts.push({
-        contact: key,
-        messages: [...messageHistory[key]],
-      });
-    }
-
-    return contacts;
-  }
 
   // ###################### ROUTING ######################
   return (
@@ -282,10 +270,10 @@ function App() {
           setCurrUser={setCurrUser}
           handleLogout={handleLogout}
           setAllEvents={setAllEvents}
+          setAllUsers={setAllUsers}
           myEvents={myEvents}
           setMyEvents={setMyEvents}
           needsCare={needsCare}
-          setNeedsCare={setNeedsCare}
         />
         <Route
           path="/login"
@@ -348,63 +336,64 @@ function App() {
           setMyEvents={setMyEvents}
           currUser={currUser}
           allUsers={allUsers}
-          setAllUsers={setAllUsers}
           handleLogout={handleLogout}
         />
-        {/* Is there a better way to account for a page refresh that conditionally render the contexts? */}
-        {currUser ? (
+        {currUser && (
           <SocketProvider currUser={currUser}>
             <ConversationsProvider
               currUser={currUser}
               myMessages={myMessages}
               setMyMessages={setMyMessages}
             >
-              <ProtectedRoute
-                path="/user/:userId"
-                component={VisitedProfile}
-                allUsers={allUsers}
-                setCurrUser={setCurrUser}
-                setCredentials={setCredentials}
-                handleLogout={handleLogout}
-              />
-              <ProtectedRoute
-                path="/messenger/:userId?"
-                component={Messenger}
-                allUsers={allUsers}
-                currUser={currUser}
-                setCurrUser={setCurrUser}
-                setCredentials={setCredentials}
-                handleLogout={handleLogout}
-                myMessages={myMessages}
-                setMyMessages={setMyMessages}
-              />
-
-              <ProtectedRoute
-                path="/repo"
-                component={PlantRepo}
-                myRepo={myRepo}
-                setMyRepo={setMyRepo}
-                setCredentials={setCredentials}
-                setCurrUser={setCurrUser}
-                handleLogout={handleLogout}
-                needsCare={needsCare}
-                setNeedsCare={setNeedsCare}
-              />
-              <ProtectedRoute
-                path="/plant/:plantId"
-                component={PlantDetail}
-                setMyRepo={setMyRepo}
-                currUser={currUser}
-                setCurrUser={setCurrUser}
-                myWishlist={myWishlist}
-                setMyWishlist={setMyWishlist}
-                handleLogout={handleLogout}
-              />
+              <Switch>
+                <ProtectedRoute
+                  path="/user/:userId"
+                  component={VisitedProfile}
+                  allUsers={allUsers}
+                  setCurrUser={setCurrUser}
+                  setCredentials={setCredentials}
+                  handleLogout={handleLogout}
+                />
+                <ProtectedRoute
+                  path="/messenger/:userId?"
+                  component={Messenger}
+                  allUsers={allUsers}
+                  currUser={currUser}
+                  setCurrUser={setCurrUser}
+                  setCredentials={setCredentials}
+                  handleLogout={handleLogout}
+                  myMessages={myMessages}
+                  setMyMessages={setMyMessages}
+                />
+                <ProtectedRoute
+                  path="/repo"
+                  component={PlantRepo}
+                  myRepo={myRepo}
+                  setMyRepo={setMyRepo}
+                  setCredentials={setCredentials}
+                  currUser={currUser}
+                  setCurrUser={setCurrUser}
+                  handleLogout={handleLogout}
+                  setNeedsCare={setNeedsCare}
+                  setAllUsers={setAllUsers}
+                />
+                <ProtectedRoute
+                  path="/plant/:plantId"
+                  component={PlantDetail}
+                  setMyRepo={setMyRepo}
+                  currUser={currUser}
+                  setCurrUser={setCurrUser}
+                  setAllUsers={setAllUsers}
+                  myWishlist={myWishlist}
+                  setMyWishlist={setMyWishlist}
+                  handleLogout={handleLogout}
+                />
+                <Route component={NotFound} />
+              </Switch>
             </ConversationsProvider>
           </SocketProvider>
-        ) : (
-          <div>Loading...</div>
         )}
+
         <Route component={NotFound} />
       </Switch>
     </ThemeProvider>

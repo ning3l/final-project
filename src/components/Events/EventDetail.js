@@ -190,7 +190,7 @@ export default function EventDetail({ match, handleLogout }) {
             </Typography>
             {singleEvent.attendees &&
               singleEvent.attendees.map((user) => (
-                <Grid item className={classes.avatars}>
+                <Grid item className={classes.avatars} key={user._id}>
                   <Avatar
                     alt="✿"
                     src={`http://localhost:3000/images/user/${user.profileImg}`}

@@ -74,7 +74,7 @@ export default function Login({ handleSetCredentials, handleLogin }) {
               <Typography style={{ fontSize: "2em", fontWeight: "500" }}>
                 <u>
                   <span style={{ backgroundColor: "yellow" }}>
-                    plant parenthood
+                    Plant parenthood
                   </span>
                 </u>{" "}
                 has never been easier.
@@ -125,7 +125,6 @@ export default function Login({ handleSetCredentials, handleLogin }) {
               onChange={(e) => handleSetCredentials(e)}
             />
             <Button
-              // type="submit"
               fullWidth
               variant="outlined"
               className={classes.submit}

@@ -83,7 +83,6 @@ export default function Events({
   const [selectedEvent, setSelectedEvent] = useState(null); // state is updated in formUpdate
 
   const handleClickOpenEdit = (singleEvent) => {
-    console.log(singleEvent._id);
     setOpenEditEvent(true);
     setSelectedEvent(singleEvent);
   };
@@ -92,11 +91,6 @@ export default function Events({
   const handleClickOpen = (e) => {
     setOpenAddEvent(true);
   };
-
-  // EDIT AN EVENT - to be implemented
-  // const handleEdit = (event) => {
-  //   console.log("event to be edited:", event._id);
-  // };
 
   // ATTEND AN EVENT
   const handleAttend = (el) => {
@@ -124,7 +118,6 @@ export default function Events({
         setMyEvents(
           (prevEvents) => [...prevEvents].filter((el) => el._id !== res.data) // res.data is eventId
         );
-        console.log("myEvents", myEvents);
       })
       .catch((err) => console.log(err.message));
   };
@@ -132,11 +125,9 @@ export default function Events({
   // CANCEL AN EVENT
   const handleCancel = (event) => {
     const eventId = event._id;
-    console.log(eventId);
     axios
       .delete(`http://localhost:3000/api/events/cancel`, { data: { eventId } })
       .then((res) => {
-        console.log("EL to be deleted", res.data);
         let del = res.data;
         setMyEvents((prev) => [...prev].filter((el) => el._id !== del._id));
         setAllEvents((prev) => [...prev].filter((el) => el._id !== del._id));
@@ -265,7 +256,6 @@ export default function Events({
         setOpenAddEvent={setOpenAddEvent}
         setMyEvents={setMyEvents}
         setAllEvents={setAllEvents}
-        myEvents={myEvents}
       />
       <ModalUpdateEvent
         openEditEvent={openEditEvent}

@@ -15,8 +15,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default function FormAddPlant({ setMyRepo }) {
-  // console.log({setMyRepo})
+export default function FormAddPlant({ setMyRepo, setAllUsers, currUser }) {
   const history = useHistory();
   const { plantId } = useParams();
   const classes = useStyles();
@@ -45,12 +44,22 @@ export default function FormAddPlant({ setMyRepo }) {
   // ADD PLANT TO PLANT INSTANCE DB
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(plantInstanceInput);
-    console.log(plantId);
     axios
       .post(`http://localhost:3000/api/plants/${plantId}`, plantInstanceInput)
       .then((res) => {
         setMyRepo((prevRepo) => [...prevRepo, res.data]);
+        // also modify this user in all users arr:
+        setAllUsers((prev) => {
+          console.log("curruser", currUser._id);
+          let userToUpdate = [...prev].find((el) => el._id === currUser._id);
+          console.log("UPDATE", userToUpdate);
+          console.log("id", plantId);
+          userToUpdate.repository.push(plantId);
+          return [
+            ...prev.filter((el) => el._id !== currUser._id),
+            userToUpdate,
+          ];
+        });
         history.push("/repo");
       })
       .catch((err) => console.log(err));

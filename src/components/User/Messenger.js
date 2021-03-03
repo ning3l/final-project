@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Grid,
@@ -39,12 +39,18 @@ export default function Messenger({
   const [text, setText] = useState(""); // create a new message
   const {
     sendMessage,
-    selectedConversation,
     myMessages,
     selectedConvo,
     setSelectedConvo,
-    setSelectedConversationID,
   } = useConversations();
+
+  const lastMsgRef = useRef();
+
+  useEffect(() => {
+    if (lastMsgRef.current) {
+      lastMsgRef.current.scrollIntoView({ smooth: true });
+    }
+  });
 
   const handleChange = (e) => {
     setText(e.target.value);
@@ -124,7 +130,6 @@ export default function Messenger({
   // create user info for selected convo
   const createUserInfo = (id, item) => {
     let selectedUser = allUsers.find((user) => user._id === id);
-
     if (item === "text") return selectedUser.username;
     if (item === "pic") return selectedUser.profileImg;
   };
@@ -141,8 +146,12 @@ export default function Messenger({
           <Grid
             item
             xs={12}
-            sm={3}
-            style={{ borderRight: "1px solid lightgrey", overflow: "scroll" }}
+            sm={4}
+            md={3}
+            style={{
+              borderRight: "1px solid lightgrey",
+              overflow: "scroll",
+            }}
           >
             {myMessages.length &&
               myMessages.map((convo, idx) => (
@@ -154,6 +163,10 @@ export default function Messenger({
                     display: "flex",
                     alignItems: "center",
                     borderBottom: "1px solid lightgrey",
+                    backgroundColor:
+                      selectedConvo && convo.contact === selectedConvo.contact
+                        ? "lightgrey"
+                        : "",
                   }}
                 >
                   <Avatar
@@ -206,7 +219,7 @@ export default function Messenger({
                 </div>
               ))}
           </Grid>
-          <Grid item xs={12} sm={9} className={classes.container}>
+          <Grid item xs={12} sm={8} md={9} className={classes.container}>
             <Box
               style={{
                 backgroundColor: "pink",
@@ -258,41 +271,41 @@ export default function Messenger({
                     overflow: "scroll",
                   }}
                 >
-                  {selectedConvo.messages.map((el, idx) => (
-                    <div key={idx}>{createChatHistory(el)}</div>
-                  ))}
+                  {selectedConvo.messages.map((el, idx) => {
+                    const lastMsg = selectedConvo.messages.length - 1 === idx;
+                    return (
+                      <div ref={lastMsg ? lastMsgRef : null} key={idx}>
+                        {createChatHistory(el)}
+                      </div>
+                    );
+                  })}
                 </Box>
                 <form onSubmit={handleSubmit}>
                   <Container
                     style={{
-                      backgroundColor: "salmon",
                       display: "flex",
                       alignItems: "center",
-                      justifyContent: "space-between",
                     }}
                   >
-                    <Grid item>
-                      <TextField
-                        name="text"
-                        label="your message"
-                        variant="outlined"
-                        type="text"
-                        margin="dense"
-                        onChange={handleChange}
-                        required={true}
-                        value={text}
-                      />
-                    </Grid>
-                    <Grid item>
-                      <Button
-                        variant="contained"
-                        type="submit"
-                        margin="dense"
-                        color="primary"
-                      >
-                        Submit
-                      </Button>
-                    </Grid>
+                    <TextField
+                      name="text"
+                      label="your message"
+                      variant="outlined"
+                      type="text"
+                      margin="dense"
+                      onChange={handleChange}
+                      required={true}
+                      value={text}
+                      fullWidth={true}
+                    />
+                    <Button
+                      variant="contained"
+                      type="submit"
+                      margin="dense"
+                      color="primary"
+                    >
+                      Submit
+                    </Button>
                   </Container>
                 </form>
               </>

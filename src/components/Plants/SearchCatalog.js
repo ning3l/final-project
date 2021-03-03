@@ -4,7 +4,6 @@ import { Grid, Toolbar, Container, TextField } from "@material-ui/core";
 
 export default function SearchCatalog({ setPlantSearch, setIsSearch }) {
   const handleSearch = (e) => {
-    console.log(e.target.value);
     if (!e.target.value) {
       setIsSearch(false);
     } else {

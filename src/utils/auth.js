@@ -14,7 +14,7 @@ const APP_NAME = "final-project";
 const setAuthHeaders = () => {
   const token = Cookies.get(`${APP_NAME}-auth-token`);
   if (token) {
-    console.log("/AUTH headers are getting set");
+    // console.log("/AUTH headers are getting set");
     axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
   }
 };
@@ -30,23 +30,25 @@ const decodeToken = () => {
   return decodedToken;
 };
 
-const register = async (newUser) => {
+const register = (newUser) => {
   const { username, password, plantsitting, city } = newUser;
-  axios
+  return axios
     .post("http://localhost:3000/api/users/register", {
       username,
       password,
       plantsitting,
       city,
     })
-    .then((res) => console.log("NEW USER:", res)) // sends only username back
+    .then((res) => {
+      return res.data;
+    })
     .catch((err) => console.log(err.message));
 };
 
 const login = async (credentials) => {
   const { username, password } = credentials;
   try {
-    // change address after deployment: check how ben did it in auth frontend repo
+    // change address after deployment: check auth frontend repo ex.
     const data = await axios.post("http://localhost:3000/api/auth/login", {
       username,
       password,
@@ -54,7 +56,7 @@ const login = async (credentials) => {
     const token = data.headers["x-authorization-token"];
 
     if (token) {
-      console.log("/AUTH/login", token);
+      // console.log("/AUTH/login", token);
       Cookies.set(`${APP_NAME}-auth-token`, token);
       setAuthHeaders();
     }
@@ -65,7 +67,7 @@ const login = async (credentials) => {
 };
 
 const logout = () => {
-  console.log("/AUTH/logout: logging out...");
+  // console.log("/AUTH/logout: logging out...");
   Cookies.remove(`${APP_NAME}-auth-token`);
 };
 
@@ -73,7 +75,6 @@ const userContext = async () => {
   setAuthHeaders();
   try {
     const data = await axios.get("http://localhost:3000/api/auth/me");
-    console.log("DATA FROM /AUTH/ME:", data);
     return data;
   } catch (error) {
     console.log(error.message);

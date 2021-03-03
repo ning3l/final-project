@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import Card from "@material-ui/core/Card";
 import { CardActions, CardActionArea } from "@material-ui/core";
@@ -14,6 +14,7 @@ import event4 from "../../assets/eventImages/event-4.jpg";
 import event5 from "../../assets/eventImages/event-5.jpg";
 import event6 from "../../assets/eventImages/event-6.jpg";
 import event7 from "../../assets/eventImages/event-7.jpg";
+import ModalUpdateEvent from "../Events/ModalUpdateEvent";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -56,7 +57,6 @@ export default function UserEventSection({
         setMyEvents(
           (prevEvents) => [...prevEvents].filter((el) => el._id !== res.data) // res.data is eventId
         );
-        console.log("myEvents", myEvents);
       })
       .catch((err) => console.log(err.message));
   };
@@ -68,7 +68,6 @@ export default function UserEventSection({
     axios
       .delete(`http://localhost:3000/api/events/cancel`, { data: { eventId } })
       .then((res) => {
-        console.log("EL to be deleted", res.data);
         let del = res.data;
         setMyEvents((prev) => [...prev].filter((el) => el._id !== del._id));
         setAllEvents((prev) => [...prev].filter((el) => el._id !== del._id));
@@ -76,61 +75,72 @@ export default function UserEventSection({
       .catch((err) => console.log(err.message));
   };
 
-  // not yet implemented server-side
-  // EDIT AN EVENT
-  const handleEdit = (event) => {
-    console.log("event to be edited:", event._id);
-    // you get back an updatet event item
-    // use it to update setAllEvents manually
+  // HANDLE MODAL FORM EVENT EDIT
+  const [openEditEvent, setOpenEditEvent] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState(null); // state is updated in formUpdate
+
+  const handleClickOpenEdit = (singleEvent) => {
+    setOpenEditEvent(true);
+    setSelectedEvent(singleEvent);
   };
 
   return (
-    <Grid item key={card} xs={12} sm={6} md={4}>
-      <Card className={classes.card}>
-        <CardActionArea onClick={() => history.push(`/event/${card._id}`)}>
-          <CardMedia
-            className={classes.cardMedia}
-            image={`${eventPics[card.img]}`}
-            title="plant image"
-          />
-          <CardContent className={classes.cardContent}>
-            <Typography gutterBottom variant="h6" component="h2">
-              {card.date}
-            </Typography>
-            <Typography gutterBottom variant="h5" component="h2">
-              {card.title}
-            </Typography>
-          </CardContent>
-        </CardActionArea>
-        <CardActions>
-          {currUser && currUser.username === card.host ? (
-            <Box>
+    <>
+      <Grid item key={card} xs={12} sm={6} md={4}>
+        <Card className={classes.card}>
+          <CardActionArea onClick={() => history.push(`/event/${card._id}`)}>
+            <CardMedia
+              className={classes.cardMedia}
+              image={`${eventPics[card.img]}`}
+              title="plant image"
+            />
+            <CardContent className={classes.cardContent}>
+              <Typography gutterBottom variant="h6" component="h2">
+                {card.date}
+              </Typography>
+              <Typography gutterBottom variant="h5" component="h2">
+                {card.title}
+              </Typography>
+            </CardContent>
+          </CardActionArea>
+          <CardActions>
+            {currUser && currUser.username === card.host ? (
+              <Box>
+                <Button
+                  size="small"
+                  color="primary"
+                  onClick={() => handleClickOpenEdit(card)}
+                >
+                  Edit
+                </Button>
+                <Button
+                  size="small"
+                  color="primary"
+                  onClick={() => handleCancel(card)}
+                >
+                  Cancel
+                </Button>
+              </Box>
+            ) : (
               <Button
                 size="small"
                 color="primary"
-                onClick={() => handleEdit(card)}
+                onClick={() => handleLeave(card)}
               >
-                Edit
+                Leave
               </Button>
-              <Button
-                size="small"
-                color="primary"
-                onClick={() => handleCancel(card)}
-              >
-                Cancel
-              </Button>
-            </Box>
-          ) : (
-            <Button
-              size="small"
-              color="primary"
-              onClick={() => handleLeave(card)}
-            >
-              Leave
-            </Button>
-          )}
-        </CardActions>
-      </Card>
-    </Grid>
+            )}
+          </CardActions>
+        </Card>
+      </Grid>
+      <ModalUpdateEvent
+        openEditEvent={openEditEvent}
+        setOpenEditEvent={setOpenEditEvent}
+        selectedEvent={selectedEvent}
+        setSelectedEvent={setSelectedEvent}
+        setMyEvents={setMyEvents}
+        setAllEvents={setAllEvents}
+      />
+    </>
   );
 }
