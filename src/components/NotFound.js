@@ -5,9 +5,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import bkg from "../assets/repo.jpg";
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    height: "100vh",
-  },
   paper: {
     padding: theme.spacing(8),
     width: "60%",
@@ -38,7 +35,7 @@ export default function NotFound() {
           can't see the forest for the trees?
         </Typography>
         <Link to="/catalog">
-          <Button>get back to our catalog</Button>
+          <Button>get back</Button>
         </Link>
       </Paper>
     </Grid>

@@ -93,7 +93,7 @@ export default function UserProfile({
   myEvents,
   setMyEvents,
   needsCare,
-  setNeedsCare,
+  setAllUsers,
 }) {
   const classes = useStyles();
 
@@ -103,7 +103,6 @@ export default function UserProfile({
 
   // HANDLE PROFILE PIC UPLOAD
   const handleChange = (e) => {
-    console.log(e.target.files[0]);
     setSelectedPic(e.target.files[0]);
   };
 
@@ -120,7 +119,6 @@ export default function UserProfile({
         },
       })
       .then((res) => {
-        console.log(res.data);
         // SET STATE IN PROFILE
         setPathToImg(res.data.pathToImage);
         // UPDATE CURR USER PIC IN APP
@@ -128,6 +126,15 @@ export default function UserProfile({
           ...prev,
           profileImg: res.data.pathToImage,
         }));
+        // UPDATE THIS USER IN ALL USERS ARR
+        setAllUsers((prev) => {
+          let userToUpdate = [...prev].find((el) => el._id === currUser._id);
+          userToUpdate.profileImg = res.data.pathToImage;
+          return [
+            ...prev.filter((el) => el._id !== currUser._id),
+            userToUpdate,
+          ];
+        });
       })
       .catch((err) => {
         console.log(err.message);
@@ -136,7 +143,6 @@ export default function UserProfile({
 
   // DELETE A PLANT FROM CURR USER WISHLIST
   const handleDelete = (name) => {
-    console.log("to be deleted from list:", name);
     axios
       .delete(`http://localhost:3000/api/users/wish`, { data: { name } })
       .then((res) => {
@@ -147,10 +153,6 @@ export default function UserProfile({
 
   // FILL REPO PLANTS WITH ARCHETYPE DATA
   const plantDetails = (name) => {
-    console.log(
-      "PLANT DETAILS",
-      myRepo.filter((el) => el.plant.latin === name)
-    );
     return myRepo.filter((el) => el.plant.latin === name)[0];
   };
 
@@ -287,7 +289,7 @@ export default function UserProfile({
               ) : null}
               <Box>
                 <Link to="/repo">
-                  <Button>show me my plant repo</Button>
+                  <Button>go to my plant repo</Button>
                 </Link>
               </Box>
             </Paper>
@@ -315,8 +317,8 @@ export default function UserProfile({
               </Box>
               <Grid item xs={12} sm={4} className={classes.wishlistContainer}>
                 {myWishlist.length ? (
-                  myWishlist.map((el) => (
-                    <ListItem>
+                  myWishlist.map((el, idx) => (
+                    <ListItem key={idx}>
                       <ListItemText>{el}</ListItemText>
                       <Button onClick={() => handleDelete(el)}>x</Button>
                     </ListItem>
@@ -339,8 +341,9 @@ export default function UserProfile({
             <Typography>time to mingle with other plant parents</Typography>
             {myEvents.length ? (
               <Grid container spacing={4} className={classes.eventContainer}>
-                {myEvents.map((card) => (
+                {myEvents.map((card, idx) => (
                   <UserEventSection
+                    key={idx}
                     card={card}
                     currUser={currUser}
                     setAllEvents={setAllEvents}

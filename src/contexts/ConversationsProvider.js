@@ -13,14 +13,10 @@ export function ConversationsProvider({
   setMyMessages,
   children,
 }) {
-  // myMessages holds chat history sorted by recipient
+  // myMessages holds chat history sorted by recipient (formatting func is in app)
   const [selectedConversationID, setSelectedConversationID] = useState("");
   const socket = useSocket();
 
-  // The 'addMessageToConversation' function makes the dependencies of useEffect Hook (at line 63)
-  // change on every render. To fix this, wrap the definition of 'addMessageToConversation' in its own useCallback()
-
-  // TEST
   const [selectedConvo, setSelectedConvo] = useState(null);
 
   const addMessageToConversation = ({ recipient, text, sender }) => {
@@ -28,10 +24,8 @@ export function ConversationsProvider({
     let oldConvo = myMessages.find(
       (el) => el.contact === recipient || el.contact === sender
     );
-    console.log("an old convo was found:", oldConvo);
     // either add new msg to old convo
     if (oldConvo) {
-      // CHANGE THIS so msg obj is created server-side and you get createdAt prop
       setMyMessages(
         (prev) =>
           [
@@ -41,7 +35,6 @@ export function ConversationsProvider({
               .messages.push({ recipient, text, sender }),
           ].filter((el) => typeof el !== "number") // this is awful and you should probably use useReducer instead !
       );
-      console.log("all my messages after update", myMessages);
     } else {
       // or create new convo for msg and push to messages arr
       let newConvo = {

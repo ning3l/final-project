@@ -13,9 +13,6 @@ export default function Modal({
   openWishlist,
   setOpenWishlist,
   singlePlant,
-  currUser,
-  setCurrUser,
-  myWishlist,
   setMyWishlist,
 }) {
   const handleClose = () => {

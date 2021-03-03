@@ -50,11 +50,11 @@ export default function PlantDetail({
   setMyRepo,
   currUser,
   setCurrUser,
+  setAllUsers,
   myWishlist,
   setMyWishlist,
   handleLogout,
 }) {
-  // console.log({setMyRepo})
   const classes = useStyles();
   // SET SINGLE PLANT
   const [singlePlant, setSinglePlant] = useState(null);
@@ -63,18 +63,15 @@ export default function PlantDetail({
   const [openRepo, setOpenRepo] = useState(false);
   const [openWishlist, setOpenWishlist] = useState(false);
 
-  console.log(match.params.plantId);
-
   // FETCH DETAIL INFO FOR PLANT ARCHETYPE
   useEffect(() => {
     fetch(`http://localhost:3000/api/plants/${match.params.plantId}`)
       .then((res) => res.json())
       .then((data) => setSinglePlant(data))
       .catch((err) => setIsError(true));
-  }, [match.params.plantId]); // why does this go here again?
+  }, [match.params.plantId]);
 
   const handleClickOpen = (e) => {
-    console.log(e.target.innerText);
     if (e.target.innerText.includes("REPO")) {
       setOpenRepo(true);
     } else if (e.target.innerText.includes("WISHLIST")) {
@@ -217,10 +214,6 @@ export default function PlantDetail({
         alignItems="center"
         justify="center"
         style={{ minHeight: "100vh" }}
-        // display="flex"
-        // align="center"
-        // direction="column"
-        // justify="center"
       >
         <Container display="flex" align="center">
           <SentimentSatisfiedAltIcon fontSize="large" />
@@ -235,15 +228,14 @@ export default function PlantDetail({
           openRepo={openRepo}
           setOpenRepo={setOpenRepo}
           setMyRepo={setMyRepo}
+          setAllUsers={setAllUsers}
+          currUser={currUser}
         />
         <ModalWishlist
           openWishlist={openWishlist}
           setOpenWishlist={setOpenWishlist}
           plantId={match.params.plantId}
           singlePlant={singlePlant}
-          currUser={currUser}
-          setCurrUser={setCurrUser}
-          myWishlist={myWishlist}
           setMyWishlist={setMyWishlist}
         />
       </Grid>

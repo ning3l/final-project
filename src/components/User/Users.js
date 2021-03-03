@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import NavBar from "../NavBar";
 import bkg from "../../assets/repo.jpg";
 import {
-  Box,
   Grid,
   Card,
   CardContent,
@@ -30,12 +29,13 @@ const useStyles = makeStyles({
   plantPic: {
     width: 151,
   },
-  image: {
+  cardContainer: {
     minHeight: "100vh",
     backgroundImage: `url(${bkg})`,
     backgroundRepeat: "no-repeat",
     backgroundSize: "cover",
     backgroundPosition: "center",
+    paddingTop: "20px",
   },
   plantsitting: {
     display: "flex",
@@ -50,12 +50,9 @@ export default function Users({
   setCredentials,
   handleLogout,
   allUsers,
-  setAllUsers,
   history,
 }) {
   const classes = useStyles();
-
-  console.log("Users from users", allUsers);
 
   const createUserCard = (el) => {
     return (
@@ -109,7 +106,7 @@ export default function Users({
         direction="column"
         justify="center"
         alignItems="center"
-        className={classes.image}
+        className={classes.cardContainer}
       >
         {allUsers.length ? (
           allUsers

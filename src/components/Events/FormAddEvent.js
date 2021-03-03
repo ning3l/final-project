@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Grid, TextField, Button } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
-import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles({
   formInputs: {
@@ -12,7 +11,6 @@ const useStyles = makeStyles({
 
 export default function FormAddEvent({
   setMyEvents,
-  myEvents,
   handleClose,
   setAllEvents,
 }) {
@@ -46,8 +44,8 @@ export default function FormAddEvent({
     axios
       .post(`http://localhost:3000/api/events`, eventInput)
       .then((res) => {
-        setAllEvents((prevEvents) => [...prevEvents, res.data]); // add to all events client
-        setMyEvents((prevEvents) => [...prevEvents, res.data]); // add to currUser events client
+        setAllEvents((prevEvents) => [...prevEvents, res.data]);
+        setMyEvents((prevEvents) => [...prevEvents, res.data]);
       })
       .catch((err) => console.log(err));
     handleClose(false);

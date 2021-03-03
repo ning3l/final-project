@@ -82,7 +82,6 @@ export default function VisitedProfile({
     axios
       .get(`http://localhost:3000/api/users/${match.params.userId}`)
       .then((res) => {
-        console.log("DATA", res.data);
         setUserDetails(res.data);
       })
       .catch((err) => console.log(err));
@@ -107,7 +106,7 @@ export default function VisitedProfile({
 
   const createPlantCards = (plant) => {
     return (
-      <Grid item xs={12} sm={6} md={4}>
+      <Grid item xs={12} sm={6} md={4} key={plant.common}>
         <Card className={classes.card}>
           <CardActionArea onClick={() => history.push(`/plant/${plant._id}`)}>
             <CardMedia
@@ -129,7 +128,7 @@ export default function VisitedProfile({
 
   const createEventCards = (event) => {
     return (
-      <Grid item xs={12} sm={6} md={4}>
+      <Grid item xs={12} sm={6} md={4} key={event.title}>
         <Card className={classes.card}>
           <CardActionArea onClick={() => history.push(`/event/${event._id}`)}>
             <CardMedia
@@ -232,7 +231,11 @@ export default function VisitedProfile({
                 plants {userDetails.username} owns
               </Typography>
               {userDetails.repository.length ? (
-                <Grid container spacing={4}>
+                <Grid
+                  container
+                  spacing={4}
+                  style={{ display: "flex", justifyContent: "center" }}
+                >
                   {userDetails.repository.map((card) =>
                     createPlantCards(card.plant)
                   )}
@@ -262,7 +265,11 @@ export default function VisitedProfile({
                 events {userDetails.username} attends
               </Typography>
               {userDetails.events.length ? (
-                <Grid container spacing={4}>
+                <Grid
+                  container
+                  spacing={4}
+                  style={{ display: "flex", justifyContent: "center" }}
+                >
                   {userDetails.events.map((card) => createEventCards(card))}
                 </Grid>
               ) : (

@@ -98,7 +98,11 @@ export default function PlantCatalog({
             ? allPlants
                 .sort((a, b) => a.latin - b.latin)
                 .map(
-                  (el) => el.latin.includes(plantSearch) && createPlantCard(el)
+                  (el) =>
+                    el.latin
+                      .toLowerCase()
+                      .includes(plantSearch.toLowerCase()) &&
+                    createPlantCard(el)
                 )
             : allPlants
                 .sort((a, b) => a.latin - b.latin)

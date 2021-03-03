@@ -24,29 +24,10 @@ export default function FormUpdatePlant({
 }) {
   const classes = useStyles();
 
-  // STATE FORM UPDATE INPUT
-  const [plantUpdateInput, setPlantUpdateInput] = useState({
-    nickname: "",
-    waterDate: "",
-    waterInterval: "",
-    fertilizeDate: "",
-    fertilizeInterval: "",
-    repotDate: "",
-    repotInterval: "",
-    happiness: "",
-  });
-
   // HANDLE FORM INPUT
   const handleChange = (e) => {
     const { name, value } = e.target;
-    // changing the state here prevents the "controlled input" warning
     setSelectedPlant((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-
-    // do you need both then? or can you just send updatet selected plant obj?
-    setPlantUpdateInput((prev) => ({
       ...prev,
       [name]: value,
     }));
@@ -57,12 +38,9 @@ export default function FormUpdatePlant({
     e.preventDefault();
     axios
       .put(`http://localhost:3000/api/plants/update`, {
-        //plantUpdateInput: plantUpdateInput,
         selectedPlant: selectedPlant,
-        // id: selectedPlant._id,
       })
       .then((res) => {
-        console.log(res.data);
         setMyRepo((prevRepo) =>
           [...prevRepo].filter((el) => el._id !== selectedPlant._id)
         );
@@ -73,7 +51,6 @@ export default function FormUpdatePlant({
         setOpenEdit(false);
       })
       .catch((err) => console.log(err));
-    console.log("MY REPO FROM FORM UPDATE PLANT", myRepo);
   };
 
   return (
@@ -99,9 +76,13 @@ export default function FormUpdatePlant({
             variant="outlined"
             type="date"
             margin="dense"
-            value={moment(selectedPlant.water.date, "MM/DD/YYYY").format(
-              "YYYY-MM-DD"
-            )}
+            value={
+              selectedPlant.waterDate
+                ? selectedPlant.waterDate
+                : moment(selectedPlant.water.date, "MM/DD/YYYY").format(
+                    "YYYY-MM-DD"
+                  )
+            }
             InputLabelProps={{
               shrink: true,
             }}
@@ -133,9 +114,13 @@ export default function FormUpdatePlant({
             variant="outlined"
             type="date"
             margin="dense"
-            value={moment(selectedPlant.fertilize.date, "MM/DD/YYYY").format(
-              "YYYY-MM-DD"
-            )}
+            value={
+              selectedPlant.fertilizeDate
+                ? selectedPlant.fertilizeDate
+                : moment(selectedPlant.fertilize.date, "MM/DD/YYYY").format(
+                    "YYYY-MM-DD"
+                  )
+            }
             InputLabelProps={{
               shrink: true,
             }}
@@ -167,9 +152,13 @@ export default function FormUpdatePlant({
             variant="outlined"
             type="date"
             margin="dense"
-            value={moment(selectedPlant.repot.date, "MM/DD/YYYY").format(
-              "YYYY-MM-DD"
-            )}
+            value={
+              selectedPlant.repotDate
+                ? selectedPlant.repotDate
+                : moment(selectedPlant.repot.date, "MM/DD/YYYY").format(
+                    "YYYY-MM-DD"
+                  )
+            }
             InputLabelProps={{
               shrink: true,
             }}
@@ -198,7 +187,7 @@ export default function FormUpdatePlant({
             current plant happiness:
           </Typography>
           <ToggleButtonGroup
-            value={plantUpdateInput.happiness}
+            value={selectedPlant.happiness}
             exclusive
             onChange={handleChange}
           >

@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
 import { Grid, TextField, Button } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
@@ -12,27 +11,12 @@ const useStyles = makeStyles({
 
 export default function FormUpdateEvent({
   setMyEvents,
-  myEvents,
   selectedEvent,
   setSelectedEvent,
   setOpenEditEvent,
-  handleClose,
   setAllEvents,
 }) {
   const classes = useStyles();
-
-  // STATE FORM UPDATE INPUT
-  const [eventEditInput, setEventEditInput] = useState({
-    title: "",
-    date: "",
-    time: "15:30",
-    description: "",
-    street: "",
-    number: "",
-    zip: "",
-    city: "",
-    img: Math.floor(Math.random() * 6) + 1,
-  });
 
   // HANDLE FORM INPUT
   const handleChange = (e) => {
@@ -42,19 +26,11 @@ export default function FormUpdateEvent({
       ...prev,
       [name]: value,
     }));
-
-    // do you need both then? or can you just send updatet selected plant obj?
-    setEventEditInput((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
   };
 
-  // ADD UPDATES EVENT TO DB
-  // to fix: this does not go and update all user's events on client side!
+  // EDIT AN EVENT
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(selectedEvent);
     axios
       .put(`http://localhost:3000/api/events/edit`, {
         selectedEvent: selectedEvent,

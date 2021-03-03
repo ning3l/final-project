@@ -14,7 +14,6 @@ export default function Modal({
   setOpenAddEvent,
   setMyEvents,
   setAllEvents,
-  myEvents,
 }) {
   const handleClose = () => {
     setOpenAddEvent(false);
@@ -37,7 +36,6 @@ export default function Modal({
             setMyEvents={setMyEvents}
             handleClose={handleClose}
             setAllEvents={setAllEvents}
-            myEvents={myEvents}
           />
         </DialogContent>
         <DialogActions>
