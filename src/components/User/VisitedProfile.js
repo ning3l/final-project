@@ -62,6 +62,7 @@ const useStyles = makeStyles((theme) => ({
 export default function VisitedProfile({
   match,
   history,
+  allUsers,
   setCurrUser,
   setCredentials,
   handleLogout,
@@ -69,23 +70,24 @@ export default function VisitedProfile({
   const classes = useStyles();
   const eventPics = [event1, event2, event3, event4, event5, event6, event7];
 
-  const {
-    myMessages,
-    setMyMessages,
-    setSelectedConversationID,
-  } = useConversations();
+  const { myMessages, setMyMessages } = useConversations();
 
   // GET INFOS FOR THIS USER
   const [userDetails, setUserDetails] = useState(null);
+  const [userError, setUserError] = useState(false);
 
   useEffect(() => {
+    if (!allUsers.find((el) => el._id === match.params.userId)) {
+      setUserError(true);
+      return;
+    }
     axios
       .get(`http://localhost:3000/api/users/${match.params.userId}`)
       .then((res) => {
         setUserDetails(res.data);
       })
       .catch((err) => console.log(err));
-  }, [match.params.userId]);
+  }, [match.params.userId, allUsers]);
 
   // MESSENGER
   const handleOpenMessenger = (user) => {
@@ -97,7 +99,6 @@ export default function VisitedProfile({
       };
       setMyMessages((prev) => [...prev, newConvo]);
     }
-    setSelectedConversationID(user._id);
     history.push({
       pathname: `/messenger/${user._id}`,
       state: { detail: user },
@@ -283,6 +284,11 @@ export default function VisitedProfile({
             </Grid>
           </Container>
         </main>
+      )}
+      {userError && !userDetails && (
+        <Box textAlign="center">
+          <h1>sorry, this user does not exist</h1>
+        </Box>
       )}
     </>
   );

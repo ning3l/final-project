@@ -275,6 +275,7 @@ function App() {
           setMyEvents={setMyEvents}
           needsCare={needsCare}
         />
+
         <Route
           path="/login"
           render={(props) => (
@@ -301,23 +302,6 @@ function App() {
           )}
         />
         <ProtectedRoute
-          path="/catalog"
-          component={PlantCatalog}
-          allPlants={allPlants}
-          setAllPlants={setAllPlants}
-          handleLogout={handleLogout}
-        />
-        <ProtectedRoute
-          path="/events"
-          component={Events}
-          currUser={currUser}
-          allEvents={allEvents}
-          setAllEvents={setAllEvents}
-          myEvents={myEvents}
-          setMyEvents={setMyEvents}
-          handleLogout={handleLogout}
-        />
-        <ProtectedRoute
           path="/event/:eventId"
           component={EventDetail}
           currUser={currUser}
@@ -325,17 +309,6 @@ function App() {
           setAllEvents={setAllEvents}
           myEvents={myEvents}
           setMyEvents={setMyEvents}
-          handleLogout={handleLogout}
-        />
-        <ProtectedRoute
-          path="/users"
-          component={Users}
-          allEvents={allEvents}
-          setAllEvents={setAllEvents}
-          myEvents={myEvents}
-          setMyEvents={setMyEvents}
-          currUser={currUser}
-          allUsers={allUsers}
           handleLogout={handleLogout}
         />
         {currUser && (
@@ -352,6 +325,34 @@ function App() {
                   allUsers={allUsers}
                   setCurrUser={setCurrUser}
                   setCredentials={setCredentials}
+                  handleLogout={handleLogout}
+                />
+                <ProtectedRoute
+                  path="/catalog"
+                  component={PlantCatalog}
+                  allPlants={allPlants}
+                  setAllPlants={setAllPlants}
+                  handleLogout={handleLogout}
+                />
+                <ProtectedRoute
+                  path="/events"
+                  component={Events}
+                  currUser={currUser}
+                  allEvents={allEvents}
+                  setAllEvents={setAllEvents}
+                  myEvents={myEvents}
+                  setMyEvents={setMyEvents}
+                  handleLogout={handleLogout}
+                />
+                <ProtectedRoute
+                  path="/users"
+                  component={Users}
+                  allEvents={allEvents}
+                  setAllEvents={setAllEvents}
+                  myEvents={myEvents}
+                  setMyEvents={setMyEvents}
+                  currUser={currUser}
+                  allUsers={allUsers}
                   handleLogout={handleLogout}
                 />
                 <ProtectedRoute
@@ -382,18 +383,17 @@ function App() {
                   component={PlantDetail}
                   setMyRepo={setMyRepo}
                   currUser={currUser}
-                  setCurrUser={setCurrUser}
                   setAllUsers={setAllUsers}
                   myWishlist={myWishlist}
                   setMyWishlist={setMyWishlist}
                   handleLogout={handleLogout}
+                  allPlants={allPlants}
                 />
                 <Route component={NotFound} />
               </Switch>
             </ConversationsProvider>
           </SocketProvider>
         )}
-
         <Route component={NotFound} />
       </Switch>
     </ThemeProvider>

@@ -20,6 +20,7 @@ import {
 } from "@material-ui/core";
 import { withStyles, makeStyles } from "@material-ui/core/styles";
 import SentimentSatisfiedAltIcon from "@material-ui/icons/SentimentSatisfiedAlt";
+import axios from "axios";
 
 const useStyles = makeStyles({
   paperContainer: {
@@ -49,11 +50,11 @@ export default function PlantDetail({
   match,
   setMyRepo,
   currUser,
-  setCurrUser,
   setAllUsers,
   myWishlist,
   setMyWishlist,
   handleLogout,
+  allPlants,
 }) {
   const classes = useStyles();
   // SET SINGLE PLANT
@@ -65,11 +66,15 @@ export default function PlantDetail({
 
   // FETCH DETAIL INFO FOR PLANT ARCHETYPE
   useEffect(() => {
-    fetch(`http://localhost:3000/api/plants/${match.params.plantId}`)
-      .then((res) => res.json())
-      .then((data) => setSinglePlant(data))
-      .catch((err) => setIsError(true));
-  }, [match.params.plantId]);
+    if (!allPlants.find((el) => el._id === match.params.plantId)) {
+      setIsError(true);
+      return;
+    }
+    axios
+      .get(`http://localhost:3000/api/plants/${match.params.plantId}`)
+      .then((res) => setSinglePlant(res.data))
+      .catch((err) => setIsError(err));
+  }, [match.params.plantId, allPlants]);
 
   const handleClickOpen = (e) => {
     if (e.target.innerText.includes("REPO")) {
@@ -205,7 +210,6 @@ export default function PlantDetail({
   return (
     <>
       <NavBar handleLogout={handleLogout} />
-      {/* <Grid className={classes.image}> */}
       <Grid
         className={classes.image}
         container
@@ -218,9 +222,11 @@ export default function PlantDetail({
         <Container display="flex" align="center">
           <SentimentSatisfiedAltIcon fontSize="large" />
           <Paper elevation={3} className={classes.paperContainer}>
-            {!singlePlant && <CircularProgress />}
+            {!singlePlant && !isError && <CircularProgress />}
             {singlePlant && createPlantDetail(singlePlant)}
-            {isError && <h1>this plant is not in our database</h1>}
+            {isError && !singlePlant && (
+              <h1>sorry, this plant is not in our database</h1>
+            )}
           </Paper>
           <SentimentSatisfiedAltIcon fontSize="large" />
         </Container>

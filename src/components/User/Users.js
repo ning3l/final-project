@@ -108,7 +108,7 @@ export default function Users({
         alignItems="center"
         className={classes.cardContainer}
       >
-        {allUsers.length ? (
+        {currUser && allUsers.length ? (
           allUsers
             .filter((el) => el.username !== currUser.username)
             .map((el) => createUserCard(el))

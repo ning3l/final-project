@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect, useCallback } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { useSocket } from "./SocketProvider";
 
 const ConversationsContext = React.createContext();
@@ -14,7 +14,6 @@ export function ConversationsProvider({
   children,
 }) {
   // myMessages holds chat history sorted by recipient (formatting func is in app)
-  const [selectedConversationID, setSelectedConversationID] = useState("");
   const socket = useSocket();
 
   const [selectedConvo, setSelectedConvo] = useState(null);
@@ -69,7 +68,6 @@ export function ConversationsProvider({
     setMyMessages,
     selectedConvo,
     setSelectedConvo,
-    setSelectedConversationID,
     sendMessage,
   };
 
