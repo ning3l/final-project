@@ -64,7 +64,6 @@ export default function UserEventSection({
   // CANCEL AN EVENT
   const handleCancel = (event) => {
     const eventId = event._id;
-    console.log(eventId);
     axios
       .delete(`http://localhost:3000/api/events/cancel`, { data: { eventId } })
       .then((res) => {

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import NavBar from "../NavBar";
 import ReactMapGL, { Marker } from "react-map-gl";
@@ -49,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function EventDetail({ match, handleLogout }) {
+export default function EventDetail({ match, handleLogout, allEvents }) {
   const classes = useStyles();
 
   // STATES FOR SINGLE EVENT
@@ -93,6 +94,10 @@ export default function EventDetail({ match, handleLogout }) {
   };
 
   useEffect(() => {
+    if (!allEvents.find((el) => el._id === match.params.eventId)) {
+      setIsError(true);
+      return;
+    }
     axios
       .get(`http://localhost:3000/api/events/event/${match.params.eventId}`)
       .then((data) => {
@@ -100,7 +105,7 @@ export default function EventDetail({ match, handleLogout }) {
         geoCoder(data.data.address);
       })
       .catch((err) => setIsError(true));
-  }, [match.params.eventId]);
+  }, [match.params.eventId, allEvents]);
 
   const createEventDetail = (singleEvent) => {
     let { title, date, time, description, address, host } = singleEvent;
@@ -191,11 +196,12 @@ export default function EventDetail({ match, handleLogout }) {
             {singleEvent.attendees &&
               singleEvent.attendees.map((user) => (
                 <Grid item className={classes.avatars} key={user._id}>
-                  <Avatar
-                    alt="✿"
-                    src={`http://localhost:3000/images/user/${user.profileImg}`}
-                  />
-                  <Typography>{user.username}</Typography>
+                  <Link to={`/user/${user._id}`}>
+                    <Avatar
+                      alt="✿"
+                      src={`http://localhost:3000/images/user/${user.profileImg}`}
+                    />
+                  </Link>
                 </Grid>
               ))}
           </Grid>
@@ -219,9 +225,11 @@ export default function EventDetail({ match, handleLogout }) {
         <Container display="flex" align="center">
           <SentimentSatisfiedAltIcon fontSize="large" />
           <Paper elevation={3} className={classes.paperContainer}>
-            {!singleEvent && <CircularProgress />}
+            {!singleEvent && !isError && <CircularProgress />}
             {singleEvent && createEventDetail(singleEvent)}
-            {isError && <h1>this plant is not in our database</h1>}
+            {isError && !singleEvent && (
+              <h1>sorry, this event does not exist</h1>
+            )}
           </Paper>
           <SentimentSatisfiedAltIcon fontSize="large" />
         </Container>
