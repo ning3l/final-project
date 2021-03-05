@@ -206,7 +206,7 @@ function App() {
   // ###################### ALL USERS ######################
   useEffect(() => {
     axios
-      .get("http://localhost:3000/api/users")
+      .get("/api/users")
       .then((res) => {
         setAllUsers(res.data);
       })
