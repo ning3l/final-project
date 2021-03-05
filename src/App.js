@@ -147,7 +147,7 @@ function App() {
   useEffect(() => {
     if (!currUser) return;
     axios
-      .get("http://localhost:3000/api/plants/repository/me")
+      .get("/api/plants/repository/me")
       .then((res) => {
         setMyRepo(res.data);
       })
@@ -188,7 +188,7 @@ function App() {
   // ###################### ALL CATALOG PLANTS ######################
   useEffect(() => {
     axios
-      .get("http://localhost:3000/api/plants")
+      .get("/api/plants")
       .then((res) => setAllPlants(res.data))
       .catch((err) => console.log(err));
   }, []);
