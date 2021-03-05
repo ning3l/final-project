@@ -1,9 +1,9 @@
 # pl@net (frontend)
 
-[ᐅ deployed version](https://plaenet.netlify.app)
-LOGIN: 
-  FicusFriend (Benjamini)
-  i_love_plants (daisy)
+[ᐅ deployed version](https://plaenet.netlify.app)<br/>
+LOGIN<br/>
+FicusFriend (Benjamini)<br/>
+i_love_plants (daisy)
 
 [ᐅ pl@net backend](https://github.com/ning3l/final-project_server)<br>
 
