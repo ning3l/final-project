@@ -4,6 +4,7 @@
 [ᐅ pl@net video walkthrough](https://www.youtube.com/watch?v=mUYSI4Nj6vk)
 
 Frontend for my final project @WBS Coding School.
+
 pl@net is a houseplant maintenance app & social network for plant parents, helping users out with grooming tips & care notifications as well as encouraging
 networking via attending events around the topic of indoor gardening. Current features include:
 
