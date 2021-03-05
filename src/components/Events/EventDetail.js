@@ -75,8 +75,11 @@ export default function EventDetail({ match, handleLogout, allEvents }) {
   const geoCoder = (address) => {
     const { street, number } = address;
     axios
+      // .get(
+      //   `  https://api.mapbox.com/geocoding/v5/mapbox.places/${street}%20${number}.json?access_token=${process.env.REACT_APP_MAPBOX_TOKEN}&cachebuster=1609931617105&autocomplete=true`
+      // )
       .get(
-        `  https://api.mapbox.com/geocoding/v5/mapbox.places/${street}%20${number}.json?access_token=${process.env.REACT_APP_MAPBOX_TOKEN}&cachebuster=1609931617105&autocomplete=true`
+        `${process.env.REACT_APP_MAPBOX}${street}%20${number}.json?access_token=${process.env.REACT_APP_MAPBOX_TOKEN}&cachebuster=1609931617105&autocomplete=true`
       )
       .then((data) => {
         setViewport((prev) => ({
