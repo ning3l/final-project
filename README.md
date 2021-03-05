@@ -1,7 +1,11 @@
 # pl@net (frontend)
 
+[ᐅ deployed version](https://plaenet.netlify.app)
+LOGIN: 
+  FicusFriend (Benjamini)
+  i_love_plants (daisy)
+
 [ᐅ pl@net backend](https://github.com/ning3l/final-project_server)<br>
-[ᐅ pl@net video walkthrough](https://www.youtube.com/watch?v=mUYSI4Nj6vk)
 
 Frontend for my final project @WBS Coding School.
 
