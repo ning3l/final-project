@@ -19,6 +19,10 @@ import { makeStyles } from "@material-ui/core/styles";
 import SentimentSatisfiedAltIcon from "@material-ui/icons/SentimentSatisfiedAlt";
 import LocalFloristIcon from "@material-ui/icons/LocalFlorist";
 import RemoveIcon from "@material-ui/icons/Remove";
+import "mapbox-gl/dist/mapbox-gl.css";
+import mapboxgl from "mapbox-gl";
+// eslint-disable-next-line import/no-webpack-loader-syntax
+mapboxgl.workerClass = require("worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker").default;
 
 const useStyles = makeStyles((theme) => ({
   root: {
