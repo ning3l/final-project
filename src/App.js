@@ -84,7 +84,6 @@ function App() {
     // console.log("/SIGNUP: submitting user", newUser);
     let user = await register(newUser);
     setAllUsers((prev) => [...prev, user]);
-    console.log("THIS IS THE DATA I NEED", allUsers);
     setNewUser(null);
     history.push("/login");
   };

@@ -4,12 +4,11 @@ import jwt from "jsonwebtoken";
 
 const APP_NAME = "final-project";
 
-// SET THIS UP IN ENV WHEN DEPLOYED
-// if (process.env.NODE_ENV === "development") {
-//   axios.defaults.baseURL = process.env.REACT_APP_BACKEND_API_LOCAL;
-// } else {
-//   axios.defaults.baseURL = process.env.REACT_APP_BACKEND_API_HEROKU;
-// }
+if (process.env.NODE_ENV === "development") {
+  axios.defaults.baseURL = process.env.REACT_APP_BACKEND_API_LOCAL;
+} else {
+  axios.defaults.baseURL = process.env.REACT_APP_BACKEND_API_HEROKU;
+}
 
 const setAuthHeaders = () => {
   const token = Cookies.get(`${APP_NAME}-auth-token`);
@@ -33,7 +32,7 @@ const decodeToken = () => {
 const register = (newUser) => {
   const { username, password, plantsitting, city } = newUser;
   return axios
-    .post("http://localhost:3000/api/users/register", {
+    .post("/api/users/register", {
       username,
       password,
       plantsitting,
@@ -49,7 +48,7 @@ const login = async (credentials) => {
   const { username, password } = credentials;
   try {
     // change address after deployment: check auth frontend repo ex.
-    const data = await axios.post("http://localhost:3000/api/auth/login", {
+    const data = await axios.post("/api/auth/login", {
       username,
       password,
     });
@@ -74,7 +73,7 @@ const logout = () => {
 const userContext = async () => {
   setAuthHeaders();
   try {
-    const data = await axios.get("http://localhost:3000/api/auth/me");
+    const data = await axios.get("/api/auth/me");
     return data;
   } catch (error) {
     console.log(error.message);
