@@ -80,6 +80,7 @@ function App() {
       alert("pls fill out form");
       return;
     }
+    if (newUser.username.length > 13) return alert("pls pick a username < 13");
     if (newUser.password.length < 5) return alert("pls choose a password > 5");
     // console.log("/SIGNUP: submitting user", newUser);
     let user = await register(newUser);
