@@ -112,7 +112,7 @@ export default function VisitedProfile({
           <CardActionArea onClick={() => history.push(`/plant/${plant._id}`)}>
             <CardMedia
               className={classes.cardMedia}
-              image={`/images/plants/${plant.srcImg}`}
+              image={`${process.env.REACT_APP_BACKEND_API_HEROKU}/images/plants/${plant.srcImg}`}
               title="Image title"
             />
             <CardContent className={classes.cardContent}>
@@ -197,7 +197,7 @@ export default function VisitedProfile({
                 }}
               >
                 <img
-                  src={`/images/user/${userDetails.profileImg}`}
+                  src={`${process.env.REACT_APP_BACKEND_API_HEROKU}/images/user/${userDetails.profileImg}`}
                   alt="user profile pic"
                 />
               </div>

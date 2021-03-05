@@ -126,7 +126,7 @@ export default function PlantDetail({
             style={{ width: 300, margin: "auto" }}
           >
             <img
-              src={`/images/plants/${srcImg}`}
+              src={`${process.env.REACT_APP_BACKEND_API_HEROKU}/images/plants/${srcImg}`}
               style={{ maxWidth: "90%" }}
               alt="detail pic of the plant"
             />

@@ -91,7 +91,7 @@ export default function PlantRepo({
       <Card className={classes.root} key={el._id}>
         <CardMedia
           className={classes.plantPic}
-          image={`/images/plants/${el.plant.srcImg}`}
+          image={`${process.env.REACT_APP_BACKEND_API_HEROKU}/images/plants/${el.plant.srcImg}`}
           title="Plant Preview"
         />
         <div>

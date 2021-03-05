@@ -59,17 +59,17 @@ export default function PlantCatalog({
           <Box display="flex">
             <CardMedia
               className={classes.cardMedia}
-              image={`/images/plants/${el.srcImg}`}
+              image={`${process.env.REACT_APP_BACKEND_API_HEROKU}/images/plants/${el.srcImg}`}
               style={{ width: "130px", height: "130px" }}
             ></CardMedia>
             <CardMedia
               className={classes.cardMedia}
-              image={`/images/plants/${el.srcImg}`}
+              image={`${process.env.REACT_APP_BACKEND_API_HEROKU}/images/plants/${el.srcImg}`}
               style={{ width: "130px", height: "130px" }}
             ></CardMedia>
             <CardMedia
               className={classes.cardMedia}
-              image={`/images/plants/${el.srcImg}`}
+              image={`${process.env.REACT_APP_BACKEND_API_HEROKU}/images/plants/${el.srcImg}`}
               style={{ width: "130px", height: "130px" }}
             ></CardMedia>
           </Box>

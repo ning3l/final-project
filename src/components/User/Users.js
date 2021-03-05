@@ -63,7 +63,7 @@ export default function Users({
       >
         <CardMedia
           className={classes.plantPic}
-          image={`/images/user/${el.profileImg}`}
+          image={`${process.env.REACT_APP_BACKEND_API_HEROKU}/images/user/${el.profileImg}`}
           title="Plant Preview"
         />
         <div className={classes.details}>

@@ -196,7 +196,7 @@ export default function UserProfile({
                     }}
                   >
                     <img
-                      src={`/images/user/${currUser.profileImg}`}
+                      src={`${process.env.REACT_APP_BACKEND_API_HEROKU}/images/user/${currUser.profileImg}`}
                       alt="profile-pic"
                     />
                   </div>
@@ -273,9 +273,9 @@ export default function UserProfile({
                       <Card className={classes.card} key={idx}>
                         <CardMedia
                           className={classes.cardMedia}
-                          image={`/images/plants/${
-                            plantDetails(el).plant.srcImg
-                          }`}
+                          image={`${
+                            process.env.REACT_APP_BACKEND_API_HEROKU
+                          }/images/plants/${plantDetails(el).plant.srcImg}`}
                           title="Image title"
                         />
                         <CardContent className={classes.cardContent}>

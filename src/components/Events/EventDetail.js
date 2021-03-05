@@ -197,7 +197,10 @@ export default function EventDetail({ match, handleLogout, allEvents }) {
               singleEvent.attendees.map((user) => (
                 <Grid item className={classes.avatars} key={user._id}>
                   <Link to={`/user/${user._id}`}>
-                    <Avatar alt="✿" src={`/images/user/${user.profileImg}`} />
+                    <Avatar
+                      alt="✿"
+                      src={`${process.env.REACT_APP_BACKEND_API_HEROKU}/images/user/${user.profileImg}`}
+                    />
                   </Link>
                 </Grid>
               ))}

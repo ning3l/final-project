@@ -171,7 +171,9 @@ export default function Messenger({
                 >
                   <Avatar
                     alt="profile pic"
-                    src={`/images/user/${createUserInfo(convo.contact, "pic")}`}
+                    src={`${
+                      process.env.REACT_APP_BACKEND_API_HEROKU
+                    }/images/user/${createUserInfo(convo.contact, "pic")}`}
                     style={{ margin: "20px" }}
                   />
                   <div
@@ -230,7 +232,9 @@ export default function Messenger({
                 <>
                   <Avatar
                     alt="profile pic"
-                    src={`/images/user/${createUserInfo(
+                    src={`${
+                      process.env.REACT_APP_BACKEND_API_HEROKU
+                    }/images/user/${createUserInfo(
                       selectedConvo.contact,
                       "pic"
                     )}`}
