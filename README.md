@@ -3,7 +3,8 @@
 [ᐅ pl@net backend](https://github.com/ning3l/final-project_server)<br>
 [ᐅ pl@net video walkthrough](https://www.youtube.com/watch?v=mUYSI4Nj6vk)
 
-Frontend for my final project @WBS Coding School. 
+Frontend for my final project @WBS Coding School.
+
 pl@net is a houseplant maintenance app & social network for plant parents, helping users out with grooming tips & care notifications as well as encouraging
 networking via attending events around the topic of indoor gardening. Current features include:
 
@@ -16,14 +17,15 @@ networking via attending events around the topic of indoor gardening. Current fe
 - Search/create/attend/leave events
 - See event details, including a map and which other users are attending
 - Browse for other users
-- [in progress] Visit other user profiles and see which plants they own
-- [in progress] A messenger feature using socket.io
+- Visit other user profiles and see which plants they own and which events they attend
+- A messenger feature using socket.io
 
 ## Technologies
 
 - ES6
 - React
 - MaterialUI
+- Socket.io
 - Jira & Github for project management
 
 # Getting Started with Create React App
