@@ -42,7 +42,7 @@ export default function FormAddEvent({
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post(`http://localhost:3000/api/events`, eventInput)
+      .post(`/api/events`, eventInput)
       .then((res) => {
         setAllEvents((prevEvents) => [...prevEvents, res.data]);
         setMyEvents((prevEvents) => [...prevEvents, res.data]);

@@ -171,10 +171,7 @@ export default function Messenger({
                 >
                   <Avatar
                     alt="profile pic"
-                    src={`http://localhost:3000/images/user/${createUserInfo(
-                      convo.contact,
-                      "pic"
-                    )}`}
+                    src={`/images/user/${createUserInfo(convo.contact, "pic")}`}
                     style={{ margin: "20px" }}
                   />
                   <div
@@ -233,7 +230,7 @@ export default function Messenger({
                 <>
                   <Avatar
                     alt="profile pic"
-                    src={`http://localhost:3000/images/user/${createUserInfo(
+                    src={`/images/user/${createUserInfo(
                       selectedConvo.contact,
                       "pic"
                     )}`}

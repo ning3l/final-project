@@ -82,7 +82,7 @@ export default function VisitedProfile({
       return;
     }
     axios
-      .get(`http://localhost:3000/api/users/${match.params.userId}`)
+      .get(`/api/users/${match.params.userId}`)
       .then((res) => {
         setUserDetails(res.data);
       })
@@ -112,7 +112,7 @@ export default function VisitedProfile({
           <CardActionArea onClick={() => history.push(`/plant/${plant._id}`)}>
             <CardMedia
               className={classes.cardMedia}
-              image={`http://localhost:3000/images/plants/${plant.srcImg}`}
+              image={`/images/plants/${plant.srcImg}`}
               title="Image title"
             />
             <CardContent className={classes.cardContent}>
@@ -197,7 +197,7 @@ export default function VisitedProfile({
                 }}
               >
                 <img
-                  src={`http://localhost:3000/images/user/${userDetails.profileImg}`}
+                  src={`/images/user/${userDetails.profileImg}`}
                   alt="user profile pic"
                 />
               </div>

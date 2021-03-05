@@ -158,7 +158,7 @@ function App() {
   useEffect(() => {
     if (!currUser) return;
     axios
-      .get("http://localhost:3000/api/events/me")
+      .get("/api/events/me")
       .then((res) => {
         setMyEvents(res.data.events);
       })
@@ -196,7 +196,7 @@ function App() {
   // ###################### ALL EVENTS ######################
   useEffect(() => {
     axios
-      .get("http://localhost:3000/api/events")
+      .get("/api/events")
       .then((res) => {
         setAllEvents(res.data);
       })
@@ -243,7 +243,7 @@ function App() {
     }
 
     axios
-      .get("http://localhost:3000/api/messages")
+      .get("/api/messages")
       .then((res) => {
         let history = turnMessagesIntoConversations(res.data);
         setMyMessages(history);

@@ -102,7 +102,7 @@ export default function Events({
     let attendAlready = myEvents.filter((event) => event._id === eventId);
     if (attendAlready.length) return alert("you already attend this event!");
     axios
-      .post("http://localhost:3000/api/events/attend", { eventId })
+      .post("/api/events/attend", { eventId })
       .then((res) => {
         setMyEvents((prevEvents) => [...prevEvents, res.data]);
       })
@@ -113,7 +113,7 @@ export default function Events({
   const handleLeave = (el) => {
     const eventId = el._id;
     axios
-      .post("http://localhost:3000/api/events/leave", { eventId })
+      .post("/api/events/leave", { eventId })
       .then((res) => {
         setMyEvents(
           (prevEvents) => [...prevEvents].filter((el) => el._id !== res.data) // res.data is eventId
@@ -126,7 +126,7 @@ export default function Events({
   const handleCancel = (event) => {
     const eventId = event._id;
     axios
-      .delete(`http://localhost:3000/api/events/cancel`, { data: { eventId } })
+      .delete(`/api/events/cancel`, { data: { eventId } })
       .then((res) => {
         let del = res.data;
         setMyEvents((prev) => [...prev].filter((el) => el._id !== del._id));

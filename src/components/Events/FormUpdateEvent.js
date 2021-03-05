@@ -32,7 +32,7 @@ export default function FormUpdateEvent({
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .put(`http://localhost:3000/api/events/edit`, {
+      .put(`/api/events/edit`, {
         selectedEvent: selectedEvent,
       })
       .then((res) => {

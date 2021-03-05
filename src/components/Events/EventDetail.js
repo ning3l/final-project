@@ -99,7 +99,7 @@ export default function EventDetail({ match, handleLogout, allEvents }) {
       return;
     }
     axios
-      .get(`http://localhost:3000/api/events/event/${match.params.eventId}`)
+      .get(`/api/events/event/${match.params.eventId}`)
       .then((data) => {
         setSingleEvent(data.data);
         geoCoder(data.data.address);
@@ -197,10 +197,7 @@ export default function EventDetail({ match, handleLogout, allEvents }) {
               singleEvent.attendees.map((user) => (
                 <Grid item className={classes.avatars} key={user._id}>
                   <Link to={`/user/${user._id}`}>
-                    <Avatar
-                      alt="✿"
-                      src={`http://localhost:3000/images/user/${user.profileImg}`}
-                    />
+                    <Avatar alt="✿" src={`/images/user/${user.profileImg}`} />
                   </Link>
                 </Grid>
               ))}

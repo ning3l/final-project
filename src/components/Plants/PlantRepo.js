@@ -63,7 +63,7 @@ export default function PlantRepo({
   // HANDLE PLANT DELETE
   const handleDelete = (id, plant) => {
     axios
-      .delete(`http://localhost:3000/api/plants/del`, { data: { id } })
+      .delete(`/api/plants/del`, { data: { id } })
       .then((res) => {
         let del = res.data;
         // manually delete both from repo and care tracker arr
@@ -91,7 +91,7 @@ export default function PlantRepo({
       <Card className={classes.root} key={el._id}>
         <CardMedia
           className={classes.plantPic}
-          image={`http://localhost:3000/images/plants/${el.plant.srcImg}`}
+          image={`/images/plants/${el.plant.srcImg}`}
           title="Plant Preview"
         />
         <div>

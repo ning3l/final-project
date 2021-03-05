@@ -59,17 +59,17 @@ export default function PlantCatalog({
           <Box display="flex">
             <CardMedia
               className={classes.cardMedia}
-              image={`http://localhost:3000/images/plants/${el.srcImg}`}
+              image={`/images/plants/${el.srcImg}`}
               style={{ width: "130px", height: "130px" }}
             ></CardMedia>
             <CardMedia
               className={classes.cardMedia}
-              image={`http://localhost:3000/images/plants/${el.srcImg}`}
+              image={`/images/plants/${el.srcImg}`}
               style={{ width: "130px", height: "130px" }}
             ></CardMedia>
             <CardMedia
               className={classes.cardMedia}
-              image={`http://localhost:3000/images/plants/${el.srcImg}`}
+              image={`/images/plants/${el.srcImg}`}
               style={{ width: "130px", height: "130px" }}
             ></CardMedia>
           </Box>

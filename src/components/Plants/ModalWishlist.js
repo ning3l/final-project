@@ -17,7 +17,7 @@ export default function Modal({
 }) {
   const handleClose = () => {
     axios
-      .post(`http://localhost:3000/api/users/wish`, {
+      .post(`/api/users/wish`, {
         plantId: singlePlant._id,
         plantName: singlePlant.latin,
       })

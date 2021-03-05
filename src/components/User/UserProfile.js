@@ -111,7 +111,7 @@ export default function UserProfile({
     const data = new FormData();
     data.append("profile_pic", selectedPic);
     axios
-      .post("http://localhost:3000/api/users/upload-profile-pic", data, {
+      .post("/api/users/upload-profile-pic", data, {
         headers: {
           accept: "application/json",
           "Accept-Language": "en-US,en;q=0.8",
@@ -144,7 +144,7 @@ export default function UserProfile({
   // DELETE A PLANT FROM CURR USER WISHLIST
   const handleDelete = (name) => {
     axios
-      .delete(`http://localhost:3000/api/users/wish`, { data: { name } })
+      .delete(`/api/users/wish`, { data: { name } })
       .then((res) => {
         setMyWishlist((prevWish) => [...prevWish].filter((el) => el !== name));
       })
@@ -196,7 +196,7 @@ export default function UserProfile({
                     }}
                   >
                     <img
-                      src={`http://localhost:3000/images/user/${currUser.profileImg}`}
+                      src={`/images/user/${currUser.profileImg}`}
                       alt="profile-pic"
                     />
                   </div>
@@ -273,7 +273,7 @@ export default function UserProfile({
                       <Card className={classes.card} key={idx}>
                         <CardMedia
                           className={classes.cardMedia}
-                          image={` http://localhost:3000/images/plants/${
+                          image={`/images/plants/${
                             plantDetails(el).plant.srcImg
                           }`}
                           title="Image title"

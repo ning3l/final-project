@@ -11,7 +11,7 @@ export function SocketProvider({ children, currUser }) {
   const [socket, setSocket] = useState();
 
   useEffect(() => {
-    const newSocket = io("http://localhost:3000", {
+    const newSocket = io(`${process.env.REACT_APP_BACKEND_API_HEROKU}`, {
       query: { id: currUser._id },
     });
     setSocket(newSocket);

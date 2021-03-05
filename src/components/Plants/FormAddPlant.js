@@ -45,7 +45,7 @@ export default function FormAddPlant({ setMyRepo, setAllUsers, currUser }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post(`http://localhost:3000/api/plants/${plantId}`, plantInstanceInput)
+      .post(`/api/plants/${plantId}`, plantInstanceInput)
       .then((res) => {
         setMyRepo((prevRepo) => [...prevRepo, res.data]);
         // also modify this user in all users arr:

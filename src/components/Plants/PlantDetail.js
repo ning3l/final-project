@@ -71,7 +71,7 @@ export default function PlantDetail({
       return;
     }
     axios
-      .get(`http://localhost:3000/api/plants/${match.params.plantId}`)
+      .get(`/api/plants/${match.params.plantId}`)
       .then((res) => setSinglePlant(res.data))
       .catch((err) => setIsError(err));
   }, [match.params.plantId, allPlants]);
@@ -126,7 +126,7 @@ export default function PlantDetail({
             style={{ width: 300, margin: "auto" }}
           >
             <img
-              src={`http://localhost:3000/images/plants/${srcImg}`}
+              src={`/images/plants/${srcImg}`}
               style={{ maxWidth: "90%" }}
               alt="detail pic of the plant"
             />

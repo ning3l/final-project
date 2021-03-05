@@ -37,7 +37,7 @@ export default function FormUpdatePlant({
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .put(`http://localhost:3000/api/plants/update`, {
+      .put(`/api/plants/update`, {
         selectedPlant: selectedPlant,
       })
       .then((res) => {

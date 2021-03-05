@@ -63,7 +63,7 @@ export default function Users({
       >
         <CardMedia
           className={classes.plantPic}
-          image={`http://localhost:3000/images/user/${el.profileImg}`}
+          image={`/images/user/${el.profileImg}`}
           title="Plant Preview"
         />
         <div className={classes.details}>
