@@ -1,6 +1,6 @@
 # pl@net (frontend)
 
-![lol](assets/lol.png)
+![lol](src/assets/lol.png)
 
 [ᐅ see live](https://plaenet.netlify.app)<br/>
 LOGIN<br/>
