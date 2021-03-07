@@ -2,10 +2,9 @@
 
 ![lol](src/assets/lol.png)
 
-[ᐅ see live](https://plaenet.netlify.app)<br/>
-LOGIN<br/>
-FicusFriend (Benjamini)<br/>
-i_love_plants (daisy)
+[ᐅ see live with these test accounts or sign up yourself:](https://plaenet.netlify.app)<br/>
+<b>FicusFriend (Benjamini)</b><br/>
+<b>i_love_plants (daisy)</b>
 
 [ᐅ pl@net backend](https://github.com/ning3l/final-project_server)<br>
 
